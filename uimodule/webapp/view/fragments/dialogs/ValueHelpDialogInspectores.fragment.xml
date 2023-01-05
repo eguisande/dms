@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+        id="idSelectDialogInspectores"
+		title="{i18n>inspector}"
+		liveChange=".onSearchInspector"
+		confirm=".onValueHelpDialogInpectoresConfirm"
+		cancel=".onValueHelpDialogInspectoresClose"
+        multiSelect="true"
+        rememberSelections="true"
+		showClearButton="true"
+		growing="false"
+		items="{AppJsonModel>/Combos/Inspectores}">
+            <StandardListItem
+                title="{AppJsonModel>nombre}"/>
+            </SelectDialog>
+</core:FragmentDefinition>

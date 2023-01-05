@@ -1,0 +1,77 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+    <form:SimpleForm title="{i18n>detalleobra}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="2" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2">
+        <core:Title text="Datos traídos de Oracle" />
+
+        <Label text="{i18n>nrop3}" />
+        <Input value="{AppJsonModel>/ObraDetalle/p3}" editable="false"/>
+
+        <Label text="{i18n>nrocontrato}" />
+        <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}" editable="false"/>
+
+        <Label text="{i18n>registroproveedor}" />
+        <Input value="{AppJsonModel>/ObraDetalle/nro_proveedor}" editable="false"/>
+
+        <Label text="{i18n>razonsocial}" />
+        <Input value="{AppJsonModel>/ObraDetalle/proveedor}" editable="false"/>
+
+        <Label text="{i18n>cuitcuilcdi}" />
+        <Input value="{AppJsonModel>/ObraDetalle/cuit}" editable="false"/>
+
+        <Label text="{i18n>nroordencompra}" />
+        <Input value="{AppJsonModel>/ObraDetalle/oc}" editable="false"/>
+
+        <Label text="{i18n>fechaordencompra}" />
+        <Input value="{
+                    path: 'AppJsonModel>/ObraDetalle/fecha_oc',
+                    formatter: '.formatter.formatDate'  
+                    }" editable="false"/>
+
+
+        <Label text="{i18n>monto}" />
+        <Input value="{
+                path: 'AppJsonModel>/ObraDetalle/quantity',
+                formatter: '.formatter.formatQuantity'
+            }" editable="false"/>
+
+        <Label text="{i18n>tasa}" />
+        <Input value="{AppJsonModel>/ObraDetalle/tasa_cambio}" editable="false"/>
+
+        <Label text="{i18n>moneda}" />
+        <Input value="{AppJsonModel>/ObraDetalle/moneda}" editable="false"/>
+        <Link press="editStepOne" text="{i18n>editar}" visible="{AppJsonModel>/Editable}">
+            <layoutData>
+                <l:GridData linebreak="true"/>
+            </layoutData>
+        </Link>
+
+        <core:Title text="Datos a completar por el usuario" />
+        <Label text="{i18n>nombreobra}" />
+        <Input value="{AppJsonModel>/ObraDetalle/nombre}" editable="false"/>
+        <Label text="{i18n>tipocontrato}" />
+        <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_contrato_ID}" editable="false">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>tipofluido}" />
+        <ComboBox items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/ObraDetalle/fluido_ID}" editable="false">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>tipoobra}" />
+        <ComboBox items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_obra_ID}" editable="false">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>partido}" />
+        <ComboBox items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/ObraDetalle/partido_ID}" editable="false">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>sistema}" />
+        <ComboBox items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/ObraDetalle/sistema_ID}" editable="false">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>acumar}" />
+        <Switch state="{AppJsonModel>/ObraDetalle/acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
+
+    </form:SimpleForm>
+</core:FragmentDefinition>

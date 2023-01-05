@@ -1,0 +1,20 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m">
+    <WizardStep id="idObraAltaStep5" validated="true" title="{i18n>garantiaejecucion}">
+        <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
+
+
+            <Label text="{i18n>nropoliza}" required="true"/>
+            <Input id="idStep5Poliza" value="{AppJsonModel>/ObraDetalle/nro_poliza}" type="Number"/>
+
+            <Label text="{i18n>extendidapor}" required="true"/>
+            <Input id="idStep5ExtendidaPor" value="{AppJsonModel>/ObraDetalle/extendida_por}" />
+
+            <Label text="{i18n>porcentajecobertura}" required="true"/>
+            <StepInput id="idStep5Cobertura" value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100"/>
+
+
+        </form:SimpleForm>
+    </WizardStep>
+</core:FragmentDefinition>

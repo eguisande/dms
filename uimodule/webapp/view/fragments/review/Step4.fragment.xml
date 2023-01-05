@@ -1,0 +1,130 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+
+
+    <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%">
+        <FlexBox class="columns" width="100%">
+
+            <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">
+                <form:content>
+                    <!-- 
+                <Label text="{i18n>nropi}" required="true"/>
+                <Input value="{AppJsonModel>/ObraDetalle/proyecto_inversion}" editable="false"/>
+
+                <Label text="{i18n>tipopi}" required="true"/>
+                <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_pi_ID}">
+                    <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>            
+                -->
+                    <Label text="{i18n>fechafirma}" required="true"/>
+                    <DatePicker displayFormat="dd-MM-yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>
+
+                    <Label text="{i18n>noredetermina}" />
+                    <Switch state="{AppJsonModel>/ObraDetalle/no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>
+
+                    <Label text="{i18n>incrementomaximo}" required="true"/>
+                    <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" editable="false"/>
+
+                    <Label text="{i18n>plazoejecucion}" required="true"/>
+                    <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" editable="false"/>
+
+                    
+                    <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" editable="false">
+                        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                    </ComboBox>
+
+                    <Label text="{i18n>plazomaxejecucion}" required="true"/>
+                    <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" editable="false"/>
+
+                    
+                    <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}" editable="false">
+                        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                    </ComboBox>
+
+                    <Label text="{i18n>acopio}" />
+                    <Switch state="{AppJsonModel>/ObraDetalle/acopio_materiales}" customTextOn="Si" customTextOff="No" enabled="false"/>
+
+                    <Label text="{i18n>anticipofinanciero}" required="true"/>
+                    <StepInput value="{AppJsonModel>/ObraDetalle/anticipo_financiero}" min="0" max="100" editable="false"/>
+
+                    <Label text="{i18n>fondoreparo}" required="true"/>
+                    <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" editable="false"/>
+
+                    <Label text="{i18n>sistemacontratacion}" required="true"/>
+                    <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>/ObraDetalle/sistema_contratacion_ID}" editable="false">
+                        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                    </ComboBox>
+
+                    <Label text="{i18n>financiamiento}" required="true"/>
+                    <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}" editable="false">
+                        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                    </ComboBox>
+
+                    <Link press="editStepFour" text="{i18n>editar}" visible="{AppJsonModel>/Editable}">
+                        <layoutData>
+                            <l:GridData linebreak="true"/>
+                        </layoutData>
+                    </Link>
+                </form:content>
+                <form:layoutData>
+                    <FlexItemData growFactor="1" baseSize="0" styleClass="sapUiTinyMargin" />
+                </form:layoutData>
+            </form:SimpleForm>
+
+
+
+            <Table items="{AppJsonModel>/ObraDetalle/PI}" fixedLayout="false" width="100%">
+
+                <columns>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>tipopi}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>nropi}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                        <Text text="{i18n>quantity}" />
+                        <footer >
+                            <ObjectStatus text="{
+                                path: 'AppJsonModel>/ObraDetalle/quantity',
+                                formatter: '.formatter.formatQuantity'
+                            }" />
+                        </footer>
+                    </Column>
+
+                </columns>
+                <items>
+                    <ColumnListItem vAlign="Middle">
+                        <cells>
+                            <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>tipo_pi_ID}" editable="false">
+                                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                            </ComboBox>
+
+                            <Text text="{AppJsonModel>pi}" />
+
+                            <Text text="{
+                        path: 'AppJsonModel>quantity',
+                        formatter: '.formatter.formatQuantity'
+                    }" />
+
+
+
+
+                        </cells>
+                    </ColumnListItem>
+                </items>
+                <layoutData>
+                    <FlexItemData growFactor="1" baseSize="0" backgroundDesign="Solid" styleClass="sapUiTinyMargin" />
+                </layoutData>
+            </Table>
+
+
+
+        </FlexBox>
+    </l:VerticalLayout>
+
+
+
+</core:FragmentDefinition>

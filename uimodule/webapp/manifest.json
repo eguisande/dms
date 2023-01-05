@@ -1,0 +1,134 @@
+{
+  "_version": "1.21.0",
+  "sap.cloud": {
+    "service": "com.aysa.pgo",
+    "public": true
+  },
+  "sap.app": {
+    "id": "com.aysa.pgo.obras",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "crossNavigation": {
+      "inbounds": {
+        "intent1": {
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          },
+          "semanticObject": "pgoobras",
+          "action": "display",
+          "icon": "",
+          "title": "{{appTitle}}",
+          "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "rootView": {
+      "viewName": "com.aysa.pgo.obras.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    },
+    "dependencies": {
+      "minUI5Version": "1.60.0",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.aysa.pgo.obras.i18n.i18n"
+        }
+      },
+      "AppJsonModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "viewPath": "com.aysa.pgo.obras.view",
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "clearControlAggregation": false,
+        "homeRoute": "App",
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "Obra",
+          "target": "Obra"
+        },
+        {
+          "pattern": "Detalle/:ID:",
+          "name": "Detalle",
+          "target": "Detalle"
+        }
+      ],
+      "targets": {
+        "Obra": {
+          "viewType": "XML",
+          "viewLevel": 1,
+          "viewId": "Obra",
+          "viewName": "Obra"
+        },
+        "Detalle": {
+          "viewType": "XML",
+          "viewLevel": 1,
+          "viewId": "Detalle",
+          "viewName": "Detalle"
+        }
+      }
+    }
+  },
+  "sap.cloud.portal": {
+    "pgoobras-display": {
+      "vizType": "com.aysa.pgo.tileobra"
+    }
+  }
+}

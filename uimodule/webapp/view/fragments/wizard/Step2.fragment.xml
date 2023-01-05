@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m">
+    <WizardStep id="idObraAltaStep2" validated="true" title="{i18n>respcontratista}">
+        <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
+
+            <Label text="{i18n>representantelegal}" required="true"/>
+            <Input id="idStep2Representante" value="{AppJsonModel>/ObraDetalle/representante}" />
+            <Label text="{i18n>telefono}" required="true"/>
+            <Input id="idStep2Telefono" value="{AppJsonModel>/ObraDetalle/telefono}" type="Number"/>
+            <Label text="{i18n>correo}" required="true"/>
+            <Input id="idStep2Correo" value="{AppJsonModel>/ObraDetalle/correo}" type="Email"/>
+
+        </form:SimpleForm>
+    </WizardStep>
+</core:FragmentDefinition>

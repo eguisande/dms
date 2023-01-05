@@ -1,0 +1,143 @@
+<mvc:View controllerName="com.aysa.pgo.obras.controller.Obra" displayBlock="true"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  xmlns:core="sap.ui.core"
+  xmlns:l="sap.ui.layout"
+  xmlns:mvc="sap.ui.core.mvc">
+
+  <f:DynamicPage id="dynamicPageId" showFooter="true">
+    <!-- DynamicPage Header -->
+    <f:header>
+      <f:DynamicPageHeader>
+        <f:content >
+          <FlexBox alignItems="End" justifyContent="End">
+            <SearchField liveChange=".onSearch" width="auto" class="sapUiTinyMarginEnd"/>
+            <Button tooltip="Sort" icon="sap-icon://sort" press="handleSortDialog" type="Ghost"/>
+          </FlexBox>
+
+        </f:content>
+      </f:DynamicPageHeader>
+    </f:header>
+    <!-- DynamicPage Content -->
+    <f:content>
+
+      <Table id="idTablaObras" items="{AppJsonModel>/Obras}" fixedLayout="false">
+
+        <columns>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>nombreobra}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>estado}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>tipocontrato}" />
+          </Column>
+          <Column >
+            <Text text="{i18n>nrop3}" />
+          </Column>
+          <Column >
+            <Text text="{i18n>codproveedor}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>direccionaysa}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>tipoobra}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>tipofluido}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>partido}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>accion}" />
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem vAlign="Middle">
+            <cells>
+              <Text text="{AppJsonModel>nombre}" />
+
+              <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
+
+              <Text text="{AppJsonModel>tipo_contrato/descripcion}" />
+
+              <Text text="{AppJsonModel>p3}" />
+
+
+              <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
+              <!-- 
+                    <Text text="{AppJsonModel>contratista/registro_proveedor}" />
+              -->
+              <Text text="{AppJsonModel>direccion/descripcion}" />
+
+              <Text text="{AppJsonModel>tipo_obra/descripcion}" />
+
+              <Text text="{AppJsonModel>fluido/descripcion}" />
+
+              <Text text="{AppJsonModel>partido/descripcion}" />
+
+              <MenuButton useDefaultActionOnly="true" icon="sap-icon://menu">
+                <menu>
+                  <Menu >
+                    <MenuItem text="{i18n>detalle}" icon="sap-icon://detail-view" press="onViewObra" />
+                    <MenuItem text="{i18n>partidimetro}" icon="sap-icon://multi-select" press="onViewPartidimetro" />
+                    <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" />
+                    <MenuItem text="{i18n>enviar}" icon="sap-icon://approvals" press="onEnviar" visible="{=${AppJsonModel>estado_ID} === 'BO'}"/>
+                    <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
+                      <items>
+                        <MenuItem text="{i18n>oferta}" press="onNavigateToOferta"/>
+                        <MenuItem text="{i18n>cargainicial}" press="onNavigateToCargaInicial"/>
+                        
+                        <MenuItem text="{i18n>genero}" press="onNavigateToCargaInicialGenero"/>
+                        <MenuItem text="{i18n>carteleria}" press="onNavigateToCargaInicialCarteleria"/>
+                        <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza"/>
+
+                      </items>
+                    </MenuItem>
+
+                    <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign">
+                      <items>
+                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio"/>
+                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido"/>
+
+
+                      </items>
+                    </MenuItem>
+
+                  </Menu>
+                </menu>
+              </MenuButton>
+
+
+              <!-- 
+
+  <HBox >
+    <Button class="sapUiTinyMargin" tooltip="{i18n>visualizar}" icon="sap-icon://show-edit"></Button>
+    <Button class="sapUiTinyMargin" tooltip="{i18n>editar}" icon="sap-icon://edit-outside"></Button>
+  </HBox>
+-->
+
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+
+    </f:content>
+
+    <f:footer>
+      <OverflowToolbar>
+        <ToolbarSpacer/>
+        <Button type="Emphasized" text="{i18n>altayasignacion}" press="openDialogAltaAsignacion">
+          <layoutData>
+            <OverflowToolbarLayoutData priority="NeverOverflow" />
+          </layoutData>
+        </Button>
+      </OverflowToolbar>
+    </f:footer>
+    <!-- DynamicPage Footer -->
+  </f:DynamicPage>
+
+</mvc:View>

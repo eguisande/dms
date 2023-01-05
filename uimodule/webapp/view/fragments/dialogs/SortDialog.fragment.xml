@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		confirm="handleSortDialogConfirm">
+		<sortItems>
+			<ViewSettingsItem text="{i18n>estado}" key="estado/descripcion" selected="true" />
+			<ViewSettingsItem text="{i18n>tipocontrato}" key="tipocontrato/descripcion" />
+			<ViewSettingsItem text="{i18n>tipoobra}" key="tipoobra/descripcion" />
+			<ViewSettingsItem text="{i18n>tipofluido}" key="tipofluido/descripcion" />
+		</sortItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

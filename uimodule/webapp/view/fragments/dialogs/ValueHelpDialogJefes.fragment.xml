@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+        id="idSelectDialogJefes"
+		title="{i18n>jefeinspeccion}"
+		liveChange=".onSearchInspector"
+		confirm=".onValueHelpDialogJefesConfirm"
+		cancel=".onValueHelpDialogJefesClose"
+        multiSelect="true"
+        rememberSelections="true"
+		showClearButton="true"
+		contentHeight="auto"
+		growing="false"
+		contentWidth="auto"
+		items="{AppJsonModel>/Combos/JefeInspectores}">
+            <StandardListItem			
+                title="{AppJsonModel>nombre}"/>
+            </SelectDialog>
+</core:FragmentDefinition>

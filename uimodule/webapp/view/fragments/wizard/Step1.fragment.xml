@@ -1,0 +1,80 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m">
+
+    <WizardStep id="idObraAltaStep1" title="{i18n>detalleobra}" validated="true">
+        <form:SimpleForm editable="true" layout="ResponsiveLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="2" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2">
+            <core:Title text="Datos traídos de Oracle" />
+            <Label text="{i18n>nrop3}" required="true"/>
+            <Input id="idStep1P3" value="{AppJsonModel>/ObraDetalle/p3}"/>
+
+            <Label text="{i18n>nrocontrato}" />
+            <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}" editable="false"/>
+
+            <Label text="{i18n>registroproveedor}" />
+            <Input value="{AppJsonModel>/ObraDetalle/nro_proveedor}" editable="false"/>
+
+            <Label text="{i18n>razonsocial}" />
+            <Input value="{AppJsonModel>/ObraDetalle/proveedor}" editable="false"/>
+
+            <Label text="{i18n>cuitcuilcdi}" />
+            <Input value="{AppJsonModel>/ObraDetalle/cuit}" editable="false"/>
+
+            <Label text="{i18n>nroordencompra}" />
+            <Input value="{AppJsonModel>/ObraDetalle/oc}" editable="false"/>
+
+            <Label text="{i18n>fechaordencompra}" />
+            <Input value="{
+                    path: 'AppJsonModel>/ObraDetalle/fecha_oc',
+                    formatter: '.formatter.formatDate'  
+                    }" editable="false"/>
+
+            <Label text="{i18n>monto}" />
+            <Input value="{
+                path: 'AppJsonModel>/ObraDetalle/quantity',
+                formatter: '.formatter.formatQuantity'
+            }" editable="false"/>
+
+            <Label text="{i18n>tasa}" />
+            <Input value="{AppJsonModel>/ObraDetalle/tasa_cambio}" editable="false"/>
+
+            <Label text="{i18n>moneda}" />
+            <Input value="{AppJsonModel>/ObraDetalle/moneda}" editable="false"/>
+
+            <core:Title text="Datos a completar por el usuario" />
+            <Label text="{i18n>nombreobra}" required="true"/>
+            <Input id="idStep1Nombre" value="{AppJsonModel>/ObraDetalle/nombre}" />
+
+            <Label text="{i18n>tipocontrato}" required="true"/>
+            <ComboBox id="idStep1TipoContrato" items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_contrato_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
+
+            <Label text="{i18n>tipofluido}" required="true"/>
+            <ComboBox id="idStep1Fluido" items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/ObraDetalle/fluido_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
+
+            <Label text="{i18n>tipoobra}" required="true"/>
+            <ComboBox id="idStep1TipoObra" items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_obra_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
+
+            <Label text="{i18n>partido}" required="true"/>
+            <ComboBox id="idStep1Partido" items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/ObraDetalle/partido_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
+
+            <Label text="{i18n>sistema}" required="true"/>
+            <ComboBox id="idStep1Sistema" items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/ObraDetalle/sistema_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
+
+            <Label text="{i18n>acumar}" />
+            <Switch state="{AppJsonModel>/ObraDetalle/acumar}" customTextOn="Si" customTextOff="No"/>
+
+
+        </form:SimpleForm>
+    </WizardStep>
+
+</core:FragmentDefinition>
