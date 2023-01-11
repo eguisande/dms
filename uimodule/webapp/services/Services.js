@@ -63,11 +63,26 @@ sap.ui.define([], function () {
         "Obras?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)"
       );
     },
+    getObrasJefeInspector: function (usuario, tipo_inspector) {
+      return this.callGetService(
+        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)`
+      );
+    },
+    getObrasByContratista: function (usuario) {
+      return this.callGetService(
+        `getObrasByContratista(usuario='${usuario}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)`
+      );
+    },
     getObra: function (ID) {
       return this.callGetService(
         `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi`
       );
     },
+
+    deleteObra: function (ID) {
+      return this.callDeleteService(`Obras/${ID}`);
+    },
+
     getDirecciones: function () {
       return this.callGetService("Direcciones");
     },
@@ -145,12 +160,59 @@ sap.ui.define([], function () {
     },
 
     getUser: async function () {
+      try {
 
-      const url = `${this._urlUserApi}/attributes`;
-      const resp = await fetch(url)
-      const user = await resp.json()
+        if (window.location.hostname === "localhost") {
+          return {
+            "firstname": "Maximiliano",
+            "lastname": "Guisande",
+            "email": "maximiliano.guisande@datco.net",
+            "name": "maximiliano.guisande@datco.net",
+            "scopes": [
+              "openid",
+              "uaa.user"
+            ],
+            "user_uuid": [
+              "64ff52e3-7bef-4706-be6f-645d504d12a0"
+            ],
+            "Groups": [
+              "CAI_Developer",
+              "HAA_USER",
+              "IDE_Developer",
+              "IRPAProjectMember",
+              "Launchpad_Admin",
+              "Launchpad_Advanced_Theming",
+              "PGO_Administrador",
+              "PGO_Analista",
+              "PGO_Contratista",
+              //"PGO_Inspector",
+              "PGO_JefeInspeccion",
+              "PGO_Launchpad_Admin",
+              "PGO_Launchpad_Advanced_Theming",
+              "PGO_Super",
+              "PGO_WorkflowManagementAdmin",
+              "PGO_WorkflowManagementBusinessExpert",
+              "PGO_WorkflowManagementDeveloper",
+              "PGO_WorkflowManagementEndUser",
+              "WorkflowManagementAdmin",
+              "WorkflowManagementBusinessExpert",
+              "WorkflowManagementDeveloper",
+              "WorkflowManagementEndUser"
+            ],
+            "acr": [
+              "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
+            ]
+          }
+        }
 
-      return user;
+        const url = `${this._urlUserApi}/attributes`;
+        const resp = await fetch(url)
+        const user = await resp.json()
+
+        return user;
+      } catch (error) {
+        console.log(error)
+      }
 
     },
 

@@ -1,12 +1,14 @@
 sap.ui.define([
     "com/aysa/pgo/obras/controller/BaseController",
     "com/aysa/pgo/obras/services/Services",
-    "sap/ui/core/Fragment"
-], function (Controller, Services, Fragment) {
+    "sap/ui/core/Fragment",
+    "sap/m/MessageBox",
+], function (Controller, Services, Fragment, MessageBox) {
     "use strict";
 
     return Controller.extend("com.aysa.pgo.obras.controller.Obra", {
-        onInit: function () {
+        onInit: async function () {
+
             const oModel = this.getModel("AppJsonModel")
             const oManifest = this.getOwnerComponent().getManifestObject()
             const urlCatalog = oManifest.resolveUri("catalog")
@@ -14,30 +16,101 @@ sap.ui.define([
             const urlWF = oManifest.resolveUri("bpmworkflowruntime")
             const urlUserApi = oManifest.resolveUri("user-api")
             Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi)
+
+            const { email, Groups: aGroups } = await Services.getUser()
+            this.setUserData(aGroups, email)
+
             this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
 
             Services.getContratistas().then(data => {
                 oModel.setProperty("/Contratistas", data.value)
             })
 
-            Services.getUser().then(data => {
-                console.log("--USER--", data)
-            })
-
         },
 
         _onObjectMatched: async function () {
+            debugger
             try {
                 sap.ui.core.BusyIndicator.show(0)
                 const oModel = this.getModel("AppJsonModel")
-                const { value } = await Services.getObras();
-                oModel.setProperty("/Obras", value)
+                const aObras = await this.getObrasData()
+                oModel.setProperty("/Obras", aObras)
             } catch (error) {
                 const message = this.getResourceBundle().getText("errorservice")
                 sap.m.MessageToast.show(message)
             } finally {
                 sap.ui.core.BusyIndicator.hide()
             }
+        },
+
+        setUserData: function (aGroups, user) {
+            const oModel = this.getModel("AppJsonModel")
+
+            const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion")
+            const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector")
+            const sContratista = aGroups.find(oGrupo => oGrupo === "PGO_Contratista")
+            const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_AreaGenero")
+            const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_AreaCarteleria")
+            const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_AreaMedioambiente")
+            const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_AreaPolizas")
+            const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador")
+            const sAllAndDelete = aGroups.find(oGrupo => oGrupo === "PGO_SuperUsuario" || oGrupo === "PGO_Analista")
+
+            /**
+             * 
+             * Carga inicial: Inspector
+                Genero: PGO_AreaGenero
+                Carteleria: PGO_AreaCarteleria
+                Medioambiente y calidad: PGO_AreaMedioambiente
+                Polizas: PGO_AreaPolizas
+             * 
+             * 
+             * 
+             */
+
+
+            oModel.setProperty("/Permisos", {
+                user,
+                delete: !!sAllAndDelete && true,
+                create: !!sAllAndDelete && true,
+                all: !!sAll && true,
+                jefe: !!sJefeInspector && true,
+                inspector: !!sInspector && true,
+                contratista: !!sContratista && true,
+                genero: !!sAreaGenero && true,
+                carteleria: !!sAreaCarteleria && true,
+                medioAmbiente: !!sAreaMedioambiente && true,
+                polizas: !!sAreaPolizas && true,
+
+            })
+        },
+
+
+        getObrasData: async function () {
+            const oModel = this.getModel("AppJsonModel")
+            const { all, jefe, inspector, contratista, user } = oModel.getProperty("/Permisos")
+
+            if (all) {
+                const { value } = await Services.getObras()
+                return value
+            }
+
+            if (jefe) {
+                const { value } = await Services.getObrasJefeInspector(user, "JE")
+                return value
+            }
+
+            if (inspector) {
+                const { value } = await Services.getObrasJefeInspector(user, "EM")
+                return value
+            }
+
+            if (contratista) {
+                const { value } = await Services.getObrasByContratista()
+                return value
+            }
+
+
         },
 
         handleSortDialog: function () {
@@ -253,6 +326,34 @@ sap.ui.define([
             this.navTo("Detalle", { ID }, false)
         },
 
+        onDeleteObra: async function (oEvent) {
+            const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+
+            sap.ui.core.BusyIndicator.show(0)
+            try {
+                await this.showMessageConfirm("eliminarregistro")
+                await Services.deleteObra(ID)
+                await this._onObjectMatched()
+            } catch (error) {
+                const message = this.getResourceBundle().getText("errorservice")
+                error && sap.m.MessageToast.show(message)
+            }
+            finally {
+                sap.ui.core.BusyIndicator.hide()
+            }
+
+        },
+
+        showMessageConfirm: function (sText) {
+            return new Promise((res, rej) => {
+                MessageBox.confirm(this.getResourceBundle().getText(sText), {
+                    actions: [MessageBox.Action.CANCEL, "Aceptar"],
+                    emphasizedAction: "Aceptar",
+                    onClose: sAction => sAction === "Aceptar" ? res() : rej(false)
+                })
+            })
+        },
+
         onNavigateToCargaInicial: async function (oEvent) {
             const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
             this.navToCross("pgocargainicial", { ID })
@@ -288,6 +389,11 @@ sap.ui.define([
             this.navToCross("pgocargainicial", { ID, area_ID: "CA" })
         },
 
+        onNavigateToCargaInicialMedioAmbiente: function (oEvent) {
+            const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+            this.navToCross("pgocargainicial", { ID, area_ID: "MA" })
+        },
+
         onNavigateToOrdenServicio: function (oEvent) {
             const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
             this.navToCross("pgoordenserv", { ID })
@@ -296,7 +402,7 @@ sap.ui.define([
             const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
             this.navToCross("pgonotapedido", { ID })
         },
-        
+
         onNavigateToPoliza: function (oEvent) {
             const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
             this.navToCross("pgopolizas", { ID })
