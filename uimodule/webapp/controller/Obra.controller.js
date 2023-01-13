@@ -17,8 +17,7 @@ sap.ui.define([
             const urlUserApi = oManifest.resolveUri("user-api")
             Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi)
 
-            const { email, Groups: aGroups } = await Services.getUser()
-            this.setUserData(aGroups, email)
+
 
             this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
 
@@ -32,7 +31,12 @@ sap.ui.define([
             debugger
             try {
                 sap.ui.core.BusyIndicator.show(0)
+
                 const oModel = this.getModel("AppJsonModel")
+
+                const { email, Groups: aGroups } = await Services.getUser()
+                this.setUserData(aGroups, email)
+
                 const aObras = await this.getObrasData()
                 oModel.setProperty("/Obras", aObras)
             } catch (error) {
@@ -54,7 +58,7 @@ sap.ui.define([
             const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_AreaMedioambiente")
             const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_AreaPolizas")
             const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador")
-            const sAllAndDelete = aGroups.find(oGrupo => oGrupo === "PGO_SuperUsuario" || oGrupo === "PGO_Analista")
+            const sAllAndDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
 
             /**
              * 
