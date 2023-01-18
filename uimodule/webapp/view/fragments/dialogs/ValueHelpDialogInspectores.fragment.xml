@@ -11,7 +11,13 @@
         rememberSelections="true"
 		showClearButton="true"
 		growing="false"
-		items="{AppJsonModel>/Combos/Inspectores}">
+		items="{
+			path : '/AppJsonModel>/Combos/Inspectores',			
+			filters : [
+				{ path : 'borrado', operator : 'NE', value1 : true}
+			]
+		}">
+		
             <StandardListItem
                 title="{AppJsonModel>nombre}"/>
             </SelectDialog>

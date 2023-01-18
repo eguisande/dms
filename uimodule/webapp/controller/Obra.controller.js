@@ -27,8 +27,7 @@ sap.ui.define([
 
         },
 
-        _onObjectMatched: async function () {
-            debugger
+        _onObjectMatched: async function () {            
             try {
                 sap.ui.core.BusyIndicator.show(0)
 
@@ -57,8 +56,8 @@ sap.ui.define([
             const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_AreaCarteleria")
             const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_AreaMedioambiente")
             const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_AreaPolizas")
-            const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador")
-            const sAllAndDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
+            const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador" || oGrupo.includes("PGO_Area"))
+            const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
 
             /**
              * 
@@ -75,8 +74,8 @@ sap.ui.define([
 
             oModel.setProperty("/Permisos", {
                 user,
-                delete: !!sAllAndDelete && true,
-                create: !!sAllAndDelete && true,
+                delete: !!sCreateDelete && true,
+                create: !!sCreateDelete && true,
                 all: !!sAll && true,
                 jefe: !!sJefeInspector && true,
                 inspector: !!sInspector && true,

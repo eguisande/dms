@@ -110,8 +110,8 @@ sap.ui.define([], function () {
       return this.callGetService("Inspectores?$expand=tipo_inspector");
     },
 
-    getDireccionGerencias: function () {
-      return this.callGetService("DireccionGerencias?$expand=gerencia");
+    getGerencias: function () {
+      return this.callGetService("Gerencias");
     },
 
     getTiposContratos: function () {

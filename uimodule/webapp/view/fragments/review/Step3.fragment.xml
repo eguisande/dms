@@ -10,7 +10,7 @@
             </ComboBox>
             <Label text="{i18n>gerenciaaysa}" />
             <ComboBox items="{AppJsonModel>/Combos/DireccionGerencias}" selectedKey="{AppJsonModel>/ObraDetalle/gerencia_ID}" editable="false">
-                <core:Item key="{AppJsonModel>gerencia/ID}" text="{AppJsonModel>gerencia/descripcion}" />
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
             </ComboBox>
             <Label text="{i18n>jefeinspeccion}" />
             <MultiComboBox items="{AppJsonModel>/Combos/JefeInspectores}" selectedKeys="{AppJsonModel>/ObraDetalle/JefesInspectores}" editable="false">

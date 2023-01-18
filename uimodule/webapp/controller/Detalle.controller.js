@@ -30,7 +30,7 @@ sap.ui.define([
                     aAreas,
                 ] = await Promise.all([
                     Services.getDirecciones(),
-                    Services.getDireccionGerencias(),
+                    Services.getGerencias(),
                     Services.getInspectores(),
                     Services.getTiposContratos(),
                     Services.getFluidos(),

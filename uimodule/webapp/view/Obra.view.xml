@@ -101,10 +101,12 @@
                       </items>
                     </MenuItem>
 
-                    <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign">
+
+
+                    <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{=${AppJsonModel>/Permisos/jefe} || ${AppJsonModel>/Permisos/inspector}}">
                       <items>
-                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio"/>
-                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido"/>
+                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" visible="{=${AppJsonModel>/Permisos/jefe} || ${AppJsonModel>/Permisos/inspector}}"/>
+                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" visible="{=${AppJsonModel>/Permisos/jefe} || ${AppJsonModel>/Permisos/inspector}}"/>
 
 
                       </items>
