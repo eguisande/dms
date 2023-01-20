@@ -8,12 +8,52 @@ sap.ui.define([
     return Controller.extend("com.aysa.pgo.obras.controller.Detalle", {
         mailRegex: /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/,
 
-        onInit: async function () {
+        onInit: function () {
+            this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
+        },
+
+        _onObjectMatched: async function (oEvent) {
+            const { ID } = oEvent.getParameter("arguments")
+            const oModel = this.getModel("AppJsonModel")
+            oModel.setProperty("/Editable", true)
+
+            this.clearToken()
+            this.loadCombos()
+
+            const oNavPage = this.byId("wizardNavContainer");
+            const oPageWizard = this.byId("wizardContentPage")
+            const oPageReview = this.byId("wizardReviewPage")
+            //Reset Wizard
+            const oWizard = this.byId("CreateObraWizard");
+            const oFirstStep = oWizard.getSteps().at(0);
+            oWizard.discardProgress(oFirstStep);
+            // scroll to top
+            oWizard.goToStep(oFirstStep);
+            //navigate wizard
+
+            if (ID) {
+
+                oNavPage.to(oPageReview)
+                await this.setDataToView(oModel, ID)
+                const aSteps = oWizard.getSteps()
+                aSteps.forEach(oStep => {
+                    oWizard.nextStep()
+                });
+
+            } else {
+                oModel.setProperty("/ObraDetalle/ID", null)
+                const oFirstStep = oWizard.getSteps().at(0);
+                oWizard.discardProgress(oFirstStep);
+                // scroll to top
+                oWizard.goToStep(oFirstStep);
+                oNavPage.to(oPageWizard)
+            }
+        },
+
+        loadCombos: async function () {
             try {
                 const oModel = this.getModel("AppJsonModel")
                 sap.ui.core.BusyIndicator.show(0)
-                this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
-
                 const [
                     aDirecciones,
                     aDireccionGerencias,
@@ -44,8 +84,6 @@ sap.ui.define([
                     Services.getAreas(),
                 ])
 
-
-
                 oModel.setProperty("/Combos", {
                     Direcciones: aDirecciones.value,
                     DireccionGerencias: aDireccionGerencias.value,
@@ -69,45 +107,6 @@ sap.ui.define([
                 const message = this.getResourceBundle().getText("errorservice")
                 sap.ui.core.BusyIndicator.hide()
                 sap.m.MessageToast.show(message)
-            }
-
-
-        },
-
-        _onObjectMatched: async function (oEvent) {
-            const { ID } = oEvent.getParameter("arguments")
-            const oModel = this.getModel("AppJsonModel")
-            oModel.setProperty("/Editable", true)
-
-            this.clearToken()
-
-            const oNavPage = this.byId("wizardNavContainer");
-            const oPageWizard = this.byId("wizardContentPage")
-            const oPageReview = this.byId("wizardReviewPage")
-            //Reset Wizard
-            const oWizard = this.byId("CreateObraWizard");
-            const oFirstStep = oWizard.getSteps().at(0);
-            oWizard.discardProgress(oFirstStep);
-            // scroll to top
-            oWizard.goToStep(oFirstStep);
-            //navigate wizard
-
-            if (ID) {
-
-                oNavPage.to(oPageReview)
-                await this.setDataToView(oModel, ID)
-                const aSteps = oWizard.getSteps()
-                aSteps.forEach(oStep => {
-                    oWizard.nextStep()
-                });
-
-            } else {
-                oModel.setProperty("/ObraDetalle/ID", null)
-                const oFirstStep = oWizard.getSteps().at(0);
-                oWizard.discardProgress(oFirstStep);
-                // scroll to top
-                oWizard.goToStep(oFirstStep);
-                oNavPage.to(oPageWizard)
             }
         },
 
@@ -300,7 +299,8 @@ sap.ui.define([
             const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID")
             const oBinding = oValueHelpDialog.getBinding("items")
             oBinding.filter([
-                new sap.ui.model.Filter("direccion_ID", sap.ui.model.FilterOperator.Contains, idDireccion)
+                new sap.ui.model.Filter("direccion_ID", sap.ui.model.FilterOperator.Contains, idDireccion),
+                new sap.ui.model.Filter("borrado", sap.ui.model.FilterOperator.NE, true)
             ])
         },
 
@@ -358,8 +358,8 @@ sap.ui.define([
             try {
                 sap.ui.core.BusyIndicator.show(0)
                 const oModel = this.getModel("AppJsonModel");
-                const oObraDetalle = oModel.getProperty("/ObraDetalle"); 
-                const aAreas = oModel.getProperty("/Combos/Areas"); 
+                const oObraDetalle = oModel.getProperty("/ObraDetalle");
+                const aAreas = oModel.getProperty("/Combos/Areas");
 
                 const inspectores = [...oObraDetalle.JefesInspectores?.map(jefe => { return { inspector_ID: jefe } }) || [],
                 ...oObraDetalle.Inspectores?.map(item => { return { inspector_ID: item } }) || []]

@@ -11,12 +11,7 @@
         rememberSelections="true"
 		showClearButton="true"
 		growing="false"
-		items="{
-			path : '/AppJsonModel>/Combos/Inspectores',			
-			filters : [
-				{ path : 'borrado', operator : 'NE', value1 : true}
-			]
-		}">
+		items="{AppJsonModel>/Combos/Inspectores}">
 		
             <StandardListItem
                 title="{AppJsonModel>nombre}"/>
