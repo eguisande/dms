@@ -19,7 +19,7 @@
                     </ComboBox>            
                     -->
                     <Label text="{i18n>fechafirma}" required="true"/>
-                    <DatePicker id="idStep4FechaFirma" displayFormat="dd-MM-yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}"/>
+                    <DatePicker id="idStep4FechaFirma" displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}"/>
 
                     <Label text="{i18n>noredetermina}" />
                     <Switch state="{AppJsonModel>/ObraDetalle/no_redetermina}" customTextOn="Si" customTextOff="No"/>

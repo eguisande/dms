@@ -161,7 +161,6 @@ sap.ui.define([], function () {
 
     getUser: async function () {
       try {
-
         if (window.location.hostname === "localhost") {
           return {
             "firstname": "Maximiliano",
@@ -185,7 +184,7 @@ sap.ui.define([], function () {
               "PGO_Administrador",
               "PGO_Analista",
               "PGO_Contratista",
-              //"PGO_Inspector",
+              "PGO_Inspector",
               "PGO_JefeInspeccion",
               "PGO_Launchpad_Admin",
               "PGO_Launchpad_Advanced_Theming",
@@ -204,16 +203,13 @@ sap.ui.define([], function () {
             ]
           }
         }
-
         const url = `${this._urlUserApi}/attributes`;
         const resp = await fetch(url)
         const user = await resp.json()
-
         return user;
       } catch (error) {
         console.log(error)
       }
-
     },
 
     creteFolderDMS: async function (folder, proveedor, aAreas = []) {
