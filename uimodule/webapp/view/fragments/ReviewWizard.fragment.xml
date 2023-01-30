@@ -21,7 +21,8 @@
                 <contentRight>
                     
                     <Button text="{i18n>cancelar}" press="handleWizardCancel" />
-                    <Button text="{i18n>guardar}" type="Emphasized" press="handleWizardSubmit" visible="{AppJsonModel>/Permisos/edit}"/>
+                    <Button id="btnGuardar" text="{i18n>guardar}" type="Emphasized" press="handleWizardSubmit" 
+                        visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' || ${AppJsonModel>/ObraDetalle/ID} === null &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
                 </contentRight>
             </Bar>
         </footer>
