@@ -21,7 +21,7 @@
                 <contentRight>
                     
                     <Button text="{i18n>cancelar}" press="handleWizardCancel" />
-                    <Button text="{i18n>guardar}" type="Emphasized" press="handleWizardSubmit" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
+                    <Button text="{i18n>guardar}" type="Emphasized" press="handleWizardSubmit" visible="{AppJsonModel>/Permisos/edit}"/>
                 </contentRight>
             </Bar>
         </footer>
