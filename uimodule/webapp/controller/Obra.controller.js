@@ -50,6 +50,7 @@ sap.ui.define([
       const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas")
       const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador" || oGrupo.includes("PGO_Area"))
       const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
+      const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector")
       const sNotaPedido = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
       const sOrdenServicio = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
@@ -58,6 +59,7 @@ sap.ui.define([
         user,
         delete: !!sCreateDelete && true,
         create: !!sCreateDelete && true,
+        edit: !!sEdit && true,
         all: !!sAll && true,
         jefe: !!sJefeInspector && true,
         inspector: !!sInspector && true,
@@ -381,6 +383,7 @@ sap.ui.define([
     },
 
     onEnviar: async function (oEvent) {
+      const oObra = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
       MessageBox.confirm(this.getResourceBundle().getText("enviarconfirm"), {
         actions: [MessageBox.Action.CANCEL, "Aceptar"],
         emphasizedAction: "Aceptar",
@@ -390,7 +393,7 @@ sap.ui.define([
           }
           try {
             BusyIndicator.show(0)
-            const oObra = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+            //const oObra = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
             const jefe_inspeccion = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === "JE")
               .map(item => ({
                 nombre: item.inspector.nombre,
@@ -433,7 +436,7 @@ sap.ui.define([
             await Services.postWorkflow(oPayload);
             await Services.updateObra(oObra.ID, { estado_ID: "PI" });
             const message = this.getResourceBundle().getText("obraenviada");
-            MessageToast.show(message);
+            MessageBox.success(message);
             this._onObjectMatched();
           } catch (error) {
             console.log("--- Error WF ---", error);
