@@ -1,8 +1,11 @@
 sap.ui.define([
   "com/aysa/pgo/obras/controller/BaseController",
   "com/aysa/pgo/obras/services/Services",
-  "sap/ui/core/Fragment"
-], function (Controller, Services, Fragment) {
+  "sap/ui/core/Fragment",
+  "sap/m/MessageBox",
+  "sap/m/MessageToast",
+  "sap/ui/core/BusyIndicator"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.obras.controller.Detalle", {
@@ -48,7 +51,7 @@ sap.ui.define([
     loadCombos: async function () {
       try {
         const oModel = this.getModel("AppJsonModel")
-        sap.ui.core.BusyIndicator.show(0)
+        BusyIndicator.show(0)
         const [
           aDirecciones,
           aDireccionGerencias,
@@ -94,11 +97,11 @@ sap.ui.define([
           Financiamientos: aFinanciamientos.value,
           Areas: aAreas.value,
         })
-        sap.ui.core.BusyIndicator.hide()
+        BusyIndicator.hide()
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice")
-        sap.ui.core.BusyIndicator.hide()
-        sap.m.MessageToast.show(message)
+        BusyIndicator.hide()
+        MessageToast.show(message)
       }
     },
 
@@ -148,7 +151,7 @@ sap.ui.define([
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
       if (this.validateFields(oObraDetalle)) {
         const message = this.getResourceBundle().getText("errorfields")
-        return sap.m.MessageToast.show(message)
+        return MessageToast.show(message)
       }
       const oNavPage = this.byId("wizardNavContainer");
       const oPageReview = this.byId("wizardReviewPage")
@@ -316,15 +319,16 @@ sap.ui.define([
     },
 
     handleWizardSubmit: async function () {
-      sap.m.MessageBox.confirm(this.getResourceBundle().getText("saveConfirm"), {
-        actions: [sap.m.MessageBox.Action.CANCEL, "Aceptar"],
+      let that = this;
+      MessageBox.confirm(this.getResourceBundle().getText("saveConfirm"), {
+        actions: [MessageBox.Action.CANCEL, "Aceptar"],
         emphasizedAction: "Aceptar",
         onClose: async (sAction) => {
           if (sAction !== "Aceptar") {
             return
           }
           try {
-            sap.ui.core.BusyIndicator.show(0)
+            BusyIndicator.show(0)
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
             const aAreas = oModel.getProperty("/Combos/Areas");
@@ -391,15 +395,21 @@ sap.ui.define([
                 Services.creteFolderDMS(oObraDetalle.p3, oObraDetalle.nro_proveedor, aAreas)
               ])
             }
-            this.onNavBack()
+            const message = this.getResourceBundle().getText("cambiosguardados");
+            MessageBox.success(message, {
+              actions: [MessageBox.Action.CLOSE],
+              onClose: function () {
+                that.onNavBack();
+              }
+            });           
           } catch (error) {
             const message = this.getResourceBundle().getText("errorservice")
-            sap.m.MessageToast.show(message)
+            MessageToast.show(message)
           } finally {
-            sap.ui.core.BusyIndicator.hide()
+            BusyIndicator.hide()
           }
         }
-      })
+      });     
     },
    
     validateFields: function (oObraDetalle) {

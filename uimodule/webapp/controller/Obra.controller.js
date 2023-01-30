@@ -3,7 +3,9 @@ sap.ui.define([
   "com/aysa/pgo/obras/services/Services",
   "sap/ui/core/Fragment",
   "sap/m/MessageBox",
-], function (Controller, Services, Fragment, MessageBox) {
+  "sap/m/MessageToast",
+  "sap/ui/core/BusyIndicator"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.obras.controller.Obra", {
@@ -23,7 +25,7 @@ sap.ui.define([
 
     _onObjectMatched: async function () {
       try {
-        sap.ui.core.BusyIndicator.show(0)
+        BusyIndicator.show(0)
         const oModel = this.getModel("AppJsonModel")
         const { email, Groups: aGroups } = await Services.getUser()
         this.setUserData(aGroups, email)
@@ -31,9 +33,9 @@ sap.ui.define([
         oModel.setProperty("/Obras", aObras)
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice")
-        sap.m.MessageToast.show(message)
+        MessageToast.show(message)
       } finally {
-        sap.ui.core.BusyIndicator.hide()
+        BusyIndicator.hide()
       }
     },
 
@@ -45,13 +47,13 @@ sap.ui.define([
       const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaGenero")
       const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria")
       const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente")
-      const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas") 
+      const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas")
       const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador" || oGrupo.includes("PGO_Area"))
-      const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")  
+      const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector")
       const sNotaPedido = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
-      const sOrdenServicio = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion") 
-      const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")    
+      const sOrdenServicio = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
+      const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
       oModel.setProperty("/Permisos", {
         user,
         delete: !!sCreateDelete && true,
@@ -115,7 +117,7 @@ sap.ui.define([
       const oBinding = oTable.getBinding("items");
       const sPath = mParams.sortItem.getKey();
       const bDescending = mParams.sortDescending;
-      const aSorters = [new sap.ui.model.Sorter(sPath, bDescending)];     
+      const aSorters = [new sap.ui.model.Sorter(sPath, bDescending)];
       oBinding.sort(aSorters);
     },
 
@@ -253,7 +255,7 @@ sap.ui.define([
         if (!PI || !nroProveedor) {
           return
         }
-        sap.ui.core.BusyIndicator.show(0)
+        BusyIndicator.show(0)
         const [oOrdenCompra, { value: quantity }, { value: OCQuantity }, oContratista] = await Promise.all([
           Services.getValidatePIPorveedor(PI, nroProveedor),
           Services.getQuantity(PI),
@@ -267,13 +269,13 @@ sap.ui.define([
           oModel.setProperty("/ObraDetalle/PI", this.getPITable(OCQuantity));
           this.navTo("Detalle", {}, false)
         } else {
-          sap.m.MessageToast.show(resourceBundle.getText("errorpinroproveedor"))
+          MessageToast.show(resourceBundle.getText("errorpinroproveedor"))
         }
       } catch (error) {
         const message = resourceBundle.getText("errorservice")
-        sap.m.MessageToast.show(message)
+        MessageToast.show(message)
       } finally {
-        sap.ui.core.BusyIndicator.hide()
+        BusyIndicator.hide()
       }
     },
 
@@ -284,17 +286,19 @@ sap.ui.define([
 
     onDeleteObra: async function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      sap.ui.core.BusyIndicator.show(0)
+      BusyIndicator.show(0)
       try {
-        await this.showMessageConfirm("eliminarregistro")
+        await this.showMessageConfirm("eliminarregistro");
+        const message = this.getResourceBundle().getText("obraeliminada");
+        MessageBox.success(message);
         await Services.deleteObra(ID)
         await this._onObjectMatched()
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice")
-        error && sap.m.MessageToast.show(message)
+        error && MessageToast.show(message)
       }
       finally {
-        sap.ui.core.BusyIndicator.hide()
+        BusyIndicator.hide()
       }
     },
 
@@ -377,58 +381,69 @@ sap.ui.define([
     },
 
     onEnviar: async function (oEvent) {
-      try {
-        sap.ui.core.BusyIndicator.show(0)
-        const oObra = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-        const jefe_inspeccion = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === "JE")
-          .map(item => ({
-            nombre: item.inspector.nombre,
-            correo: item.inspector.usuario
-          }))
-        const inspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID !== "JE")
-          .map(item => ({
-            nombre: item.inspector.nombre,
-            correo: item.inspector.usuario
-          }))
-        const oPayload = {
-          definitionId: "pgo.wfaltaobra",
-          context: {
-            id_obra: oObra.ID,
-            cuit: oObra.contratista.nro_documento,
-            razon_social: oObra.contratista.razonsocial,
-            //proveedor: oObra.nro_proveedor,
-            proveedor: oObra.contratista.registro_proveedor,
-            nrop3: oObra.p3,
-            nombre: oObra.nombre,
-            fluido: oObra.fluido.descripcion,
-            partido: oObra.partido.descripcion,
-            sistema: oObra.sistema.descripcion,
-            direccion: oObra.direccion.descripcion,
-            gerencia: oObra.gerencia.descripcion,
-            acumar: oObra.acumar ? "Si" : "No",
-            tipo_contrato: oObra.tipo_contrato.descripcion,
-            tipo_obra: oObra.tipo_obra.descripcion,
-            no_redetermina: oObra.no_redetermina ? "Si" : "No",
-            fecha_firma_contrato: oObra.fecha_firma,
-            jefe_inspeccion,
-            inspectores,
-            pi: oObra.pi.map(item => ({
-              codigo: item.pi,
-              tipo_obra: item.tipo_pi.descripcion,
-              monto_original: item.quantity
-            }))
+      MessageBox.confirm(this.getResourceBundle().getText("enviarconfirm"), {
+        actions: [MessageBox.Action.CANCEL, "Aceptar"],
+        emphasizedAction: "Aceptar",
+        onClose: async (sAction) => {
+          if (sAction !== "Aceptar") {
+            return
+          }
+          try {
+            BusyIndicator.show(0)
+            const oObra = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+            const jefe_inspeccion = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === "JE")
+              .map(item => ({
+                nombre: item.inspector.nombre,
+                correo: item.inspector.usuario
+              }))
+            const inspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID !== "JE")
+              .map(item => ({
+                nombre: item.inspector.nombre,
+                correo: item.inspector.usuario
+              }))
+            const oPayload = {
+              definitionId: "pgo.wfaltaobra",
+              context: {
+                id_obra: oObra.ID,
+                cuit: oObra.contratista.nro_documento,
+                razon_social: oObra.contratista.razonsocial,
+                //proveedor: oObra.nro_proveedor,
+                proveedor: oObra.contratista.registro_proveedor,
+                nrop3: oObra.p3,
+                nombre: oObra.nombre,
+                fluido: oObra.fluido.descripcion,
+                partido: oObra.partido.descripcion,
+                sistema: oObra.sistema.descripcion,
+                direccion: oObra.direccion.descripcion,
+                gerencia: oObra.gerencia.descripcion,
+                acumar: oObra.acumar ? "Si" : "No",
+                tipo_contrato: oObra.tipo_contrato.descripcion,
+                tipo_obra: oObra.tipo_obra.descripcion,
+                no_redetermina: oObra.no_redetermina ? "Si" : "No",
+                fecha_firma_contrato: oObra.fecha_firma,
+                jefe_inspeccion,
+                inspectores,
+                pi: oObra.pi.map(item => ({
+                  codigo: item.pi,
+                  tipo_obra: item.tipo_pi.descripcion,
+                  monto_original: item.quantity
+                }))
+              }
+            }
+            await Services.postWorkflow(oPayload);
+            await Services.updateObra(oObra.ID, { estado_ID: "PI" });
+            const message = this.getResourceBundle().getText("obraenviada");
+            MessageToast.show(message);
+            this._onObjectMatched();
+          } catch (error) {
+            console.log("--- Error WF ---", error);
+            const message = this.getResourceBundle().getText("errorservice");
+            MessageToast.show(message);
+          } finally {
+            BusyIndicator.hide();
           }
         }
-        await Services.postWorkflow(oPayload)
-        await Services.updateObra(oObra.ID, { estado_ID: "PI" })
-        this._onObjectMatched()
-      } catch (error) {
-        console.log("--- Error WF ---", error)
-        const message = this.getResourceBundle().getText("errorservice")
-        sap.m.MessageToast.show(message)
-      } finally {
-        sap.ui.core.BusyIndicator.hide()
-      }
+      });
     },
 
     onOpenDialogContratistas: function () {
