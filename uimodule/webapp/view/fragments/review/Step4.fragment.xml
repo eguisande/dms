@@ -19,7 +19,7 @@
                 </ComboBox>            
                 -->
                     <Label text="{i18n>fechafirma}" required="true"/>
-                    <DatePicker displayFormat="dd-MM-yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>
+                    <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>
 
                     <Label text="{i18n>noredetermina}" />
                     <Switch state="{AppJsonModel>/ObraDetalle/no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>
@@ -62,7 +62,7 @@
                         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                     </ComboBox>
 
-                    <Link press="editStepFour" text="{i18n>editar}" visible="{AppJsonModel>/Editable}">
+                    <Link press="editStepFour" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
                         <layoutData>
                             <l:GridData linebreak="true"/>
                         </layoutData>

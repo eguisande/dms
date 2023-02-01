@@ -21,7 +21,7 @@
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
             </MultiComboBox>
 
-            <Link press="editStepThree" text="{i18n>editar}" visible="{AppJsonModel>/Editable}">
+            <Link press="editStepThree" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
                 <layoutData>
                     <l:GridData linebreak="true"/>
                 </layoutData>

@@ -4,7 +4,6 @@
   xmlns:core="sap.ui.core"
   xmlns:l="sap.ui.layout"
   xmlns:mvc="sap.ui.core.mvc">
-
   <f:DynamicPage id="dynamicPageId" showFooter="{AppJsonModel>/Permisos/create}">
     <!-- DynamicPage Header -->
     <f:header>
@@ -14,15 +13,12 @@
             <SearchField liveChange=".onSearch" width="auto" class="sapUiTinyMarginEnd"/>
             <Button tooltip="Sort" icon="sap-icon://sort" press="handleSortDialog" type="Ghost"/>
           </FlexBox>
-
         </f:content>
       </f:DynamicPageHeader>
     </f:header>
     <!-- DynamicPage Content -->
     <f:content>
-
       <Table id="idTablaObras" items="{AppJsonModel>/Obras}" fixedLayout="false">
-
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nombreobra}" />
@@ -59,26 +55,15 @@
           <ColumnListItem vAlign="Middle">
             <cells>
               <Text text="{AppJsonModel>nombre}" />
-
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
-
               <Text text="{AppJsonModel>tipo_contrato/descripcion}" />
-
               <Text text="{AppJsonModel>p3}" />
-
-
               <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
-              <!-- 
-                    <Text text="{AppJsonModel>contratista/registro_proveedor}" />
-              -->
+              <!-- <Text text="{AppJsonModel>contratista/registro_proveedor}" />-->
               <Text text="{AppJsonModel>direccion/descripcion}" />
-
               <Text text="{AppJsonModel>tipo_obra/descripcion}" />
-
               <Text text="{AppJsonModel>fluido/descripcion}" />
-
               <Text text="{AppJsonModel>partido/descripcion}" />
-
               <MenuButton useDefaultActionOnly="true" icon="sap-icon://menu">
                 <menu>
                   <Menu >
@@ -90,48 +75,32 @@
                     <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
                       <items>
                         <MenuItem text="{i18n>oferta}" press="onNavigateToOferta"/>
-                        <MenuItem text="{i18n>cargainicial}" press="onNavigateToCargaInicial"/>
-
-
+                        <MenuItem text="{i18n>cargainicial}" press="onNavigateToCargaInicial" visible="{AppJsonModel>/Permisos/cargaInicial}"/>
                         <MenuItem text="{i18n>carteleria}" press="onNavigateToCargaInicialCarteleria" visible="{AppJsonModel>/Permisos/carteleria}"/>
                         <MenuItem text="{i18n>genero}" press="onNavigateToCargaInicialGenero" visible="{AppJsonModel>/Permisos/genero}"/>
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
                         <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
-
                       </items>
                     </MenuItem>
-
-
-
-                    <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{=${AppJsonModel>/Permisos/jefe} || ${AppJsonModel>/Permisos/inspector}}">
+                    <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{AppJsonModel>/Permisos/comunicaciones}">
                       <items>
-                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" visible="{=${AppJsonModel>/Permisos/jefe} || ${AppJsonModel>/Permisos/inspector}}"/>
-                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" visible="{=${AppJsonModel>/Permisos/jefe} || ${AppJsonModel>/Permisos/inspector}}"/>
-
-
+                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" visible="{AppJsonModel>/Permisos/ordenServicio}"/>
+                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" visible="{AppJsonModel>/Permisos/notaPedido}"/>
                       </items>
                     </MenuItem>
-
                   </Menu>
                 </menu>
               </MenuButton>
-
-
-              <!-- 
-
-  <HBox >
-    <Button class="sapUiTinyMargin" tooltip="{i18n>visualizar}" icon="sap-icon://show-edit"></Button>
-    <Button class="sapUiTinyMargin" tooltip="{i18n>editar}" icon="sap-icon://edit-outside"></Button>
-  </HBox>
--->
-
+              <!-- <HBox >
+                <Button class="sapUiTinyMargin" tooltip="{i18n>visualizar}" icon="sap-icon://show-edit"></Button>
+                <Button class="sapUiTinyMargin" tooltip="{i18n>editar}" icon="sap-icon://edit-outside"></Button>
+              </HBox>-->
             </cells>
           </ColumnListItem>
         </items>
       </Table>
-
     </f:content>
-
+    <!-- DynamicPage Footer -->
     <f:footer>
       <OverflowToolbar>
         <ToolbarSpacer/>
@@ -142,7 +111,5 @@
         </Button>
       </OverflowToolbar>
     </f:footer>
-    <!-- DynamicPage Footer -->
   </f:DynamicPage>
-
 </mvc:View>

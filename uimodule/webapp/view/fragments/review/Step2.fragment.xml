@@ -13,7 +13,7 @@
             <Label text="{i18n>correo}" />
             <Input value="{AppJsonModel>/ObraDetalle/correo}" editable="false"/>
 
-            <Link press="editStepTwo" text="{i18n>editar}" visible="{AppJsonModel>/Editable}">
+            <Link press="editStepTwo" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
                 <layoutData>
                     <l:GridData linebreak="true"/>
                 </layoutData>
