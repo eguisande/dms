@@ -9,4 +9,3 @@ deployer/resources/
 Makefile*
 mta-*
 approuter/*/webapp/
-resources/

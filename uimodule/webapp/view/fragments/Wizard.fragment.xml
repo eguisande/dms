@@ -6,15 +6,15 @@
         <content>
             <Wizard id="CreateObraWizard" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" complete="wizardCompletedHandler">
                 <!-- STEP 1 -->
-                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.wizard.Step1" type="XML"/>
+                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.wizard.Step1" type="XML"/>
                 <!-- STEP 2 -->
-                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.wizard.Step2" type="XML"/>
+                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.wizard.Step2" type="XML"/>
                 <!-- STEP 3 -->
-                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.wizard.Step3" type="XML"/>
+                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.wizard.Step3" type="XML"/>
                 <!-- STEP 4 -->
-                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.wizard.Step4" type="XML"/>
+                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.wizard.Step4" type="XML"/>
                 <!-- STEP 5 -->
-                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.wizard.Step5" type="XML"/>
+                <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.wizard.Step5" type="XML"/>
             </Wizard>
         </content>
         <footer>

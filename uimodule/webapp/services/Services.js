@@ -151,7 +151,7 @@ sap.ui.define([], function () {
       return this.callGetService("Financiamientos");
     },
 
-    postObras: function (oPayload) {
+    postObra: function (oPayload) {
       return this.callPostService("Obras", oPayload);
     },
 

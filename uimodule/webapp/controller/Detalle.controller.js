@@ -1,6 +1,6 @@
 sap.ui.define([
-  "com/aysa/pgo/obras/controller/BaseController",
-  "com/aysa/pgo/obras/services/Services",
+  "com/aysa/pgo/altaobras/controller/BaseController",
+  "com/aysa/pgo/altaobras/services/Services",
   "sap/ui/core/Fragment",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
@@ -8,7 +8,7 @@ sap.ui.define([
 ], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator) {
   "use strict";
 
-  return Controller.extend("com.aysa.pgo.obras.controller.Detalle", {
+  return Controller.extend("com.aysa.pgo.altaobras.controller.Detalle", {
     mailRegex: /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/,
 
     onInit: function () {
@@ -60,7 +60,7 @@ sap.ui.define([
           aFluidos,
           aPartidos,
           aSistemas,
-          aTiposObras,
+          aTiposaltaobras,
           aMonedas,
           aUnidadesMedida,
           aSistemasContratacion,
@@ -90,7 +90,7 @@ sap.ui.define([
           Fluidos: aFluidos.value,
           Partidos: aPartidos.value,
           Sistemas: aSistemas.value,
-          TiposObras: aTiposObras.value,
+          Tiposaltaobras: aTiposaltaobras.value,
           Monedas: aMonedas.value,
           UnidadesMedida: aUnidadesMedida.value,
           SistemasContratacion: aSistemasContratacion.value,
@@ -229,7 +229,7 @@ sap.ui.define([
       if (!this._pValueHelpDialogJefes) {
         this._pValueHelpDialogJefes = Fragment.load({
           id: oView.getId(),
-          name: "com.aysa.pgo.obras.view.fragments.dialogs.ValueHelpDialogJefes",
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpDialogJefes",
           controller: this
         }).then(oValueHelpDialog => {
           oView.addDependent(oValueHelpDialog);
@@ -249,7 +249,7 @@ sap.ui.define([
       if (!this._pValueHelpDialogInspectores) {
         this._pValueHelpDialogInspectores = Fragment.load({
           id: oView.getId(),
-          name: "com.aysa.pgo.obras.view.fragments.dialogs.ValueHelpDialogInspectores",
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpDialogInspectores",
           controller: this
         }).then(oValueHelpDialog => {
           oView.addDependent(oValueHelpDialog);
@@ -386,7 +386,7 @@ sap.ui.define([
             } else {
               const oPreconstruccion = await Services.cretePreconstruccion()
               await Promise.all([
-                Services.postObras({
+                Services.postObra({
                   ...oPayload,
                   estado_ID: "BO",
                   estado_datos_contratista_ID: "AC",

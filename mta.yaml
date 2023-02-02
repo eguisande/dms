@@ -1,5 +1,5 @@
 _schema-version: "3.2"
-ID: pgo_obras
+ID: pgo_altaobras
 version: 1.0.0
 
 build-parameters:
@@ -9,42 +9,42 @@ build-parameters:
         - npm install
 
 modules:
-  - name: pgo_obras-destination-content
+  - name: pgo_altaobras-destination-content
     type: com.sap.application.content
     requires:
-      - name: pgo_obras_uaa
+      - name: pgo_altaobras_uaa
         parameters:
           service-key:
-            name: pgo_obras_uaa-key
-      - name: pgo_obras_html_repo_host
+            name: pgo_altaobras_uaa-key
+      - name: pgo_altaobras_html_repo_host
         parameters:
           service-key:
-            name: pgo_obras_html_repo_host-key
-      - name: pgo_obras-destination-service
+            name: pgo_altaobras_html_repo_host-key
+      - name: pgo_altaobras-destination-service
         parameters:
           content-target: true
-      - name: pgo_obras_workflow
+      - name: pgo_altaobras_workflow
     parameters:
       content:
-        subaccount:
+        instance:
           destinations:
-            - Name: my_service_pgo_obras_html_repo_host
-              ServiceInstanceName: pgo_obras_html_repo_host
-              ServiceKeyName: pgo_obras_html_repo_host-key
+            - Name: my_service_pgo_altaobras_html_repo_host
+              ServiceInstanceName: pgo_altaobras_html_repo_host
+              ServiceKeyName: pgo_altaobras_html_repo_host-key
               sap.cloud.service: com.aysa.pgo
             - Authentication: OAuth2UserTokenExchange
-              Name: my_service_uaa_pgo_obras
-              ServiceInstanceName: pgo_obras_uaa
-              ServiceKeyName: uaa_pgo_obras-key
+              Name: my_service_uaa_pgo_altaobras
+              ServiceInstanceName: pgo_altaobras_uaa
+              ServiceKeyName: uaa_pgo_altaobras-key
               sap.cloud.service: com.aysa.pgo
           existing_destinations_policy: update
     build-parameters:
       no-source: true
-  - name: pgo_obras_ui_deployer
+  - name: pgo_altaobras_ui_deployer
     type: com.sap.application.content
     path: .
     requires:
-      - name: pgo_obras_html_repo_host
+      - name: pgo_altaobras_html_repo_host
         parameters:
           content-target: true
     build-parameters:
@@ -63,28 +63,28 @@ modules:
         - npm run build:uimodule --prefix ..
       supported-platforms: []
 resources:
-  - name: pgo_obras_workflow
-    type: org.cloudfoundry.existing-service
-    parameters:
-      service: workflow
-      service-plan: standard
-  - name: pgo_obras-destination-service
+  - name: pgo_altaobras-destination-service
     type: org.cloudfoundry.managed-service
     parameters:
       service: destination
-      service-name: pgo_obras-destination-service
+      service-name: pgo_altaobras-destination-service
       service-plan: lite
       config:
         HTML5Runtime_enabled: true
         version: 1.0.0
-  - name: pgo_obras_html_repo_host
+  - name: pgo_altaobras_html_repo_host
     type: org.cloudfoundry.managed-service
     parameters:
       service: html5-apps-repo
       service-plan: app-host
-  - name: pgo_obras_uaa
+  - name: pgo_altaobras_uaa
     type: org.cloudfoundry.managed-service
     parameters:
       path: ./xs-security.json
       service: xsuaa
       service-plan: application
+  - name: pgo_altaobras_workflow
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: workflow
+      service-plan: standard

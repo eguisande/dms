@@ -1,5 +1,5 @@
 {
-  "xsappname": "pgo_obras",
+  "xsappname": "altaobras",
   "tenant-mode": "dedicated",
   "description": "Security profile of called application",
   "scopes": [

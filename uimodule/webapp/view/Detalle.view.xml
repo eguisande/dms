@@ -1,12 +1,12 @@
-<mvc:View controllerName="com.aysa.pgo.obras.controller.Detalle" displayBlock="true"
+<mvc:View controllerName="com.aysa.pgo.altaobras.controller.Detalle" displayBlock="true"
   xmlns:core="sap.ui.core"
   xmlns:mvc="sap.ui.core.mvc"
   xmlns="sap.m">
 
   <NavContainer id="wizardNavContainer">
     <pages>
-      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.Wizard" type="XML"/>
-      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.obras.view.fragments.ReviewWizard" type="XML"/>
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.Wizard" type="XML"/>
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.ReviewWizard" type="XML"/>
     </pages>
   </NavContainer>
 

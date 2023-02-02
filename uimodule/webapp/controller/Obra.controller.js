@@ -1,6 +1,6 @@
 sap.ui.define([
-  "com/aysa/pgo/obras/controller/BaseController",
-  "com/aysa/pgo/obras/services/Services",
+  "com/aysa/pgo/altaobras/controller/BaseController",
+  "com/aysa/pgo/altaobras/services/Services",
   "sap/ui/core/Fragment",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
@@ -8,7 +8,7 @@ sap.ui.define([
 ], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator) {
   "use strict";
 
-  return Controller.extend("com.aysa.pgo.obras.controller.Obra", {
+  return Controller.extend("com.aysa.pgo.altaobras.controller.Obra", {
     onInit: async function () {
       const oModel = this.getModel("AppJsonModel")
       const oManifest = this.getOwnerComponent().getManifestObject()
@@ -29,8 +29,8 @@ sap.ui.define([
         const oModel = this.getModel("AppJsonModel")
         const { email, Groups: aGroups } = await Services.getUser()
         this.setUserData(aGroups, email)
-        const aObras = await this.getObrasData()
-        oModel.setProperty("/Obras", aObras)
+        const aaltaobras = await this.getObrasData()
+        oModel.setProperty("/altaobras", aaltaobras)
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice")
         MessageToast.show(message)
@@ -102,7 +102,7 @@ sap.ui.define([
         this.pDialog = Fragment.load({
           id: oView.getId(),
           controller: this,
-          name: "com.aysa.pgo.obras.view.fragments.dialogs.SortDialog"
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.SortDialog"
         }).then(oDialog => {
           oView.addDependent(oDialog);
           return oDialog;
@@ -114,7 +114,7 @@ sap.ui.define([
     },
 
     handleSortDialogConfirm: function (oEvent) {
-      const oTable = this.byId("idTablaObras");
+      const oTable = this.byId("idTablaaltaobras");
       const mParams = oEvent.getParameters();
       const oBinding = oTable.getBinding("items");
       const sPath = mParams.sortItem.getKey();
@@ -125,7 +125,7 @@ sap.ui.define([
 
     onSearch: function (oEvent) {
       const sSearch = oEvent.getParameter("newValue");
-      const oTable = this.byId("idTablaObras");
+      const oTable = this.byId("idTablaaltaobras");
       const oBinding = oTable.getBinding("items");
       const aFilter = [
         new sap.ui.model.Filter({
@@ -178,7 +178,7 @@ sap.ui.define([
         this.pDialogAlta = Fragment.load({
           id: oView.getId(),
           controller: this,
-          name: "com.aysa.pgo.obras.view.fragments.dialogs.AltaAsignacion"
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AltaAsignacion"
         }).then(oDialog => {
           oView.addDependent(oDialog);
           return oDialog;
@@ -460,7 +460,7 @@ sap.ui.define([
       if (!this._pValueHelpDialogInspectores) {
         this._pValueHelpDialogInspectores = Fragment.load({
           id: oView.getId(),
-          name: "com.aysa.pgo.obras.view.fragments.dialogs.ValueHelpDialogContratistas",
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpDialogContratistas",
           controller: this
         }).then(oValueHelpDialog => {
           oView.addDependent(oValueHelpDialog);

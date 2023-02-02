@@ -56,7 +56,7 @@
             </ComboBox>
 
             <Label text="{i18n>tipoobra}" required="true"/>
-            <ComboBox id="idStep1TipoObra" items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_obra_ID}">
+            <ComboBox id="idStep1TipoObra" items="{AppJsonModel>/Combos/Tiposaltaobras}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_obra_ID}">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
             </ComboBox>
 
