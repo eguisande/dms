@@ -5,7 +5,7 @@
     "public": true
   },
   "sap.app": {
-    "id": "com.aysa.pgo.obras",
+    "id": "com.aysa.pgo.altaobras",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -20,7 +20,7 @@
             "parameters": {},
             "additionalParameters": "allowed"
           },
-          "semanticObject": "pgoobras",
+          "semanticObject": "pgoaltaobras",
           "action": "display",
           "icon": "",
           "title": "{{appTitle}}",
@@ -49,13 +49,10 @@
       "phone": true
     }
   },
-  "sap.platform.cf": {
-    "ui5VersionNumber": "1.108"
-  },
   "sap.ui5": {
     "flexEnabled": true,
     "rootView": {
-      "viewName": "com.aysa.pgo.obras.view.App",
+      "viewName": "com.aysa.pgo.altaobras.view.App",
       "type": "XML",
       "async": true,
       "id": "App"
@@ -76,7 +73,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "com.aysa.pgo.obras.i18n.i18n"
+          "bundleName": "com.aysa.pgo.altaobras.i18n.i18n"
         }
       },
       "AppJsonModel": {
@@ -92,7 +89,7 @@
     },
     "routing": {
       "config": {
-        "viewPath": "com.aysa.pgo.obras.view",
+        "viewPath": "com.aysa.pgo.altaobras.view",
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
         "controlId": "app",
@@ -130,12 +127,8 @@
     }
   },
   "sap.cloud.portal": {
-    "pgoobras-display": {
+    "pgoaltaobras-display": {
       "vizType": "com.aysa.pgo.tileobra"
-    },
-    "config": {
-      "ui5VersionNumber": "1.108",
-      "ui5LibraryUrl": "https://sapui5.hana.ondemand.com"
     }
   }
 }

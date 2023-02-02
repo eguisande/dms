@@ -1,5 +1,5 @@
 {
-  "name": "com.aysa.pgo.obras",
+  "name": "altaobras",
   "version": "0.0.1",
   "scripts": {
     "start": "ui5 serve --config=uimodule/ui5.yaml  --open index.html",
@@ -10,7 +10,7 @@
     "karma": "run-s clearCoverage karma-ci",
     "lint": "eslint .",
     "build:mta": "mbt build",
-    "deploy:cf": "cross-var cf deploy mta_archives/pgoobras_$npm_package_version.mtar",
+    "deploy:cf": "cross-var cf deploy mta_archives/altaobras_$npm_package_version.mtar",
     "deploy": "run-s build:mta deploy:cf",
     "serve:uimodule": "ui5 serve --config=uimodule/ui5.yaml",
     "build:uimodule": "ui5 build --config=uimodule/ui5.yaml --clean-dest --dest uimodule/dist --include-task=generateManifestBundle"

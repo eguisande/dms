@@ -1,6 +1,5 @@
 {
   "welcomeFile": "/index.html",
-  "authenticationMethod": "route",
   "routes": [
     {
       "source": "^/catalog/(.*)$",
@@ -28,11 +27,11 @@
       "target": "$1",
       "service": "sap-approuter-userapi"
     },
-		{
-      "source": "^(.*)$",
+    {
+      "source": "^(.*)",
       "target": "$1",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "authenticationType": "xsuaa",
+      "service": "html5-apps-repo-rt"
     }
   ]
 }

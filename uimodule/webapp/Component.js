@@ -1,9 +1,9 @@
 sap.ui.define(
-    ["sap/ui/core/UIComponent", "sap/ui/Device", "com/aysa/pgo/obras/model/models"],
+    ["sap/ui/core/UIComponent", "sap/ui/Device", "com/aysa/pgo/altaobras/model/models"],
     function (UIComponent, Device, models) {
         "use strict";
 
-        return UIComponent.extend("com.aysa.pgo.obras.Component", {
+        return UIComponent.extend("com.aysa.pgo.altaobras.Component", {
             metadata: {
                 manifest: "json"
             },

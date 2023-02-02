@@ -59,7 +59,7 @@
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
         </ComboBox>
         <Label text="{i18n>tipoobra}" />
-        <ComboBox items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_obra_ID}" editable="false">
+        <ComboBox items="{AppJsonModel>/Combos/Tiposaltaobras}" selectedKey="{AppJsonModel>/ObraDetalle/tipo_obra_ID}" editable="false">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
         </ComboBox>
         <Label text="{i18n>partido}" />
