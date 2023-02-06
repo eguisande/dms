@@ -10,6 +10,8 @@ sap.ui.define([
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Detalle", {
     mailRegex: /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/,
+    numTextInputRegex: /^[0-9A-Za-z]+([\s]{1}[0-9A-Za-z]+)*$/,  
+    textInputRegex: /^[A-Za-z]+([\s]{1}[A-Za-z]+)*$/, 
 
     onInit: function () {
       this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
@@ -413,9 +415,12 @@ sap.ui.define([
     },
    
     validateFields: function (oObraDetalle) {
-      const idMultiInputJefes = this.byId("idMultiInputJefes")
-      const idMultiInputInspectores = this.byId("idMultiInputInspectores")
-      const oModel = this.getModel("AppJsonModel")
+      const idMultiInputJefes = this.byId("idMultiInputJefes");
+      const idMultiInputInspectores = this.byId("idMultiInputInspectores");
+      const idStep1P3 = this.byId("idStep1P3");
+      const idStep1Nombre = this.byId("idStep1Nombre");
+      const idStep2Representante = this.byId("idStep2Representante");
+      const oModel = this.getModel("AppJsonModel");
       if (!oModel.getProperty("/Combos")) {
         return
       }
@@ -449,16 +454,19 @@ sap.ui.define([
         ...oModel.getProperty("/ObraDetalle/PI")
       ]
       aInputs.forEach(oInput => {
-        oInput.setValueState(oInput.getValue() ? "None" : "Error")
-        oInput.getType && oInput.getType() === "Email" && oInput.setValueState(this.mailRegex.test(oInput.getValue()) ? "None" : "Error")
+        oInput.setValueState(oInput.getValue() ? "None" : "Error");
+        oInput.getType && oInput.getType() === "Email" && oInput.setValueState(this.mailRegex.test(oInput.getValue()) ? "None" : "Error");
         if (oInput.mProperties?.max) {
-          oInput.setValueState(oInput.getValue() >= 0 && oInput.getValue() <= 100 ? "None" : "Error")
+          oInput.setValueState(oInput.getValue() >= 0 && oInput.getValue() <= 100 ? "None" : "Error");
         }
       });
-      idMultiInputJefes.setValueState(idMultiInputJefes.getTokens().length ? "None" : "Error")
-      idMultiInputInspectores.setValueState(idMultiInputInspectores.getTokens().length ? "None" : "Error")
-      oModel.updateBindings(true)
-      return [...aInputs, idMultiInputJefes, idMultiInputInspectores].some(item => item.getValueState() === "Error")
+      idMultiInputJefes.setValueState(idMultiInputJefes.getTokens().length ? "None" : "Error");
+      idMultiInputInspectores.setValueState(idMultiInputInspectores.getTokens().length ? "None" : "Error");
+      idStep1P3.setValueState(this.numTextInputRegex.test(idStep1P3.getValue()) ? "None" : "Error");
+      idStep1Nombre.setValueState(this.numTextInputRegex.test(idStep1Nombre.getValue()) ? "None" : "Error");
+      idStep2Representante.setValueState(this.textInputRegex.test(idStep2Representante.getValue()) ? "None" : "Error");
+      oModel.updateBindings(true);
+      return [...aInputs, idMultiInputJefes, idMultiInputInspectores, idStep1P3, idStep1Nombre, idStep2Representante].some(item => item.getValueState() === "Error");
     }
 
   });
