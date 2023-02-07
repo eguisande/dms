@@ -12,7 +12,7 @@
             <Input id="idStep5ExtendidaPor" value="{AppJsonModel>/ObraDetalle/extendida_por}" />
 
             <Label text="{i18n>porcentajecobertura}" required="true"/>
-            <StepInput id="idStep5Cobertura" value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100"/>
+            <StepInput id="idStep5Cobertura" value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" description="%" fieldWidth="90%"/>
 
 
         </form:SimpleForm>
