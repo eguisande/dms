@@ -10,8 +10,8 @@ sap.ui.define([
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Detalle", {
     mailRegex: /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/,
-    numTextInputRegex: /^[0-9A-Za-z]+([\s]{1}[0-9A-Za-z]+)*$/,  
-    textInputRegex: /^[A-Za-z]+([\s]{1}[A-Za-z]+)*$/, 
+    numTextInputRegex: /^[0-9A-Za-z]+([\s]{1}[0-9A-Za-z]+)*$/,
+    textInputRegex: /^[A-Za-z]+([\s]{1}[A-Za-z]+)*$/,
 
     onInit: function () {
       this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
@@ -222,7 +222,17 @@ sap.ui.define([
     },
 
     handleWizardCancel: function () {
-      this.onNavBack()
+      MessageBox.confirm(this.getResourceBundle().getText("cancelarconfirm"), {
+        actions: ["Sí", "No"],
+        emphasizedAction: "No",
+        onClose: async (sAction) => {
+          if (sAction === "No") {
+            return
+          } else {
+            this.onNavBack();
+          }          
+        }
+      });
     },
 
     onOpenDialogJefe: function () {
@@ -403,7 +413,7 @@ sap.ui.define([
               onClose: function () {
                 that.onNavBack();
               }
-            });           
+            });
           } catch (error) {
             const message = this.getResourceBundle().getText("errorservice")
             MessageToast.show(message)
@@ -411,9 +421,9 @@ sap.ui.define([
             BusyIndicator.hide()
           }
         }
-      });     
+      });
     },
-   
+
     validateFields: function (oObraDetalle) {
       const idMultiInputJefes = this.byId("idMultiInputJefes");
       const idMultiInputInspectores = this.byId("idMultiInputInspectores");
