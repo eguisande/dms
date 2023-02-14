@@ -16,7 +16,7 @@ sap.ui.define([
       const urlDMS = oManifest.resolveUri("dms")
       const urlWF = oManifest.resolveUri("bpmworkflowruntime")
       const urlUserApi = oManifest.resolveUri("user-api")
-      const urlPdfApi = oManifest.resolveUri("pdf-api")
+      const urlPdfApi = oManifest.resolveUri("api")
       Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi)
       this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
       Services.getContratistas().then(data => {
