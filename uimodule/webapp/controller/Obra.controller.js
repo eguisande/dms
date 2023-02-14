@@ -475,6 +475,7 @@ sap.ui.define([
     },
 
     createPdf: async function () {
+      BusyIndicator.show(0);
       const oTable = this.byId("idTablaaltaobras");
       const oBinding = oTable.getBinding("items");
       const oObras = oBinding.oList;
@@ -503,6 +504,7 @@ sap.ui.define([
         "obras": oObrasPayload
       }
       await Services.createPdf(oPayload);
+      BusyIndicator.hide(0);
     }
 
   });
