@@ -309,15 +309,11 @@ sap.ui.define([], function () {
     },
 
     createPdf: async function (oPayload) {
-      //const url = `${this._urlPdfApi}`;
-      const url = "https://aysa-generatepdf.cfapps.us10.hana.ondemand.com";
+      const url = `${this._urlPdfApi}/generatePDF`;
       await fetch(url, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Accept': '*/*',
-          'Access-Control-Allow-Methods': 'POST'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(oPayload)
       });

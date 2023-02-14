@@ -28,10 +28,11 @@
       "service": "sap-approuter-userapi"
     },
     {
-      "source": "^/pdf-api/(.*)",
+      "source": "/api/(.*)",
       "target": "$1",
       "destination": "GeneratePDF",
-      "authenticationType": "none"
+      "authenticationType": "none",
+      "csrfProtection": false
     },
     {
       "source": "^(.*)",
