@@ -16,7 +16,8 @@ sap.ui.define([
       const urlDMS = oManifest.resolveUri("dms")
       const urlWF = oManifest.resolveUri("bpmworkflowruntime")
       const urlUserApi = oManifest.resolveUri("user-api")
-      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi)
+      const urlPdfApi = oManifest.resolveUri("pdf-api")
+      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi)
       this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
       Services.getContratistas().then(data => {
         oModel.setProperty("/Contratistas", data.value)
@@ -472,6 +473,37 @@ sap.ui.define([
         oValueHelpDialog.open();
       });
     },
+
+    createPdf: async function () {
+      const oTable = this.byId("idTablaaltaobras");
+      const oBinding = oTable.getBinding("items");
+      const oObras = oBinding.oList;
+      const idNumber = new Date().getMilliseconds();
+      let docId = "listado_obras_" + idNumber;
+      const { email } = await Services.getUser();     
+      const oObrasPayload = oObras.map(item => {
+        return {
+          "nombre": item.nombre,
+          "estado": item.estado.descripcion,
+          "tipo_contrato": item.tipo_contrato_ID, 
+          "nrop3": item.p3, 
+          "registro_proveedor": item.contratista.registro_proveedor, 
+          "razonsocial": item.contratista.razonsocial, 
+          "direccion": item.direccion.descripcion, 
+          "fluido": item.fluido.descripcion, 
+          "partido": item.partido.descripcion,
+          "tipo_obra": item.tipo_obra.descripcion 
+        }
+      })
+      const oPayload = {
+        "doc_id": docId,
+        "usuario": email,
+        "fecha": this.formatter.formatDateToBack(new Date()),
+        "formato": "base64",
+        "obras": oObrasPayload
+      }
+      await Services.createPdf(oPayload);
+    }
 
   });
 });

@@ -5,6 +5,7 @@ sap.ui.define([], function () {
     _urlDMS: null,
     _urlWF: null,
     _urlUserApi: null,
+    _urlPdfApi: null,
 
     callGetService: function (sEntity) {
       return new Promise((res, rej) => {
@@ -51,11 +52,12 @@ sap.ui.define([], function () {
           .catch((err) => rej(err));
       });
     },
-    setUrl: function (urlCatalog, urlDMS, urlWF, urlUserApi) {
+    setUrl: function (urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi) {
       this._urlCatalog = urlCatalog;
       this._urlDMS = urlDMS;
       this._urlWF = urlWF;
       this._urlUserApi = urlUserApi;
+      this._urlPdfApi = urlPdfApi;
     },
 
     getObras: function () {
@@ -304,6 +306,15 @@ sap.ui.define([], function () {
 
     cretePreconstruccion: function () {
       return this.callPostService("Preconstrucciones", { estado_ID: "BO" });
+    },
+
+    createPdf: async function (oPayload) {
+      const url = `${this._urlPdfApi}`;
+      await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(oPayload)
+      });
     }
+
   };
 });

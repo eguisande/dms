@@ -32,6 +32,8 @@ server:
           url: https://dev-cf-aysa-pgo-default-cappgo-srv.cfapps.us10.hana.ondemand.com
         - name: "DMS_ROOT"
           url: https://api-sdm-di.cfapps.us10.hana.ondemand.com/browser/RepositorioPGO/root
+        - name: "GeneratePDF"
+          url: https://aysa-generatepdf.cfapps.us10.hana.ondemand.com/
 builder:
   customTasks:
     -  name: ui5-task-zipper

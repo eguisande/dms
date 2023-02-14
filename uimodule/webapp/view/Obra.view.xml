@@ -11,7 +11,8 @@
         <f:content >
           <FlexBox alignItems="End" justifyContent="End">
             <SearchField liveChange=".onSearch" width="auto" class="sapUiTinyMarginEnd"/>
-            <Button tooltip="Sort" icon="sap-icon://sort" press="handleSortDialog" type="Ghost"/>
+            <Button tooltip="{i18n>ordenar}" icon="sap-icon://sort" press="handleSortDialog" type="Ghost" class="sapUiTinyMarginEnd"/>
+            <Button tooltip="{i18n>pdf}" icon="sap-icon://pdf-attachment" press="createPdf" type="Ghost"/>
           </FlexBox>
         </f:content>
       </f:DynamicPageHeader>
