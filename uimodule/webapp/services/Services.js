@@ -310,13 +310,14 @@ sap.ui.define([], function () {
 
     createPdf: async function (oPayload) {
       const url = `${this._urlPdfApi}/generatePDF`;
-      await fetch(url, {
+      const oData = await fetch(url, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(oPayload)
       });
+      return await Promise.all([oData.text()]);
     }
 
   };

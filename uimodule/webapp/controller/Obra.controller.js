@@ -4,8 +4,9 @@ sap.ui.define([
   "sap/ui/core/Fragment",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
-  "sap/ui/core/BusyIndicator"
-], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator) {
+  "sap/ui/core/BusyIndicator",
+  "sap/ui/core/util/File"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, File) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Obra", {
@@ -475,13 +476,10 @@ sap.ui.define([
     },
 
     createPdf: async function () {
-      BusyIndicator.show(0);
       const oTable = this.byId("idTablaaltaobras");
       const oBinding = oTable.getBinding("items");
       const oObras = oBinding.oList;
-      const idNumber = new Date().getMilliseconds();
-      let docId = "listado_obras_" + idNumber;
-      const { email } = await Services.getUser();     
+      const { firstname, lastname } = await Services.getUser();     
       const oObrasPayload = oObras.map(item => {
         return {
           "nombre": item.nombre,
@@ -497,15 +495,29 @@ sap.ui.define([
         }
       })
       const oPayload = {
-        "doc_id": docId,
-        "usuario": email,
-        "fecha": this.formatter.formatDateToBack(new Date()),
+        "doc_id": "listado_obras",
+        "usuario": firstname + " " + lastname,
+        "fecha": this.formatter.formatDatePdf(new Date()),
         "formato": "base64",
-        "obras": oObrasPayload
+        "obras": oObrasPayload        
       }
-      await Services.createPdf(oPayload);
-      BusyIndicator.hide(0);
-    }
+      const oBinary = await Services.createPdf(oPayload);
+      const idNumber = new Date().getMilliseconds();
+      let sFileName = "listado_obras_" + idNumber;
+      const sMimeType = "pdf";
+      let aBuffer = this.base64ToArrayBuffer(oBinary[0]);
+      File.save(aBuffer, sFileName, sMimeType);
+    },
 
+    base64ToArrayBuffer: function(sBinLine) {
+      let binary_string = window.atob(sBinLine);
+			let len = binary_string.length;
+			let bytes = new Uint8Array(len);
+			for (let i = 0; i < len; i++) {
+				bytes[i] = binary_string.charCodeAt(i);
+			}
+			return bytes.buffer;
+    }
+    
   });
 });
