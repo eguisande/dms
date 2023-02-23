@@ -375,6 +375,11 @@ sap.ui.define([
       this.navToCross("pgoplantrabajo", { ID })
     },
 
+    onNavigateToListadoPresentaciones: function(oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgolistadopresentaciones", { ID })
+    },
+
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
         oService.hrefForExternalAsync({
@@ -484,7 +489,7 @@ sap.ui.define([
         return {
           "nombre": item.nombre,
           "estado": item.estado.descripcion,
-          "tipo_contrato": item.tipo_contrato_ID, 
+          "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato.descripcion, 
           "nrop3": item.p3, 
           "registro_proveedor": item.contratista.registro_proveedor, 
           "razonsocial": item.contratista.razonsocial, 
@@ -502,8 +507,8 @@ sap.ui.define([
         "obras": oObrasPayload        
       }
       const oBinary = await Services.createPdf(oPayload);
-      const idNumber = new Date().getMilliseconds();
-      let sFileName = "listado_obras_" + idNumber;
+      const timeStamp = (new Date()).toLocaleString('es-AR', { year:'numeric', month: '2-digit', day:'2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/[^0-9]/g, '');
+      let sFileName = "listado_obras_" + timeStamp;
       const sMimeType = "pdf";
       let aBuffer = this.base64ToArrayBuffer(oBinary[0]);
       File.save(aBuffer, sFileName, sMimeType);

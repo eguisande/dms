@@ -72,6 +72,7 @@
                     <MenuItem text="{i18n>eliminar}" icon="sap-icon://delete" press="onDeleteObra" visible="{=${AppJsonModel>estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/delete} }"/>
                     <MenuItem text="{i18n>partidimetro}" icon="sap-icon://multi-select" press="onViewPartidimetro" />
                     <MenuItem text="{i18n>plantrabajo}" icon="sap-icon://gantt-bars" press="onNavigateToPlanTrabajo" />
+                    <MenuItem text="{i18n>listadopresentaciones}" icon="sap-icon://clinical-tast-tracker" press="onNavigateToListadoPresentaciones" />
                     <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" />
                     <MenuItem text="{i18n>enviar}" icon="sap-icon://approvals" press="onEnviar" visible="{=${AppJsonModel>estado_ID} === 'BO' || ${AppJsonModel>estado_ID} === 'RE'}"/>
                     <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
