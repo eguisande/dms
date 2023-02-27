@@ -487,16 +487,16 @@ sap.ui.define([
       const { firstname, lastname } = await Services.getUser();     
       const oObrasPayload = oObras.map(item => {
         return {
-          "nombre": item.nombre,
-          "estado": item.estado.descripcion,
+          "nombre": item.nombre === null ? "" : item.nombre,
+          "estado": item.estado === null ? "" : item.estado.descripcion,
           "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato.descripcion, 
-          "nrop3": item.p3, 
-          "registro_proveedor": item.contratista.registro_proveedor, 
-          "razonsocial": item.contratista.razonsocial, 
-          "direccion": item.direccion.descripcion, 
-          "fluido": item.fluido.descripcion, 
-          "partido": item.partido.descripcion,
-          "tipo_obra": item.tipo_obra.descripcion 
+          "nrop3": item.p3 === null ? "" : item.p3, 
+          "registro_proveedor": item.contratista.registro_proveedor === null ? "" : item.contratista.registro_proveedor, 
+          "razonsocial": item.contratista.razonsocial === null ? "" : item.contratista.razonsocial, 
+          "direccion": item.direccion === null ? "" : item.direccion.descripcion, 
+          "fluido": item.fluido === null ? "" : item.fluido.descripcion, 
+          "partido": item.partido === null ? "" : item.partido.descripcion,
+          "tipo_obra": item.tipo_obra === null ? "" : item.tipo_obra.descripcion
         }
       })
       const oPayload = {
