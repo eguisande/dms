@@ -216,57 +216,54 @@ sap.ui.define([], function () {
 
     creteFolderDMS: async function (folder, proveedor, aAreas = []) {
       const url = `${this._urlDMS}/Obras`;
-
       const respFolderPrincipal = await fetch(url, {
         method: "POST",
         body: this.getFormDMS(`${folder}_${proveedor}`),
       });
-
       const [
         respFolderOferta,
         respFolderCargaInicial,
         respFolderNotasPedido,
-        respFolderOrdenesServicio
+        respFolderOrdenesServicio,
+        respFolderPresentaciones
       ] = await Promise.all([
         //_${proveedor}
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Oferta`),
         }),
-
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Carga inicial`),
         }),
-
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Notas de pedido`),
         }),
-
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Órdenes de servicio`),
+        }),
+        fetch(`${url}/${folder}_${proveedor}`, {
+          method: "POST",
+          body: this.getFormDMS(`Presentaciones`),
         })
-
       ])
-
       const aAreasPromise = await Promise.all(aAreas.map(item => {
         return fetch(`${url}/${folder}_${proveedor}/Carga inicial`, {
           method: "POST",
           body: this.getFormDMS(`${item.descripcion}`),
         })
       }))
-
       return await Promise.all([
         respFolderPrincipal.json(),
         respFolderOferta.json(),
         respFolderCargaInicial.json(),
         respFolderNotasPedido.json(),
         respFolderOrdenesServicio.json(),
+        respFolderPresentaciones.json(),
         ...aAreasPromise.map(item => item.json())
       ])
-
     },
 
     getFormDMS: function (folder) {
@@ -278,7 +275,6 @@ sap.ui.define([], function () {
       oForm.append("propertyValue[1]", "cmis:folder");
       oForm.append("_charset_", "UTF-8")
       oForm.append("succinct", true);
-
       return oForm;
     },
 
@@ -289,9 +285,7 @@ sap.ui.define([], function () {
           'X-CSRF-Token': 'Fetch'
         }
       })
-
       const token = resp.headers.get("x-csrf-token")
-
       await fetch(`${this._urlWF}/v1/workflow-instances`, {
         method: 'POST',
         headers: {
@@ -300,7 +294,6 @@ sap.ui.define([], function () {
         },
         body: JSON.stringify(body)
       })
-
       //await this.updateObra(ID, { estado_ID: "PE" })
     },
 
