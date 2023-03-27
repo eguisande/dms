@@ -15,8 +15,12 @@ sap.ui.define([
 
     onInit: function () {
       const oManifest = this.getOwnerComponent().getManifestObject();
-      const urlCatalog = oManifest.resolveUri("catalog");
-      Services.setUrl(urlCatalog); 
+      const urlCatalog = oManifest.resolveUri("catalog")
+      const urlDMS = oManifest.resolveUri("dms")
+      const urlWF = oManifest.resolveUri("bpmworkflowruntime")
+      const urlUserApi = oManifest.resolveUri("user-api")
+      const urlPdfApi = oManifest.resolveUri("api")
+      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi)
       this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
     },
 

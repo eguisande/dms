@@ -286,7 +286,7 @@ sap.ui.define([], function () {
         }
       })
       const token = resp.headers.get("x-csrf-token")
-      await fetch(`${this._urlWF}/v1/workflow-instances`, {
+      const response = await fetch(`${this._urlWF}/v1/workflow-instances`, {
         method: 'POST',
         headers: {
           'X-CSRF-Token': token,
@@ -294,7 +294,7 @@ sap.ui.define([], function () {
         },
         body: JSON.stringify(body)
       })
-      //await this.updateObra(ID, { estado_ID: "PE" })
+      return response;
     },
 
     cretePreconstruccion: function () {

@@ -445,14 +445,22 @@ sap.ui.define([
                 }))
               }
             }
-            await Services.postWorkflow(oPayload).then(oResponse => {
-              console.log(oResponse);
-            });
-            //fijarse que post workflow devuelva status 201
-            await Services.updateObra(oObra.ID, { estado_ID: "PI" });
-            const message = this.getResourceBundle().getText("obraenviada");
-            MessageBox.success(message);
-            this._onObjectMatched();
+            const response = await Services.postWorkflow(oPayload);
+            if (response.status === 201) {
+              Services.updateObra(oObra.ID, { estado_ID: "PI" }).then(oResponse => {
+                if (oResponse.error) {
+                  const message = this.getResourceBundle().getText("errorupdate");
+                  MessageToast.show(message);
+                } else {
+                  const message = this.getResourceBundle().getText("obraenviada");
+                  MessageBox.success(message);
+                  this._onObjectMatched();
+                }
+              })             
+            } else {
+              const message = this.getResourceBundle().getText("errorservice");
+              MessageToast.show(message);
+            }                               
           } catch (error) {
             console.log("--- Error WF ---", error);
             const message = this.getResourceBundle().getText("errorservice");
