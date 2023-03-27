@@ -24,6 +24,9 @@ modules:
         parameters:
           content-target: true
       - name: pgo_altaobras_workflow
+        parameters:
+            service-key:
+              name: pgo_altaobras_wf-key
     parameters:
       content:
         instance:
@@ -37,6 +40,10 @@ modules:
               ServiceInstanceName: pgo_altaobras_uaa
               ServiceKeyName: uaa_pgo_altaobras-key
               sap.cloud.service: com.aysa.pgo
+            - Name: bpmworkflowruntime
+              Authentication: OAuth2JWTBearer
+              ServiceInstanceName: pgo_altaobras_workflow
+              ServiceKeyName: wf_pgo_altaobras-key              
           existing_destinations_policy: update
     build-parameters:
       no-source: true
