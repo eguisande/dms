@@ -14,6 +14,9 @@ sap.ui.define([
     textInputRegex: /^[A-Za-z]+([\s]{1}[A-Za-z]+)*$/,
 
     onInit: function () {
+      const oManifest = this.getOwnerComponent().getManifestObject();
+      const urlCatalog = oManifest.resolveUri("catalog");
+      Services.setUrl(urlCatalog); 
       this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
     },
 

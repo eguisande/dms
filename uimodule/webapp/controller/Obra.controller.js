@@ -445,7 +445,10 @@ sap.ui.define([
                 }))
               }
             }
-            await Services.postWorkflow(oPayload);
+            await Services.postWorkflow(oPayload).then(oResponse => {
+              console.log(oResponse);
+            });
+            //fijarse que post workflow devuelva status 201
             await Services.updateObra(oObra.ID, { estado_ID: "PI" });
             const message = this.getResourceBundle().getText("obraenviada");
             MessageBox.success(message);
