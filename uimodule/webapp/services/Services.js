@@ -246,7 +246,11 @@ sap.ui.define([], function () {
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-          body: this.getFormDMS(`Presentaciones`),
+          body: this.getFormDMS(`Presentaciones`),        
+        }),
+        fetch(`${url}/${folder}_${proveedor}`, {
+          method: "POST",
+          body: this.getFormDMS(`Seguridad e Higiene`),
         })
       ])
       const aAreasPromise = await Promise.all(aAreas.map(item => {
