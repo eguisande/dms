@@ -411,7 +411,7 @@ sap.ui.define([
                   estado_datos_contratista_ID: "AC",
                   preconstruccion_ID: oPreconstruccion.ID
                 }),
-                Services.creteFolderDMS(oObraDetalle.p3, oObraDetalle.nro_proveedor, aAreas)
+                Services.createFolderDMS(oObraDetalle.p3, oObraDetalle.nro_proveedor, aAreas)
               ])
             }
             const message = this.getResourceBundle().getText("cambiosguardados");

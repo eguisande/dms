@@ -214,7 +214,7 @@ sap.ui.define([], function () {
       }
     },
 
-    creteFolderDMS: async function (folder, proveedor, aAreas = []) {
+    createFolderDMS: async function (folder, proveedor, aAreas = []) {
       const url = `${this._urlDMS}/Obras`;
       const respFolderPrincipal = await fetch(url, {
         method: "POST",
@@ -225,7 +225,8 @@ sap.ui.define([], function () {
         respFolderCargaInicial,
         respFolderNotasPedido,
         respFolderOrdenesServicio,
-        respFolderPresentaciones
+        respFolderPresentaciones,
+        respFolderPermisos
       ] = await Promise.all([
         //_${proveedor}
         fetch(`${url}/${folder}_${proveedor}`, {
@@ -247,6 +248,10 @@ sap.ui.define([], function () {
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Presentaciones`),
+        }),
+        fetch(`${url}/${folder}_${proveedor}`, {
+          method: "POST",
+          body: this.getFormDMS(`Permisos`),
         })
       ])
       const aAreasPromise = await Promise.all(aAreas.map(item => {
@@ -262,6 +267,7 @@ sap.ui.define([], function () {
         respFolderNotasPedido.json(),
         respFolderOrdenesServicio.json(),
         respFolderPresentaciones.json(),
+        respFolderPermisos.json(),
         ...aAreasPromise.map(item => item.json())
       ])
     },
