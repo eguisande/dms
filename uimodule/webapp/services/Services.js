@@ -247,19 +247,15 @@ sap.ui.define([], function () {
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-<<<<<<< HEAD
           body: this.getFormDMS(`Presentaciones`),
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-          body: this.getFormDMS(`Permisos`),
-=======
-          body: this.getFormDMS(`Presentaciones`),        
+          body: this.getFormDMS(`Permisos`),      
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Seguridad e Higiene`),
->>>>>>> 7cfb85d70b5426ff6042258065f20a1195595f3a
         })
       ])
       const aAreasPromise = await Promise.all(aAreas.map(item => {
