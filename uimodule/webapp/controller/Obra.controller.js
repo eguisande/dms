@@ -321,6 +321,11 @@ sap.ui.define([
       this.navToCross("pgocargainicial", { ID })
     },
 
+    onNavigateToPermisos: async function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgopermisos", { ID })
+    },
+
     onNavigateToOferta: async function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgooferta", { ID })

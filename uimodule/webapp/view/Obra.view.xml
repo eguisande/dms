@@ -83,6 +83,7 @@
                         <MenuItem text="{i18n>genero}" press="onNavigateToCargaInicialGenero" visible="{AppJsonModel>/Permisos/genero}"/>
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
                         <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
+                        <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos"/>   
                       </items>
                     </MenuItem>
                     <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{AppJsonModel>/Permisos/comunicaciones}">
