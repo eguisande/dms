@@ -225,8 +225,10 @@ sap.ui.define([], function () {
         respFolderCargaInicial,
         respFolderNotasPedido,
         respFolderOrdenesServicio,
-        respFolderPresentaciones,
-        respFolderPermisos
+        respFolderIngenieria,
+        respFolderPermisos,
+        respFolderSegHigiene,
+        respFolderPolizas
       ] = await Promise.all([
         //_${proveedor}
         fetch(`${url}/${folder}_${proveedor}`, {
@@ -247,7 +249,7 @@ sap.ui.define([], function () {
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-          body: this.getFormDMS(`Presentaciones`),
+          body: this.getFormDMS(`Ingeniería`),
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
@@ -256,7 +258,11 @@ sap.ui.define([], function () {
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
           body: this.getFormDMS(`Seguridad e Higiene`),
-        })
+        }),
+        fetch(`${url}/${folder}_${proveedor}`, {
+          method: "POST",
+          body: this.getFormDMS(`Pólizas`),      
+        }),
       ])
       const aAreasPromise = await Promise.all(aAreas.map(item => {
         return fetch(`${url}/${folder}_${proveedor}/Carga inicial`, {
@@ -270,8 +276,10 @@ sap.ui.define([], function () {
         respFolderCargaInicial.json(),
         respFolderNotasPedido.json(),
         respFolderOrdenesServicio.json(),
-        respFolderPresentaciones.json(),
+        respFolderIngenieria.json(),
         respFolderPermisos.json(),
+        respFolderSegHigiene.json(),
+        respFolderPolizas.json(),
         ...aAreasPromise.map(item => item.json())
       ])
     },
