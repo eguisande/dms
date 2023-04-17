@@ -72,19 +72,24 @@
                     <MenuItem text="{i18n>eliminar}" icon="sap-icon://delete" press="onDeleteObra" visible="{=${AppJsonModel>estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/delete} }"/>
                     <MenuItem text="{i18n>partidimetro}" icon="sap-icon://multi-select" press="onViewPartidimetro" />
                     <MenuItem text="{i18n>plantrabajo}" icon="sap-icon://gantt-bars" press="onNavigateToPlanTrabajo" />
-                    <MenuItem text="{i18n>listadopresentaciones}" icon="sap-icon://clinical-tast-tracker" press="onNavigateToListadoPresentaciones" />
                     <MenuItem text="{i18n>seguridadhigiene}" icon="sap-icon://validate" press="onNavigateToSeguridadHigiene" />
                     <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" />
                     <MenuItem text="{i18n>enviar}" icon="sap-icon://approvals" press="onEnviar" visible="{=${AppJsonModel>estado_ID} === 'BO' || ${AppJsonModel>estado_ID} === 'RE'}"/>
                     <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
                       <items>
+                        <MenuItem text="{i18n>ingenieria}">
+                          <items>
+                            <MenuItem text="{i18n>listadopresentaciones}" press="onNavigateToListadoPresentaciones" />
+                            <MenuItem text="{i18n>listadoplanos}" press="onNavigateToListadoPlanos" />
+                          </items>
+                        </MenuItem>
                         <MenuItem text="{i18n>oferta}" press="onNavigateToOferta"/>
                         <MenuItem text="{i18n>cargainicial}" press="onNavigateToCargaInicial" visible="{AppJsonModel>/Permisos/cargaInicial}"/>
                         <MenuItem text="{i18n>carteleria}" press="onNavigateToCargaInicialCarteleria" visible="{AppJsonModel>/Permisos/carteleria}"/>
                         <MenuItem text="{i18n>genero}" press="onNavigateToCargaInicialGenero" visible="{AppJsonModel>/Permisos/genero}"/>
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
                         <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
-                        <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos"/>   
+                        <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos"/>
                       </items>
                     </MenuItem>
                     <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{AppJsonModel>/Permisos/comunicaciones}">

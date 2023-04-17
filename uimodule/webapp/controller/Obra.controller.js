@@ -390,6 +390,11 @@ sap.ui.define([
       this.navToCross("pgoseguridadhigiene", { ID })
     },
 
+    onNavigateToListadoPlanos: function(oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgolistadoplanos", { ID })
+    },
+
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
         oService.hrefForExternalAsync({
