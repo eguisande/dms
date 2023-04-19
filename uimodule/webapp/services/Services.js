@@ -228,7 +228,8 @@ sap.ui.define([], function () {
         respFolderIngenieria,
         respFolderPermisos,
         respFolderSegHigiene,
-        respFolderPolizas
+        respFolderPolizas,
+        respFolderInterferencias
       ] = await Promise.all([
         //_${proveedor}
         fetch(`${url}/${folder}_${proveedor}`, {
@@ -263,6 +264,10 @@ sap.ui.define([], function () {
           method: "POST",
           body: this.getFormDMS(`Pólizas`),      
         }),
+        fetch(`${url}/${folder}_${proveedor}`, {
+          method: "POST",
+          body: this.getFormDMS(`Interferencias`),      
+        }),
       ])
       const aAreasPromise = await Promise.all(aAreas.map(item => {
         return fetch(`${url}/${folder}_${proveedor}/Carga inicial`, {
@@ -280,6 +285,7 @@ sap.ui.define([], function () {
         respFolderPermisos.json(),
         respFolderSegHigiene.json(),
         respFolderPolizas.json(),
+        respFolderInterferencias.json(),
         ...aAreasPromise.map(item => item.json())
       ])
     },
