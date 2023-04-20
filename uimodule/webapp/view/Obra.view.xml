@@ -72,7 +72,6 @@
                     <MenuItem text="{i18n>eliminar}" icon="sap-icon://delete" press="onDeleteObra" visible="{=${AppJsonModel>estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/delete} }"/>
                     <MenuItem text="{i18n>partidimetro}" icon="sap-icon://multi-select" press="onViewPartidimetro" />
                     <MenuItem text="{i18n>plantrabajo}" icon="sap-icon://gantt-bars" press="onNavigateToPlanTrabajo" />
-                    <MenuItem text="{i18n>seguridadhigiene}" icon="sap-icon://validate" press="onNavigateToSeguridadHigiene" />
                     <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" />
                     <MenuItem text="{i18n>enviar}" icon="sap-icon://approvals" press="onEnviar" visible="{=${AppJsonModel>estado_ID} === 'BO' || ${AppJsonModel>estado_ID} === 'RE'}"/>
                     <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
@@ -90,6 +89,7 @@
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
                         <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
                         <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos"/>
+                        <MenuItem text="{i18n>seguridadhigiene}" press="onNavigateToSeguridadHigiene" />
                       </items>
                     </MenuItem>
                     <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{AppJsonModel>/Permisos/comunicaciones}">
