@@ -214,6 +214,10 @@ sap.ui.define([], function () {
       }
     },
 
+    getUserRoles: function () {
+      return this.callGetService("getUserRoles()");
+    },
+
     createFolderDMS: async function (folder, proveedor, aAreas = []) {
       const url = `${this._urlDMS}/Obras`;
       const respFolderPrincipal = await fetch(url, {

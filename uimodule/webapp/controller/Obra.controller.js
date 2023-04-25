@@ -29,8 +29,11 @@ sap.ui.define([
       try {
         BusyIndicator.show(0)
         const oModel = this.getModel("AppJsonModel")
-        const { email, Groups: aGroups } = await Services.getUser()
-        this.setUserData(aGroups, email)
+        //Se reemplaza por getUserRoles
+        //const { email, Groups: aGroups } = await Services.getUser()
+        const { email } = await Services.getUser()
+        const oUserRoles = await Services.getUserRoles()
+        this.setUserData(oUserRoles.value, email)
         const aaltaobras = await this.getObrasData()
         oModel.setProperty("/altaobras", aaltaobras)
       } catch (error) {
