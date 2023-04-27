@@ -339,6 +339,11 @@ sap.ui.define([
       this.navToCross("pgopartidimetro", { ID })
     },
 
+    onNavigateToInterferencias: async function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgointerferencias", { ID })
+    },
+
     onNavigateToPreconstruccion: async function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgopreconstruccion", { ID })
