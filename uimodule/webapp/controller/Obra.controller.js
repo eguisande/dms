@@ -53,6 +53,10 @@ sap.ui.define([
       const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria")
       const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente")
       const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas")
+      const sAreaSegHigiene = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaHyS")
+      const sAreaPermisos = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPermisos")
+      const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria")
+      const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias")
       const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador" || oGrupo.includes("PGO_Area"))
       const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
@@ -73,6 +77,10 @@ sap.ui.define([
         carteleria: !!sAreaCarteleria && true,
         medioAmbiente: !!sAreaMedioambiente && true,
         polizas: !!sAreaPolizas && true,
+        seghigiene: !!sAreaSegHigiene && true,
+        permisos: !!sAreaPermisos && true,
+        ingenieria: !!sAreaIngenieria && true,
+        interferencias: !!sAreaInterferencias && true,
         cargaInicial: !!sCargaIncial && true,
         notaPedido: !!sNotaPedido && true,
         ordenServicio: !!sOrdenServicio && true,
