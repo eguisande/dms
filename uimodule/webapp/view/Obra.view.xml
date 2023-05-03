@@ -79,16 +79,16 @@
                         <MenuItem text="{i18n>carteleria}" press="onNavigateToCargaInicialCarteleria" visible="{AppJsonModel>/Permisos/carteleria}"/>
                         <MenuItem text="{i18n>genero}" press="onNavigateToCargaInicialGenero" visible="{AppJsonModel>/Permisos/genero}"/>
                         <MenuItem text="{i18n>ingenieria}" visible="{AppJsonModel>/Permisos/ingenieria}">
-                          <items>
-                            <MenuItem text="{i18n>listadopresentaciones}" press="onNavigateToListadoPresentaciones" />
+                          <items>                     
                             <MenuItem text="{i18n>listadoplanos}" press="onNavigateToListadoPlanos" />
+                            <MenuItem text="{i18n>listadopresentaciones}" press="onNavigateToListadoPresentaciones" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>interferencias}" press="onNavigateToInterferencias" visible="{AppJsonModel>/Permisos/interferencias}" />
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
                         <MenuItem text="{i18n>oferta}" press="onNavigateToOferta"/>
-                        <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
                         <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos" visible="{AppJsonModel>/Permisos/permisos}"/>
+                        <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>                   
                         <MenuItem text="{i18n>seguridadhigiene}" press="onNavigateToSeguridadHigiene" visible="{AppJsonModel>/Permisos/seghigiene}" />
                       </items>
                     </MenuItem>
