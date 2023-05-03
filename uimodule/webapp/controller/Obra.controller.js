@@ -57,13 +57,13 @@ sap.ui.define([
       const sAreaPermisos = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPermisos")
       const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria")
       const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias")
-      const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_Area" || oGrupo === "PGO_Administrador" || oGrupo.includes("PGO_Area"))
+      const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_Administrador")
       const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector")
-      const sNotaPedido = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
-      const sOrdenServicio = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
-      const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion")
+      const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
+        || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos" 
+        || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias")
       oModel.setProperty("/Permisos", {
         user,
         delete: !!sCreateDelete && true,
@@ -81,9 +81,7 @@ sap.ui.define([
         permisos: !!sAreaPermisos && true,
         ingenieria: !!sAreaIngenieria && true,
         interferencias: !!sAreaInterferencias && true,
-        cargaInicial: !!sCargaIncial && true,
-        notaPedido: !!sNotaPedido && true,
-        ordenServicio: !!sOrdenServicio && true,
+        cargaInicial: !!sCargaIncial && true,        
         comunicaciones: !!sComunicaciones && true
       })
     },

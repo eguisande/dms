@@ -60,7 +60,6 @@
               <Text text="{AppJsonModel>tipo_contrato/descripcion}" />
               <Text text="{AppJsonModel>p3}" />
               <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
-              <!-- <Text text="{AppJsonModel>contratista/registro_proveedor}" />-->
               <Text text="{AppJsonModel>direccion/descripcion}" />
               <Text text="{AppJsonModel>tipo_obra/descripcion}" />
               <Text text="{AppJsonModel>fluido/descripcion}" />
@@ -95,17 +94,13 @@
                     </MenuItem>
                     <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{AppJsonModel>/Permisos/comunicaciones}">
                       <items>
-                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" visible="{AppJsonModel>/Permisos/notaPedido}"/>
-                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" visible="{AppJsonModel>/Permisos/ordenServicio}"/>
+                        <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" />
+                        <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" />
                       </items>
                     </MenuItem>
                   </Menu>
                 </menu>
               </MenuButton>
-              <!-- <HBox >
-                <Button class="sapUiTinyMargin" tooltip="{i18n>visualizar}" icon="sap-icon://show-edit"></Button>
-                <Button class="sapUiTinyMargin" tooltip="{i18n>editar}" icon="sap-icon://edit-outside"></Button>
-              </HBox>-->
             </cells>
           </ColumnListItem>
         </items>
