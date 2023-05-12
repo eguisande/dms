@@ -100,10 +100,11 @@
                     </MenuItem>
                     <MenuItem text="{i18n>ejecucion}" icon="sap-icon://gantt-bars" visible="{AppJsonModel>/Permisos/ejecucion}">
                       <items>
-                        <MenuItem text="{i18n>medicion}" icon="sap-icon://measure"/>
-                        <items>
-                          <MenuItem text="{i18n>diagramacuadra}" press="onNavigateToDiagramaCuadra" />         
-                        </items>
+                        <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
+                          <items>
+                            <MenuItem text="{i18n>diagramacuadra}" press="onNavigateToDiagramaCuadra" />
+                          </items>
+                        </MenuItem>
                       </items>
                     </MenuItem>
                   </Menu>
