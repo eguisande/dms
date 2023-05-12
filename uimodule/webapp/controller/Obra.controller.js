@@ -64,6 +64,7 @@ sap.ui.define([
       const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
         || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos" 
         || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias")
+      const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista")
       oModel.setProperty("/Permisos", {
         user,
         delete: !!sCreateDelete && true,
@@ -82,7 +83,8 @@ sap.ui.define([
         ingenieria: !!sAreaIngenieria && true,
         interferencias: !!sAreaInterferencias && true,
         cargaInicial: !!sCargaIncial && true,        
-        comunicaciones: !!sComunicaciones && true
+        comunicaciones: !!sComunicaciones && true,
+        ejecucion: !!sEjecucion && true
       })
     },
 
@@ -407,6 +409,11 @@ sap.ui.define([
     onNavigateToListadoPlanos: function(oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgolistadoplanos", { ID })
+    },
+
+    onNavigateToDiagramaCuadra: function(oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgotramos", { ID })
     },
 
     navToCross: function (semanticObject, params) {

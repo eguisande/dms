@@ -79,7 +79,7 @@
                         <MenuItem text="{i18n>carteleria}" press="onNavigateToCargaInicialCarteleria" visible="{AppJsonModel>/Permisos/carteleria}"/>
                         <MenuItem text="{i18n>genero}" press="onNavigateToCargaInicialGenero" visible="{AppJsonModel>/Permisos/genero}"/>
                         <MenuItem text="{i18n>ingenieria}" visible="{AppJsonModel>/Permisos/ingenieria}">
-                          <items>                     
+                          <items>
                             <MenuItem text="{i18n>listadoplanos}" press="onNavigateToListadoPlanos" />
                             <MenuItem text="{i18n>listadopresentaciones}" press="onNavigateToListadoPresentaciones" />
                           </items>
@@ -88,7 +88,7 @@
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
                         <MenuItem text="{i18n>oferta}" press="onNavigateToOferta"/>
                         <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos" visible="{AppJsonModel>/Permisos/permisos}"/>
-                        <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>                   
+                        <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
                         <MenuItem text="{i18n>seguridadhigiene}" press="onNavigateToSeguridadHigiene" visible="{AppJsonModel>/Permisos/seghigiene}" />
                       </items>
                     </MenuItem>
@@ -96,6 +96,14 @@
                       <items>
                         <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" />
                         <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" />
+                      </items>
+                    </MenuItem>
+                    <MenuItem text="{i18n>ejecucion}" icon="sap-icon://gantt-bars" visible="{AppJsonModel>/Permisos/ejecucion}">
+                      <items>
+                        <MenuItem text="{i18n>medicion}" icon="sap-icon://measure"/>
+                        <items>
+                          <MenuItem text="{i18n>diagramacuadra}" press="onNavigateToDiagramaCuadra" />         
+                        </items>
                       </items>
                     </MenuItem>
                   </Menu>

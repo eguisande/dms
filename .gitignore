@@ -10,3 +10,4 @@ Makefile*
 mta-*
 approuter/*/webapp/
 resources/
+.vscode/
