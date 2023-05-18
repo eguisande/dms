@@ -1,23 +1,20 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
-    xmlns:form="sap.ui.layout.form"
-    xmlns:l="sap.ui.layout"
-    xmlns="sap.m">
-    <form:SimpleForm title="{i18n>respcontratista}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
-        <form:content>
-
-            
-            <Label text="{i18n>representantelegal}" />
-            <Input value="{AppJsonModel>/ObraDetalle/representante}" editable="false"/>
-            <Label text="{i18n>telefono}" />
-            <Input value="{AppJsonModel>/ObraDetalle/telefono}" editable="false"/>
-            <Label text="{i18n>correo}" />
-            <Input value="{AppJsonModel>/ObraDetalle/correo}" editable="false"/>
-
-            <Link press="editStepTwo" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-                <layoutData>
-                    <l:GridData linebreak="true"/>
-                </layoutData>
-            </Link>
-        </form:content>
-    </form:SimpleForm>
+  xmlns:form="sap.ui.layout.form"
+  xmlns:l="sap.ui.layout"
+  xmlns="sap.m">
+  <form:SimpleForm title="{i18n>respcontratista}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
+    <form:content>
+      <Label text="{i18n>representantelegal}" />
+      <Input value="{AppJsonModel>/ObraDetalle/representante}" editable="false"/>
+      <Label text="{i18n>telefono}" />
+      <Input value="{AppJsonModel>/ObraDetalle/telefono}" editable="false"/>
+      <Label text="{i18n>correo}" />
+      <Input value="{AppJsonModel>/ObraDetalle/correo}" editable="false"/>
+      <Link press="editStepTwo" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+        <layoutData>
+          <l:GridData linebreak="true"/>
+        </layoutData>
+      </Link>
+    </form:content>
+  </form:SimpleForm>
 </core:FragmentDefinition>

@@ -1,31 +1,30 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
-    xmlns:form="sap.ui.layout.form"
-    xmlns:l="sap.ui.layout"
-    xmlns="sap.m">
-    <form:SimpleForm title="{i18n>responsablesaysa}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
-        <form:content>
-            <Label text="{i18n>direccionaysa}" />
-            <ComboBox items="{AppJsonModel>/Combos/Direcciones}" selectedKey="{AppJsonModel>/ObraDetalle/direccion_ID}" editable="false">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-            </ComboBox>
-            <Label text="{i18n>gerenciaaysa}" />
-            <ComboBox items="{AppJsonModel>/Combos/DireccionGerencias}" selectedKey="{AppJsonModel>/ObraDetalle/gerencia_ID}" editable="false">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-            </ComboBox>
-            <Label text="{i18n>jefeinspeccion}" />
-            <MultiComboBox items="{AppJsonModel>/Combos/JefeInspectores}" selectedKeys="{AppJsonModel>/ObraDetalle/JefesInspectores}" editable="false">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-            </MultiComboBox>
-            <Label text="{i18n>inspector}" />
-            <MultiComboBox items="{AppJsonModel>/Combos/Inspectores}" selectedKeys="{AppJsonModel>/ObraDetalle/Inspectores}" editable="false">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-            </MultiComboBox>
-
-            <Link press="editStepThree" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-                <layoutData>
-                    <l:GridData linebreak="true"/>
-                </layoutData>
-            </Link>
-        </form:content>
-    </form:SimpleForm>
+  xmlns:form="sap.ui.layout.form"
+  xmlns:l="sap.ui.layout"
+  xmlns="sap.m">
+  <form:SimpleForm title="{i18n>responsablesaysa}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
+    <form:content>
+      <Label text="{i18n>direccionaysa}" />
+      <ComboBox items="{AppJsonModel>/Combos/Direcciones}" selectedKey="{AppJsonModel>/ObraDetalle/direccion_ID}" editable="false">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>gerenciaaysa}" />
+      <ComboBox items="{AppJsonModel>/Combos/DireccionGerencias}" selectedKey="{AppJsonModel>/ObraDetalle/gerencia_ID}" editable="false">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>jefeinspeccion}" />
+      <MultiComboBox items="{AppJsonModel>/Combos/JefeInspectores}" selectedKeys="{AppJsonModel>/ObraDetalle/JefesInspectores}" editable="false">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
+      </MultiComboBox>
+      <Label text="{i18n>inspector}" />
+      <MultiComboBox items="{AppJsonModel>/Combos/Inspectores}" selectedKeys="{AppJsonModel>/ObraDetalle/Inspectores}" editable="false">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
+      </MultiComboBox>
+      <Link press="editStepThree" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+        <layoutData>
+          <l:GridData linebreak="true"/>
+        </layoutData>
+      </Link>
+    </form:content>
+  </form:SimpleForm>
 </core:FragmentDefinition>

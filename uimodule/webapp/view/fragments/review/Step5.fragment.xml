@@ -19,4 +19,12 @@
             </Link>
         </form:content>
     </form:SimpleForm>
+    <form:SimpleForm title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
+        <form:content>
+            <Label text="{i18n>fechainiciocontractual}"/>
+            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_inicio_contractual', formatter: '.formatter.formatDate'}" editable="false"/>
+            <Label text="{i18n>fechainiciofisico}"/>
+            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_inicio_fisico', formatter: '.formatter.formatDate'}" editable="false"/>
+        </form:content>
+    </form:SimpleForm>
 </core:FragmentDefinition>
