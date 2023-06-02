@@ -446,16 +446,15 @@ sap.ui.define([
           }
           try {
             BusyIndicator.show(0)
-            //const oObra = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
             const jefe_inspeccion = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === "JE")
               .map(item => ({
-                nombre: item.inspector.nombre,
-                correo: item.inspector.usuario
+                usuario: item.inspector.usuario,
+                correo: item.inspector.correo
               }))
             const inspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID !== "JE")
               .map(item => ({
-                nombre: item.inspector.nombre,
-                correo: item.inspector.usuario
+                usuario: item.inspector.usuario,
+                correo: item.inspector.correo
               }))
             const oPayload = {
               definitionId: "pgo.wfaltaobra",
@@ -463,7 +462,6 @@ sap.ui.define([
                 id_obra: oObra.ID,
                 cuit: oObra.contratista.nro_documento,
                 razon_social: oObra.contratista.razonsocial,
-                //proveedor: oObra.nro_proveedor,
                 proveedor: oObra.contratista.registro_proveedor,
                 nrop3: oObra.p3,
                 nombre: oObra.nombre,
