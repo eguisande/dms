@@ -67,7 +67,7 @@
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
-              <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>tipo_pi_ID}" editable="false">
+              <ComboBox items="{AppJsonModel>/Combos/TiposPI}" selectedKey="{AppJsonModel>tipo_pi_ID}" editable="false">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
               </ComboBox>
               <Text text="{AppJsonModel>pi}" />

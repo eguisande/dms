@@ -75,6 +75,7 @@ sap.ui.define([
           aSistemasContratacion,
           aFinanciamientos,
           aAreas,
+          aTiposPI
         ] = await Promise.all([
           Services.getDirecciones(),
           Services.getGerencias(),
@@ -89,6 +90,7 @@ sap.ui.define([
           Services.getSistemasContratacion(),
           Services.getFinanciamientos(),
           Services.getAreas(),
+          Services.getTiposPI(),
         ])
         oModel.setProperty("/Combos", {
           Direcciones: aDirecciones.value,
@@ -96,6 +98,7 @@ sap.ui.define([
           JefeInspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE'),
           Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'),
           TiposContratos: aTiposContratos.value,
+          TiposPI: aTiposPI.value,
           Fluidos: aFluidos.value,
           Partidos: aPartidos.value,
           Sistemas: aSistemas.value,

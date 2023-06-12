@@ -119,6 +119,10 @@ sap.ui.define([], function () {
     getTiposContratos: function () {
       return this.callGetService("TiposContratos");
     },
+    
+    getTiposPI: function () {
+      return this.callGetService("TiposPI");
+    },
 
     getFluidos: function () {
       return this.callGetService("Fluidos");
@@ -165,18 +169,10 @@ sap.ui.define([], function () {
       try {
         if (window.location.hostname === "localhost") {
           return {
-            "firstname": "Maximiliano",
-            "lastname": "Guisande",
-            "email": "maximiliano.guisande@datco.net",
-            "name": "maximiliano.guisande@datco.net",
-            "scopes": [
-              "openid",
-              "uaa.user"
-            ],
             "user_uuid": [
               "64ff52e3-7bef-4706-be6f-645d504d12a0"
             ],
-            "Groups": [
+            "value": [
               "CAI_Developer",
               "HAA_USER",
               "IDE_Developer",
@@ -200,9 +196,6 @@ sap.ui.define([], function () {
               "WorkflowManagementDeveloper",
               "WorkflowManagementEndUser"
             ],
-            "acr": [
-              "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
-            ]
           }
         }
         const url = `${this._urlUserApi}/attributes`;
@@ -215,6 +208,37 @@ sap.ui.define([], function () {
     },
 
     getUserRoles: function () {
+      if (window.location.hostname === "localhost") {
+        return {
+          "user_uuid": [
+            "64ff52e3-7bef-4706-be6f-645d504d12a0"
+          ],
+          "value": [
+            "CAI_Developer",
+            "HAA_USER",
+            "IDE_Developer",
+            "IRPAProjectMember",
+            "Launchpad_Admin",
+            "Launchpad_Advanced_Theming",
+            "PGO_Administrador",
+            "PGO_Analista",
+            "PGO_Contratista",
+            "PGO_Inspector",
+            "PGO_JefeInspeccion",
+            "PGO_Launchpad_Admin",
+            "PGO_Launchpad_Advanced_Theming",
+            "PGO_Super",
+            "PGO_WorkflowManagementAdmin",
+            "PGO_WorkflowManagementBusinessExpert",
+            "PGO_WorkflowManagementDeveloper",
+            "PGO_WorkflowManagementEndUser",
+            "WorkflowManagementAdmin",
+            "WorkflowManagementBusinessExpert",
+            "WorkflowManagementDeveloper",
+            "WorkflowManagementEndUser"
+          ],
+        }
+      }
       return this.callGetService("getUserRoles()");
     },
 
