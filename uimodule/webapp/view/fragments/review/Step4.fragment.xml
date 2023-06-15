@@ -29,9 +29,7 @@
           <Label text="{i18n>fondoreparo}" required="true"/>
           <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
           <Label text="{i18n>sistemacontratacion}" required="true"/>
-          <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>/ObraDetalle/sistema_contratacion_ID}" editable="false">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-          </ComboBox>
+
           <Label text="{i18n>financiamiento}" required="true"/>
           <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}" editable="false">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
@@ -49,10 +47,13 @@
       <Table items="{AppJsonModel>/ObraDetalle/PI}" fixedLayout="false" width="100%">
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>nropi}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipopi}" />
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
-            <Text text="{i18n>nropi}" />
+            <Text text="{i18n>sistemaContratacion}" />
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
             <Text text="{i18n>quantity}" />
@@ -67,10 +68,13 @@
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
+              <Text text="{AppJsonModel>pi}" />
               <ComboBox items="{AppJsonModel>/Combos/TiposPI}" selectedKey="{AppJsonModel>tipo_pi_ID}" editable="false">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
               </ComboBox>
-              <Text text="{AppJsonModel>pi}" />
+              <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>sistema_contratacion_ID}" editable="false">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
               <Text text="{
                         path: 'AppJsonModel>quantity',
                         formatter: '.formatter.formatQuantity'

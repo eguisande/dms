@@ -96,7 +96,7 @@ sap.ui.define([
           Direcciones: aDirecciones.value,
           DireccionGerencias: aDireccionGerencias.value,
           JefeInspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE'),
-          Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'),
+          /* Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'), */
           TiposContratos: aTiposContratos.value,
           TiposPI: aTiposPI.value,
           Fluidos: aFluidos.value,
@@ -115,6 +115,13 @@ sap.ui.define([
         BusyIndicator.hide()
         MessageToast.show(message)
       }
+    },
+
+    setInspectoresDeUnJefe:async function(){
+      const oModel = this.getModel("AppJsonModel")
+      const oObraDetalle = oModel.getProperty("/ObraDetalle");
+      const aInspectores = await Services.getInspectores()
+      oModel.setProperty("/Combos/Inspectores",  aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID)))
     },
 
     setDataToView: async function (oModel, ID) {
@@ -297,6 +304,8 @@ sap.ui.define([
     onValueHelpDialogJefesConfirm: function (oEvent) {
       const oMultiJefes = this.getView().byId("idMultiInputJefes");
       this.setDataMultiInput(oEvent, oMultiJefes, "JefesInspectores")
+      this.setInspectoresDeUnJefe()
+      debugger
     },
 
     onValueHelpDialogInpectoresConfirm: function (oEvent) {
@@ -340,6 +349,26 @@ sap.ui.define([
       oBinding.filter(aFilter);
     },
 
+    setMaximoPlazo: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      let plazo_ejecucion_model = oModel.getProperty("/ObraDetalle/plazo_ejecucion");
+      let incremento_maximo_model = oModel.getProperty("/ObraDetalle/incremento_maximo");
+      let incremento_maximo = Number(incremento_maximo_model)
+      let plazo_ejecucion = Number(plazo_ejecucion_model)
+      let maximo_plazo_extension = plazo_ejecucion + ((plazo_ejecucion*incremento_maximo) / 100)
+      maximo_plazo_extension = Math.round(maximo_plazo_extension);
+      console.log(maximo_plazo_extension);
+      oModel.setProperty("/ObraDetalle/maximo_plazo_extension", maximo_plazo_extension);
+ 
+    },
+
+    setUmMaximoPLazo: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel"); 
+      let um_plazo_original = oModel.getProperty("/ObraDetalle/um_plazo_ID");
+      oModel.setProperty("/ObraDetalle/um_plazo_maximo_ID", um_plazo_original);
+    },
+
+
     handleWizardSubmit: async function () {
       let that = this;
       MessageBox.confirm(this.getResourceBundle().getText("saveConfirm"), {
@@ -360,7 +389,8 @@ sap.ui.define([
               const oPI = {
                 pi: item.pi,
                 tipo_pi_ID: item.tipo_pi_ID,
-                quantity: item.quantity
+                quantity: item.quantity,
+                sistema_contratacion_ID: item.sistema_contratacion_ID,
               }
               return item.ID ? { ID: item.ID, ...oPI } : oPI
             })
@@ -396,7 +426,6 @@ sap.ui.define([
               acopio_materiales: oObraDetalle.acopio_materiales,
               anticipo_financiero: oObraDetalle.anticipo_financiero,
               fondo_reparo: oObraDetalle.fondo_reparo,
-              sistema_contratacion_ID: oObraDetalle.sistema_contratacion_ID,
               financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
               contratista_ID: oObraDetalle.contratista.ID,
               nro_poliza: Number(oObraDetalle.nro_poliza),
@@ -463,7 +492,6 @@ sap.ui.define([
         this.byId("idStep4UM"),
         this.byId("idStep4PlazoMaxEjecucion"),
         this.byId("idStep4UMEjecucion"),
-        this.byId("idStep4SistemasContratacion"),
         this.byId("idStep4Financiamientos"),
         this.byId("idStep4Incremento"),
         this.byId("idStep4AnticipoFinanciero"),

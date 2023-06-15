@@ -5,7 +5,7 @@
   <WizardStep id="idObraAltaStep4" validated="true" title="{i18n>datosfinancieros}">
     <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%">
       <FlexBox class="columns" width="100%">
-        <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">  
+        <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">
           <Label text="{i18n>fechafirma}" required="true"/>
           <DatePicker id="idStep4FechaFirma" displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}"/>
           <Label text="{i18n>noredetermina}" />
@@ -14,15 +14,15 @@
             <FlexItemData growFactor="1" baseSize="0" styleClass="sapUiTinyMargin" />
           </form:layoutData>
           <Label text="{i18n>incrementomaximo}" required="true"/>
-          <StepInput id="idStep4Incremento" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" description="%" fieldWidth="90%"/>
+          <StepInput id="idStep4Incremento" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" change=".setMaximoPlazo" min="0" max="100" description="%" fieldWidth="90%"/>
           <Label text="{i18n>plazoejecucion}" required="true"/>
-          <Input id="idStep4PlazoEjecucion" value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" type="Number"/>
-          <ComboBox id="idStep4UM" items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}">
+          <Input id="idStep4PlazoEjecucion" value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" change=".setMaximoPlazo" type="Number"/>
+          <ComboBox id="idStep4UM" items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" change=".setUmMaximoPLazo">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
           </ComboBox>
           <Label text="{i18n>plazomaxejecucion}" required="true"/>
-          <Input id="idStep4PlazoMaxEjecucion" value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number"/>
-          <ComboBox id="idStep4UMEjecucion" items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}">
+          <Input id="idStep4PlazoMaxEjecucion" value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number" editable="false"/>
+          <ComboBox id="idStep4UMEjecucion" items="{AppJsonModel>/Combos/UnidadesMedida}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
           </ComboBox>
           <Label text="{i18n>acopio}" />
@@ -32,9 +32,7 @@
           <Label text="{i18n>fondoreparo}" required="true"/>
           <StepInput id="idStep4FondoReparo" value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" description="%" fieldWidth="90%"/>
           <Label text="{i18n>sistemacontratacion}" required="true"/>
-          <ComboBox id="idStep4SistemasContratacion" items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>/ObraDetalle/sistema_contratacion_ID}">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-          </ComboBox>
+
           <Label text="{i18n>financiamiento}" required="true"/>
           <ComboBox id="idStep4Financiamientos" items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
@@ -43,10 +41,13 @@
         <Table id="idTablaPI" items="{AppJsonModel>/ObraDetalle/PI}" fixedLayout="false" width="100%">
           <columns>
             <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nropi}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>tipopi}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>nropi}" />
+              <Text text="{i18n>sistemaContratacion}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
               <Text text="{i18n>quantity}" />
@@ -61,10 +62,13 @@
           <items>
             <ColumnListItem vAlign="Middle">
               <cells>
+                <Text text="{AppJsonModel>pi}" />
                 <ComboBox items="{AppJsonModel>/Combos/TiposPI}" selectedKey="{AppJsonModel>tipo_pi_ID}" valueState="{AppJsonModel>state}">
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
-                <Text text="{AppJsonModel>pi}" />
+                <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>sistema_contratacion_ID}" >
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
                 <Text text="{
                             path: 'AppJsonModel>quantity',
                             formatter: '.formatter.formatQuantity'

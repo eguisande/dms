@@ -84,7 +84,7 @@ sap.ui.define(
             return this.tipo_pi_ID
           }
         }))
-      }
+      },
     });
   }
 );

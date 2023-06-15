@@ -62,7 +62,7 @@ sap.ui.define([
       const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector")
       const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
-        || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos" 
+        || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
         || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias")
       const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista")
       oModel.setProperty("/Permisos", {
@@ -82,7 +82,7 @@ sap.ui.define([
         permisos: !!sAreaPermisos && true,
         ingenieria: !!sAreaIngenieria && true,
         interferencias: !!sAreaInterferencias && true,
-        cargaInicial: !!sCargaIncial && true,        
+        cargaInicial: !!sCargaIncial && true,
         comunicaciones: !!sComunicaciones && true,
         ejecucion: !!sEjecucion && true
       })
@@ -396,27 +396,27 @@ sap.ui.define([
       this.navToCross("pgoplantrabajo", { ID })
     },
 
-    onNavigateToListadoPresentaciones: function(oEvent) {
+    onNavigateToListadoPresentaciones: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgolistadopresentaciones", { ID })
     },
-    
-    onNavigateToSeguridadHigiene: function(oEvent) {
+
+    onNavigateToSeguridadHigiene: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgoseguridadhigiene", { ID })
     },
 
-    onNavigateToListadoPlanos: function(oEvent) {
+    onNavigateToListadoPlanos: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgolistadoplanos", { ID })
     },
 
-    onNavigateToDiagramaCuadra: function(oEvent) {
+    onNavigateToDiagramaCuadra: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgotramos", { ID })
     },
 
-    onNavigateToControlDocumentacion: function(oEvent) {
+    onNavigateToControlDocumentacion: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgocontroldocumentacion", { ID })
     },
@@ -495,11 +495,11 @@ sap.ui.define([
                   MessageBox.success(message);
                   this._onObjectMatched();
                 }
-              })             
+              })
             } else {
               const message = this.getResourceBundle().getText("errorservice");
               MessageToast.show(message);
-            }                               
+            }
           } catch (error) {
             console.log("--- Error WF ---", error);
             const message = this.getResourceBundle().getText("errorservice");
@@ -534,17 +534,17 @@ sap.ui.define([
       const oTable = this.byId("idTablaaltaobras");
       const oBinding = oTable.getBinding("items");
       const oObras = oBinding.oList;
-      const { firstname, lastname } = await Services.getUser();     
+      const { firstname, lastname } = await Services.getUser();
       const oObrasPayload = oObras.map(item => {
         return {
           "nombre": item.nombre === null ? "" : item.nombre,
           "estado": item.estado === null ? "" : item.estado.descripcion,
-          "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato.descripcion, 
-          "nrop3": item.p3 === null ? "" : item.p3, 
-          "registro_proveedor": item.contratista.registro_proveedor === null ? "" : item.contratista.registro_proveedor, 
-          "razonsocial": item.contratista.razonsocial === null ? "" : item.contratista.razonsocial, 
-          "direccion": item.direccion === null ? "" : item.direccion.descripcion, 
-          "fluido": item.fluido === null ? "" : item.fluido.descripcion, 
+          "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato.descripcion,
+          "nrop3": item.p3 === null ? "" : item.p3,
+          "registro_proveedor": item.contratista.registro_proveedor === null ? "" : item.contratista.registro_proveedor,
+          "razonsocial": item.contratista.razonsocial === null ? "" : item.contratista.razonsocial,
+          "direccion": item.direccion === null ? "" : item.direccion.descripcion,
+          "fluido": item.fluido === null ? "" : item.fluido.descripcion,
           "partido": item.partido === null ? "" : item.partido.descripcion,
           "tipo_obra": item.tipo_obra === null ? "" : item.tipo_obra.descripcion
         }
@@ -554,25 +554,25 @@ sap.ui.define([
         "usuario": firstname + " " + lastname,
         "fecha": this.formatter.formatDatePdf(new Date()),
         "formato": "base64",
-        "obras": oObrasPayload        
+        "obras": oObrasPayload
       }
       const oBinary = await Services.createPdf(oPayload);
-      const timeStamp = (new Date()).toLocaleString('es-AR', { year:'numeric', month: '2-digit', day:'2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/[^0-9]/g, '');
+      const timeStamp = (new Date()).toLocaleString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/[^0-9]/g, '');
       let sFileName = "listado_obras_" + timeStamp;
       const sMimeType = "pdf";
       let aBuffer = this.base64ToArrayBuffer(oBinary[0]);
       File.save(aBuffer, sFileName, sMimeType);
     },
 
-    base64ToArrayBuffer: function(sBinLine) {
+    base64ToArrayBuffer: function (sBinLine) {
       let binary_string = window.atob(sBinLine);
-			let len = binary_string.length;
-			let bytes = new Uint8Array(len);
-			for (let i = 0; i < len; i++) {
-				bytes[i] = binary_string.charCodeAt(i);
-			}
-			return bytes.buffer;
+      let len = binary_string.length;
+      let bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+      }
+      return bytes.buffer;
     }
-    
+
   });
 });
