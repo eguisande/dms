@@ -117,11 +117,11 @@ sap.ui.define([
       }
     },
 
-    setInspectoresDeUnJefe:async function(){
+    setInspectoresDeUnJefe: async function () {
       const oModel = this.getModel("AppJsonModel")
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
       const aInspectores = await Services.getInspectores()
-      oModel.setProperty("/Combos/Inspectores",  aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID)))
+      oModel.setProperty("/Combos/Inspectores", aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID)))
     },
 
     setDataToView: async function (oModel, ID) {
@@ -247,7 +247,7 @@ sap.ui.define([
             return
           } else {
             this.onNavBack();
-          }          
+          }
         }
       });
     },
@@ -328,6 +328,21 @@ sap.ui.define([
       );
     },
 
+    deleteJefe: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      let sType = oEvent.getParameter("type"),
+        aRemovedTokens = oEvent.getParameter("removedTokens"),
+        oMultiJefes = this.getView().byId("idMultiInputJefes");
+      if (sType == "removed") {
+        oMultiJefes = oMultiJefes.getTokens().filter(function (oContext) {
+          return oContext.getKey() !== aRemovedTokens[0].getKey()
+        });
+      }
+      oModel.setProperty(`/ObraDetalle/JefesInspectores`, oMultiJefes)
+      ;
+
+    },
+
     onValueHelpDialogJefesClose: function () {
       this.byId("idSelectDialogJefes").close()
     },
@@ -355,15 +370,15 @@ sap.ui.define([
       let incremento_maximo_model = oModel.getProperty("/ObraDetalle/incremento_maximo");
       let incremento_maximo = Number(incremento_maximo_model)
       let plazo_ejecucion = Number(plazo_ejecucion_model)
-      let maximo_plazo_extension = plazo_ejecucion + ((plazo_ejecucion*incremento_maximo) / 100)
+      let maximo_plazo_extension = plazo_ejecucion + ((plazo_ejecucion * incremento_maximo) / 100)
       maximo_plazo_extension = Math.round(maximo_plazo_extension);
       console.log(maximo_plazo_extension);
       oModel.setProperty("/ObraDetalle/maximo_plazo_extension", maximo_plazo_extension);
- 
+
     },
 
     setUmMaximoPLazo: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel"); 
+      const oModel = this.getModel("AppJsonModel");
       let um_plazo_original = oModel.getProperty("/ObraDetalle/um_plazo_ID");
       oModel.setProperty("/ObraDetalle/um_plazo_maximo_ID", um_plazo_original);
     },
