@@ -2,9 +2,9 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%">
+  <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%" title="{i18n>datosfinancieros}">
     <FlexBox class="columns" width="100%">
-      <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">
+      <form:SimpleForm editable="true" title="{i18n>datosfinancieros}" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">
         <form:content>
           <Label text="{i18n>fechafirma}" required="true"/>
           <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>

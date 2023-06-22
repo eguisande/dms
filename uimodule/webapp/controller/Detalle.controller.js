@@ -96,7 +96,7 @@ sap.ui.define([
           Direcciones: aDirecciones.value,
           DireccionGerencias: aDireccionGerencias.value,
           JefeInspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE'),
-          /* Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'), */
+          Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'),
           TiposContratos: aTiposContratos.value,
           TiposPI: aTiposPI.value,
           Fluidos: aFluidos.value,
