@@ -151,6 +151,8 @@ sap.ui.define([
         oModel.setProperty("/ObraDetalle", oObraDetalle);
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE")
         oModel.updateBindings(true)
+        this.setInspectoresDeUnJefe()
+
       } catch (error) {
         console.log(error)
       }

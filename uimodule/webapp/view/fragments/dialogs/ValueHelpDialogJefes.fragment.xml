@@ -15,8 +15,7 @@
 		contentWidth="auto"		
 		
 		items="{AppJsonModel>/Combos/JefeInspectores}">
-		
-            <StandardListItem			
+            <StandardListItem	
                 title="{AppJsonModel>nombre}"/>
             </SelectDialog>
 </core:FragmentDefinition>

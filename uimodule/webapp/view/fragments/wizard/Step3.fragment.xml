@@ -18,7 +18,7 @@
             <MultiInput id="idMultiInputJefes" change="deleteJefe" tokenUpdate="deleteJefe" valueHelpOnly="true" valueHelpRequest="onOpenDialogJefe" enabled="{=!!${AppJsonModel>/ObraDetalle/direccion_ID}}"></MultiInput>
 
             <Label text="{i18n>inspector}" required="true"/>
-            <MultiInput id="idMultiInputInspectores"   valueHelpOnly="true" valueHelpRequest="onOpenDialogInspectores" enabled="{=!!${AppJsonModel>/ObraDetalle/direccion_ID} &amp;&amp; ${AppJsonModel>/ObraDetalle/JefesInspectores}.length !== 0 }"></MultiInput>
+            <MultiInput id="idMultiInputInspectores" valueHelpOnly="true" valueHelpRequest="onOpenDialogInspectores" enabled="{=!!${AppJsonModel>/ObraDetalle/direccion_ID} &amp;&amp; ${AppJsonModel>/ObraDetalle/JefesInspectores}.length !== 0 }"></MultiInput>
 
 
         </form:SimpleForm>
