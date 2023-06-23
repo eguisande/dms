@@ -16,6 +16,6 @@
 		
 		items="{AppJsonModel>/Combos/JefeInspectores}">
             <StandardListItem	
-                title="{AppJsonModel>nombre}"/>
+                title="{AppJsonModel>nombre}" selected="{AppJsonModel>selected}"/>
             </SelectDialog>
 </core:FragmentDefinition>

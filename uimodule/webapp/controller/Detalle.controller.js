@@ -146,6 +146,11 @@ sap.ui.define([
           JefesInspectores: aJefes.map(item => (item.inspector_ID)),
           Inspectores: aInspectores.map(item => (item.inspector_ID))
         }
+
+/*         aJefes.forEach(item => {
+          oObraDetalle.JefesInspectores.includes(item.ID)
+          item.selected = true
+        }) */
         this.setTokensWizard(oMultiJefes, aJefes)
         this.setTokensWizard(oMultiInspectores, aInspectores)
         oModel.setProperty("/ObraDetalle", oObraDetalle);
@@ -307,7 +312,6 @@ sap.ui.define([
       const oMultiJefes = this.getView().byId("idMultiInputJefes");
       this.setDataMultiInput(oEvent, oMultiJefes, "JefesInspectores")
       this.setInspectoresDeUnJefe()
-      debugger
     },
 
     onValueHelpDialogInpectoresConfirm: function (oEvent) {
@@ -334,13 +338,37 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       let sType = oEvent.getParameter("type"),
         aRemovedTokens = oEvent.getParameter("removedTokens"),
-        oMultiJefes = this.getView().byId("idMultiInputJefes");
+        oMultiJefes = this.getView().byId("idMultiInputJefes"),
+        aJefes = oModel.getProperty("/Combos/JefeInspectores")
       if (sType == "removed") {
+        aJefes.forEach(item => {
+          if(item.ID == aRemovedTokens[0].getKey()) item.selected = false
+        })
         oMultiJefes = oMultiJefes.getTokens().filter(function (oContext) {
           return oContext.getKey() !== aRemovedTokens[0].getKey()
         });
+        oModel.refresh()
       }
       oModel.setProperty(`/ObraDetalle/JefesInspectores`, oMultiJefes)
+      ;
+
+    },
+    deleteInspector: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      let sType = oEvent.getParameter("type"),
+        aRemovedTokens = oEvent.getParameter("removedTokens"),
+        oMultiInspectores = this.getView().byId("idMultiInputInspectores"),
+        aInspectores = oModel.getProperty("/Combos/Inspectores")
+      if (sType == "removed") {
+        aInspectores.forEach(item => {
+          if(item.ID == aRemovedTokens[0].getKey()) item.selected = false
+        })
+        oMultiInspectores = oMultiInspectores.getTokens().filter(function (oContext) {
+          return oContext.getKey() !== aRemovedTokens[0].getKey()
+        });
+        oModel.refresh()
+      }
+      oModel.setProperty(`/ObraDetalle/Inspectores`, oMultiInspectores)
       ;
 
     },
