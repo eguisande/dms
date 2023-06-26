@@ -29,7 +29,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel")
       oModel.setProperty("/Editable", true)
       this.clearToken()
-      this.loadCombos()
+      this.loadCombos(ID)
       const oNavPage = this.byId("wizardNavContainer");
       const oPageWizard = this.byId("wizardContentPage")
       const oPageReview = this.byId("wizardReviewPage")
@@ -57,11 +57,12 @@ sap.ui.define([
       }
     },
 
-    loadCombos: async function () {
+    loadCombos: async function (ID) {
       try {
         const oModel = this.getModel("AppJsonModel")
         BusyIndicator.show(0)
         const [
+          oObra,
           aDirecciones,
           aDireccionGerencias,
           aInspectores,
@@ -77,6 +78,7 @@ sap.ui.define([
           aAreas,
           aTiposPI
         ] = await Promise.all([
+          Services.getObra(ID),
           Services.getDirecciones(),
           Services.getGerencias(),
           Services.getInspectores(),
@@ -92,10 +94,22 @@ sap.ui.define([
           Services.getAreas(),
           Services.getTiposPI(),
         ])
+
+        
+
+        let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE')
+        Jefes = Jefes.map(inspector => {
+          oObra.inspectores.forEach(obraIn => {
+            if(inspector.ID == obraIn.inspector_ID){
+              inspector.selected = true
+            }
+          })
+          return inspector
+        }) 
         oModel.setProperty("/Combos", {
           Direcciones: aDirecciones.value,
           DireccionGerencias: aDireccionGerencias.value,
-          JefeInspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE'),
+          JefeInspectores: Jefes,
           Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'),
           TiposContratos: aTiposContratos.value,
           TiposPI: aTiposPI.value,
@@ -121,7 +135,12 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel")
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
       const aInspectores = await Services.getInspectores()
-      oModel.setProperty("/Combos/Inspectores", aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID)))
+      let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID))
+        Inspectores = Inspectores.map(inspector => {
+            inspector.selected = true
+          return inspector
+        }) 
+      oModel.setProperty("/Combos/Inspectores",Inspectores )
     },
 
     setDataToView: async function (oModel, ID) {
@@ -146,11 +165,6 @@ sap.ui.define([
           JefesInspectores: aJefes.map(item => (item.inspector_ID)),
           Inspectores: aInspectores.map(item => (item.inspector_ID))
         }
-
-/*         aJefes.forEach(item => {
-          oObraDetalle.JefesInspectores.includes(item.ID)
-          item.selected = true
-        }) */
         this.setTokensWizard(oMultiJefes, aJefes)
         this.setTokensWizard(oMultiInspectores, aInspectores)
         oModel.setProperty("/ObraDetalle", oObraDetalle);
@@ -342,7 +356,7 @@ sap.ui.define([
         aJefes = oModel.getProperty("/Combos/JefeInspectores")
       if (sType == "removed") {
         aJefes.forEach(item => {
-          if(item.ID == aRemovedTokens[0].getKey()) item.selected = false
+          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false
         })
         oMultiJefes = oMultiJefes.getTokens().filter(function (oContext) {
           return oContext.getKey() !== aRemovedTokens[0].getKey()
@@ -350,7 +364,7 @@ sap.ui.define([
         oModel.refresh()
       }
       oModel.setProperty(`/ObraDetalle/JefesInspectores`, oMultiJefes)
-      ;
+        ;
 
     },
     deleteInspector: function (oEvent) {
@@ -361,7 +375,7 @@ sap.ui.define([
         aInspectores = oModel.getProperty("/Combos/Inspectores")
       if (sType == "removed") {
         aInspectores.forEach(item => {
-          if(item.ID == aRemovedTokens[0].getKey()) item.selected = false
+          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false
         })
         oMultiInspectores = oMultiInspectores.getTokens().filter(function (oContext) {
           return oContext.getKey() !== aRemovedTokens[0].getKey()
@@ -369,7 +383,7 @@ sap.ui.define([
         oModel.refresh()
       }
       oModel.setProperty(`/ObraDetalle/Inspectores`, oMultiInspectores)
-      ;
+        ;
 
     },
 
@@ -402,7 +416,6 @@ sap.ui.define([
       let plazo_ejecucion = Number(plazo_ejecucion_model)
       let maximo_plazo_extension = plazo_ejecucion + ((plazo_ejecucion * incremento_maximo) / 100)
       maximo_plazo_extension = Math.round(maximo_plazo_extension);
-      console.log(maximo_plazo_extension);
       oModel.setProperty("/ObraDetalle/maximo_plazo_extension", maximo_plazo_extension);
 
     },
