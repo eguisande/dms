@@ -98,14 +98,16 @@ sap.ui.define([
         
 
         let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE')
-        Jefes = Jefes.map(inspector => {
-          oObra.inspectores.forEach(obraIn => {
-            if(inspector.ID == obraIn.inspector_ID){
-              inspector.selected = true
-            }
-          })
-          return inspector
-        }) 
+        if(oObra.inspectores){
+          Jefes = Jefes.map(inspector => {
+            oObra.inspectores.forEach(obraIn => {
+              if(inspector.ID == obraIn.inspector_ID){
+                inspector.selected = true
+              }
+            })
+            return inspector
+          }) 
+        }
         oModel.setProperty("/Combos", {
           Direcciones: aDirecciones.value,
           DireccionGerencias: aDireccionGerencias.value,
@@ -125,19 +127,22 @@ sap.ui.define([
         })
         BusyIndicator.hide()
       } catch (error) {
+        console.log(error);
         const message = this.getResourceBundle().getText("errorservice")
         BusyIndicator.hide()
         MessageToast.show(message)
       }
     },
 
-    setInspectoresDeUnJefe: async function () {
+    setInspectoresDeUnJefe: async function (select) {
       const oModel = this.getModel("AppJsonModel")
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
       const aInspectores = await Services.getInspectores()
       let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID))
         Inspectores = Inspectores.map(inspector => {
+          if(select){
             inspector.selected = true
+          }
           return inspector
         }) 
       oModel.setProperty("/Combos/Inspectores",Inspectores )
@@ -170,7 +175,7 @@ sap.ui.define([
         oModel.setProperty("/ObraDetalle", oObraDetalle);
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE")
         oModel.updateBindings(true)
-        this.setInspectoresDeUnJefe()
+        this.setInspectoresDeUnJefe(true)
 
       } catch (error) {
         console.log(error)
@@ -325,7 +330,7 @@ sap.ui.define([
     onValueHelpDialogJefesConfirm: function (oEvent) {
       const oMultiJefes = this.getView().byId("idMultiInputJefes");
       this.setDataMultiInput(oEvent, oMultiJefes, "JefesInspectores")
-      this.setInspectoresDeUnJefe()
+      this.setInspectoresDeUnJefe(false)
     },
 
     onValueHelpDialogInpectoresConfirm: function (oEvent) {
