@@ -428,6 +428,11 @@ sap.ui.define([
       this.navToCross("pgoactassuspension", { ID })
     },
 
+    onNavigateToNotasMinutas: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgonotasminutas", { ID })
+    },
+
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
         oService.hrefForExternalAsync({
