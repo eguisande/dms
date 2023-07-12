@@ -110,6 +110,7 @@
                         <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
                           <items>
                             <MenuItem text="{i18n>diagramacuadra}" press="onNavigateToDiagramaCuadra" />
+                            <MenuItem text="{i18n>memoriacalculo}" press="onNavigateToMemoriaCalculo" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>inspecciondiaria}">

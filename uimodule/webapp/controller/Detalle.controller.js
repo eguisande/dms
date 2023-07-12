@@ -493,7 +493,15 @@ sap.ui.define([
               contratista_ID: oObraDetalle.contratista.ID,
               nro_poliza: Number(oObraDetalle.nro_poliza),
               extendida_por: oObraDetalle.extendida_por,
-              porcentaje_cobertura: oObraDetalle.porcentaje_cobertura
+              porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
+              nro_contrato: oObraDetalle.nro_contrato,
+              nro_proveedor: oObraDetalle.nro_proveedor,
+              proveedor: oObraDetalle.proveedor,
+              cuit: oObraDetalle.cuit,
+              oc: oObraDetalle.oc,
+              fecha_oc: oObraDetalle.fecha_oc,
+              quantity: oObraDetalle.quantity,
+              tasa_cambio: oObraDetalle.tasa_cambio,              
             }
             if (oObraDetalle.ID) {
               Services.updateObra(oObraDetalle.ID, oPayload)

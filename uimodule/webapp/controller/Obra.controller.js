@@ -437,6 +437,11 @@ sap.ui.define([
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgopartediario", { ID })
     },
+   
+    onNavigateToMemoriaCalculo: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgomemoriacalculo", { ID })
+    },
 
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
