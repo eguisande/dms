@@ -156,8 +156,11 @@ sap.ui.define([
         ])
         const oMultiJefes = this.getView().byId("idMultiInputJefes")
         const oMultiInspectores = this.getView().byId("idMultiInputInspectores")
-        const aJefes = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === 'JE')
-        const aInspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === 'EM')
+        const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null)
+        const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE')
+        const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM')
+        // const aJefes = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === 'JE')
+        // const aInspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === 'EM')
         const oObraDetalle = {
           ID,
           ...oOrdenCompra,
@@ -175,7 +178,9 @@ sap.ui.define([
         oModel.updateBindings(true)
         this.setInspectoresDeUnJefe(true)
       } catch (error) {
-        console.log(error)
+        const message = this.getResourceBundle().getText("errorservice")
+        MessageToast.show(message)
+        oModel.setProperty("/ObraDetalle", []);
       }
     },
 

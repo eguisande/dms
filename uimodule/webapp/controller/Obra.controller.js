@@ -185,10 +185,10 @@ sap.ui.define([
     openDialogAltaAsignacion: function () {
       const oView = this.getView();
       const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/Alta", {
-        PI: "1960N06",
-        //nroProveedor: "9987"
-      })
+      // oModel.setProperty("/Alta", {
+      //   PI: "1960N06",
+      //   //nroProveedor: "9987"
+      // })
       if (!this.pDialogAlta) {
         this.pDialogAlta = Fragment.load({
           id: oView.getId(),
