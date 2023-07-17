@@ -52,6 +52,7 @@ sap.ui.define([], function () {
           .catch((err) => rej(err));
       });
     },
+
     setUrl: function (urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi) {
       this._urlCatalog = urlCatalog;
       this._urlDMS = urlDMS;
@@ -65,16 +66,19 @@ sap.ui.define([], function () {
         "Obras?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)"
       );
     },
+
     getObrasJefeInspector: function (usuario, tipo_inspector) {
       return this.callGetService(
         `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)`
       );
     },
+
     getObrasByContratista: function (usuario) {
       return this.callGetService(
         `getObrasByContratista(usuario='${usuario}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)`
       );
     },
+
     getObra: function (ID) {
       return this.callGetService(
         `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi`
@@ -100,7 +104,8 @@ sap.ui.define([], function () {
     getContratista: function (registro_proveedor) {
       return this.callGetService(`getContratista(registro_proveedor='${registro_proveedor}')`);
     },
-    getContratistas: function (registro_proveedor) {
+
+    getContratistas: function () {
       return this.callGetService("Contratistas?$expand=tipo_documento,tipo_contratista");
     },
 
@@ -147,12 +152,15 @@ sap.ui.define([], function () {
     getMonedas: function () {
       return this.callGetService("Monedas");
     },
+
     getUnidadesMedida: function () {
-      return this.callGetService("UnidadesMedida");
+      return this.callGetService("UMGeneral");
     },
+
     getSistemasContratacion: function () {
       return this.callGetService("SistemasContratacion");
     },
+    
     getFinanciamientos: function () {
       return this.callGetService("Financiamientos");
     },

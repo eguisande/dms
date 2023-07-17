@@ -14,10 +14,10 @@
             <FlexItemData growFactor="1" baseSize="0" styleClass="sapUiTinyMargin" />
           </form:layoutData>
           <Label text="{i18n>incrementomaximo}" required="true"/>
-          <StepInput id="idStep4Incremento" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" change=".setMaximoPlazo" min="0" max="100" description="%" fieldWidth="90%"/>
+          <StepInput id="idStep4Incremento" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" change=".setMaximoPlazo" min="0" max="30" description="%" fieldWidth="90%"/>
           <Label text="{i18n>plazoejecucion}" required="true"/>
           <Input id="idStep4PlazoEjecucion" value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" change=".setMaximoPlazo" type="Number"/>
-          <ComboBox id="idStep4UM" items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" change=".setUmMaximoPLazo">
+          <ComboBox id="idStep4UM" items="{AppJsonModel>/Combos/UnidadesMedida}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
           </ComboBox>
           <Label text="{i18n>plazomaxejecucion}" required="true"/>

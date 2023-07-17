@@ -49,6 +49,7 @@ sap.ui.define([
         });
       } else {
         oModel.setProperty("/ObraDetalle/ID", null)
+        this.setUmMaximoPLazo()
         const oFirstStep = oWizard.getSteps().at(0);
         oWizard.discardProgress(oFirstStep);
         // scroll to top
@@ -93,10 +94,7 @@ sap.ui.define([
           Services.getFinanciamientos(),
           Services.getAreas(),
           Services.getTiposPI(),
-        ])
-
-        
-
+        ])      
         let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE')
         if(oObra.inspectores){
           Jefes = Jefes.map(inspector => {
@@ -176,7 +174,6 @@ sap.ui.define([
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE")
         oModel.updateBindings(true)
         this.setInspectoresDeUnJefe(true)
-
       } catch (error) {
         console.log(error)
       }
@@ -370,8 +367,8 @@ sap.ui.define([
       }
       oModel.setProperty(`/ObraDetalle/JefesInspectores`, oMultiJefes)
         ;
-
     },
+
     deleteInspector: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
       let sType = oEvent.getParameter("type"),
@@ -389,7 +386,6 @@ sap.ui.define([
       }
       oModel.setProperty(`/ObraDetalle/Inspectores`, oMultiInspectores)
         ;
-
     },
 
     onValueHelpDialogJefesClose: function () {
@@ -413,24 +409,34 @@ sap.ui.define([
       oBinding.filter(aFilter);
     },
 
-    setMaximoPlazo: function (oEvent) {
+    setMaximoPlazo: function () {
       const oModel = this.getModel("AppJsonModel");
+      const message = this.getResourceBundle().getText("errorplazomax");
       let plazo_ejecucion_model = oModel.getProperty("/ObraDetalle/plazo_ejecucion");
+      if (this.byId("idStep4Incremento").getValue() === 0) {
+        oModel.setProperty("/ObraDetalle/incremento_maximo", 0);
+      }
       let incremento_maximo_model = oModel.getProperty("/ObraDetalle/incremento_maximo");
-      let incremento_maximo = Number(incremento_maximo_model)
-      let plazo_ejecucion = Number(plazo_ejecucion_model)
-      let maximo_plazo_extension = plazo_ejecucion + ((plazo_ejecucion * incremento_maximo) / 100)
+      let incremento_maximo = Number(incremento_maximo_model);
+      let plazo_ejecucion = Number(plazo_ejecucion_model);
+      let maximo_plazo_extension = plazo_ejecucion + ((plazo_ejecucion * incremento_maximo) / 100);
       maximo_plazo_extension = Math.round(maximo_plazo_extension);
       oModel.setProperty("/ObraDetalle/maximo_plazo_extension", maximo_plazo_extension);
-
+      if (maximo_plazo_extension > plazo_ejecucion + 180) {
+        this.byId("idStep4PlazoEjecucion").setValueState("Error");
+        MessageToast.show(message);
+      } else {
+        this.byId("idStep4PlazoEjecucion").setValueState("None");
+      }
     },
 
-    setUmMaximoPLazo: function (oEvent) {
+    setUmMaximoPLazo: function () {
+      //17/7/23: Se asocia a la entidad UMGeneral y se pone predeterminado no editable la UM Días
       const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/ObraDetalle/um_plazo_ID", "D");
       let um_plazo_original = oModel.getProperty("/ObraDetalle/um_plazo_ID");
       oModel.setProperty("/ObraDetalle/um_plazo_maximo_ID", um_plazo_original);
     },
-
 
     handleWizardSubmit: async function () {
       let that = this;
