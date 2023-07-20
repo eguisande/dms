@@ -443,6 +443,11 @@ sap.ui.define([
       this.navToCross("pgomemoriacalculo", { ID })
     },
 
+    onNavigateToActasProrroga: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgoactasprorroga", { ID })
+    },
+
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
         oService.hrefForExternalAsync({
