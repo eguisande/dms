@@ -105,7 +105,11 @@
                         <MenuItem text="{i18n>actas}">
                           <items>
                             <MenuItem text="{i18n>actassuspension}" press="onNavigateToActasSuspension" />
+<<<<<<< HEAD
                             <MenuItem text="{i18n>acopiomateriales}" press="onNavigateToAcopioMateriales" />
+=======
+                            <MenuItem text="{i18n>actasprorroga}" press="onNavigateToActasProrroga" />
+>>>>>>> 9496f7c014852a47f80d2bfee19b9c83073af203
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
