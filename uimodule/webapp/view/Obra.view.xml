@@ -107,6 +107,7 @@
                             <MenuItem text="{i18n>actassuspension}" press="onNavigateToActasSuspension" />
                             <MenuItem text="{i18n>acopiomateriales}" press="onNavigateToAcopioMateriales" />
                             <MenuItem text="{i18n>actasprorroga}" press="onNavigateToActasProrroga" />
+                            <MenuItem text="{i18n>actastradicion}" press="onNavigateToActasTradicion" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
