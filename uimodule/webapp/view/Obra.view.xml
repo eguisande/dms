@@ -127,6 +127,7 @@
                             <MenuItem text="{i18n>inspeccionelectro}" press="onNavigateToInspecElectro" />
                           </items>
                         </MenuItem>
+                        <MenuItem text="{i18n>registrosobra}" press="onNavigateToRegistrosObra" />                          
                       </items>
                     </MenuItem>
                   </Menu>
