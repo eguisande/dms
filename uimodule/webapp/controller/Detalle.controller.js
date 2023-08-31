@@ -79,7 +79,7 @@ sap.ui.define([
           aAreas,
           aTiposPI
         ] = await Promise.all([
-          Services.getObra(ID),
+          ID ? Services.getObra(ID) : {},
           Services.getDirecciones(),
           Services.getGerencias(),
           Services.getInspectores(),
@@ -502,7 +502,7 @@ sap.ui.define([
               fondo_reparo: oObraDetalle.fondo_reparo,
               financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
               contratista_ID: oObraDetalle.contratista.ID,
-              nro_poliza: Number(oObraDetalle.nro_poliza),
+              nro_poliza: oObraDetalle.nro_poliza,
               extendida_por: oObraDetalle.extendida_por,
               porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
               nro_contrato: oObraDetalle.nro_contrato,
@@ -515,7 +515,7 @@ sap.ui.define([
               tasa_cambio: oObraDetalle.tasa_cambio,              
             }
             if (oObraDetalle.ID) {
-              Services.updateObra(oObraDetalle.ID, oPayload)
+              await Services.updateObra(oObraDetalle.ID, oPayload)
             } else {
               const oPreconstruccion = await Services.cretePreconstruccion()
               await Promise.all([
