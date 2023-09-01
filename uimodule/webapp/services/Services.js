@@ -10,7 +10,8 @@ sap.ui.define([], function () {
     callGetService: function (sEntity) {
       return new Promise((res, rej) => {
         fetch(`${this._urlCatalog}/${sEntity}`)
-          .then((response) => res(response.json()))
+          .then((response) => response.json())
+          .then((oData) => (oData.error ? rej(oData.error) : res(oData)))
           .catch((err) => rej(err));
       });
     },
@@ -24,7 +25,8 @@ sap.ui.define([], function () {
           },
           body: JSON.stringify(oPayload),
         })
-          .then((response) => res(response.json()))
+          .then((response) => response.json())
+          .then((oData) => (oData.error ? rej(oData.error) : res(oData)))
           .catch((err) => rej(err));
       });
     },
@@ -38,7 +40,8 @@ sap.ui.define([], function () {
           },
           body: JSON.stringify(oPayload),
         })
-          .then((response) => res(response))
+          .then((response) => response.json())
+          .then((oData) => (oData.error ? rej(oData.error) : res(oData)))
           .catch((err) => rej(err));
       });
     },
@@ -94,23 +97,33 @@ sap.ui.define([], function () {
     },
 
     getValidatePIPorveedor: function (proyecto_inversion, nro_proveedor) {
-      return this.callGetService(`validatePIPorveedor(proyecto_inversion='${proyecto_inversion}',nro_proveedor='${nro_proveedor}')`);
+      return this.callGetService(
+        `validatePIPorveedor(proyecto_inversion='${proyecto_inversion}',nro_proveedor='${nro_proveedor}')`
+      );
     },
 
     getQuantity: function (proyecto_inversion) {
-      return this.callGetService(`getQuantity(proyecto_inversion='${proyecto_inversion}')`);
+      return this.callGetService(
+        `getQuantity(proyecto_inversion='${proyecto_inversion}')`
+      );
     },
 
     getContratista: function (registro_proveedor) {
-      return this.callGetService(`getContratista(registro_proveedor='${registro_proveedor}')`);
+      return this.callGetService(
+        `getContratista(registro_proveedor='${registro_proveedor}')`
+      );
     },
 
     getContratistas: function () {
-      return this.callGetService("Contratistas?$expand=tipo_documento,tipo_contratista");
+      return this.callGetService(
+        "Contratistas?$expand=tipo_documento,tipo_contratista"
+      );
     },
 
     getOCQuantity: function (proyecto_inversion) {
-      return this.callGetService(`getOCQuantity(proyecto_inversion='${proyecto_inversion}')`);
+      return this.callGetService(
+        `getOCQuantity(proyecto_inversion='${proyecto_inversion}')`
+      );
     },
 
     getInspectores: function () {
@@ -124,7 +137,7 @@ sap.ui.define([], function () {
     getTiposContratos: function () {
       return this.callGetService("TiposContratos");
     },
-    
+
     getTiposPI: function () {
       return this.callGetService("TiposPI");
     },
@@ -160,7 +173,7 @@ sap.ui.define([], function () {
     getSistemasContratacion: function () {
       return this.callGetService("SistemasContratacion");
     },
-    
+
     getFinanciamientos: function () {
       return this.callGetService("Financiamientos");
     },
@@ -177,10 +190,8 @@ sap.ui.define([], function () {
       try {
         if (window.location.hostname === "localhost") {
           return {
-            "user_uuid": [
-              "64ff52e3-7bef-4706-be6f-645d504d12a0"
-            ],
-            "value": [
+            user_uuid: ["64ff52e3-7bef-4706-be6f-645d504d12a0"],
+            value: [
               "CAI_Developer",
               "HAA_USER",
               "IDE_Developer",
@@ -202,26 +213,24 @@ sap.ui.define([], function () {
               "WorkflowManagementAdmin",
               "WorkflowManagementBusinessExpert",
               "WorkflowManagementDeveloper",
-              "WorkflowManagementEndUser"
+              "WorkflowManagementEndUser",
             ],
-          }
+          };
         }
         const url = `${this._urlUserApi}/attributes`;
-        const resp = await fetch(url)
-        const user = await resp.json()
+        const resp = await fetch(url);
+        const user = await resp.json();
         return user;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
 
     getUserRoles: function () {
       if (window.location.hostname === "localhost") {
         return {
-          "user_uuid": [
-            "64ff52e3-7bef-4706-be6f-645d504d12a0"
-          ],
-          "value": [
+          user_uuid: ["64ff52e3-7bef-4706-be6f-645d504d12a0"],
+          value: [
             "CAI_Developer",
             "HAA_USER",
             "IDE_Developer",
@@ -243,9 +252,9 @@ sap.ui.define([], function () {
             "WorkflowManagementAdmin",
             "WorkflowManagementBusinessExpert",
             "WorkflowManagementDeveloper",
-            "WorkflowManagementEndUser"
+            "WorkflowManagementEndUser",
           ],
-        }
+        };
       }
       return this.callGetService("getUserRoles()");
     },
@@ -265,7 +274,7 @@ sap.ui.define([], function () {
         respFolderPermisos,
         respFolderSegHigiene,
         respFolderPolizas,
-        respFolderInterferencias
+        respFolderInterferencias,
       ] = await Promise.all([
         //_${proveedor}
         fetch(`${url}/${folder}_${proveedor}`, {
@@ -290,7 +299,7 @@ sap.ui.define([], function () {
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-          body: this.getFormDMS(`Permisos`),      
+          body: this.getFormDMS(`Permisos`),
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
@@ -298,19 +307,21 @@ sap.ui.define([], function () {
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-          body: this.getFormDMS(`Pólizas`),      
+          body: this.getFormDMS(`Pólizas`),
         }),
         fetch(`${url}/${folder}_${proveedor}`, {
           method: "POST",
-          body: this.getFormDMS(`Interferencias`),      
+          body: this.getFormDMS(`Interferencias`),
         }),
-      ])
-      const aAreasPromise = await Promise.all(aAreas.map(item => {
-        return fetch(`${url}/${folder}_${proveedor}/Carga inicial`, {
-          method: "POST",
-          body: this.getFormDMS(`${item.descripcion}`),
+      ]);
+      const aAreasPromise = await Promise.all(
+        aAreas.map((item) => {
+          return fetch(`${url}/${folder}_${proveedor}/Carga inicial`, {
+            method: "POST",
+            body: this.getFormDMS(`${item.descripcion}`),
+          });
         })
-      }))
+      );
       return await Promise.all([
         respFolderPrincipal.json(),
         respFolderOferta.json(),
@@ -322,8 +333,8 @@ sap.ui.define([], function () {
         respFolderSegHigiene.json(),
         respFolderPolizas.json(),
         respFolderInterferencias.json(),
-        ...aAreasPromise.map(item => item.json())
-      ])
+        ...aAreasPromise.map((item) => item.json()),
+      ]);
     },
 
     getFormDMS: function (folder) {
@@ -333,27 +344,27 @@ sap.ui.define([], function () {
       oForm.append("propertyValue[0]", folder);
       oForm.append("propertyId[1]", "cmis:objectTypeId");
       oForm.append("propertyValue[1]", "cmis:folder");
-      oForm.append("_charset_", "UTF-8")
+      oForm.append("_charset_", "UTF-8");
       oForm.append("succinct", true);
       return oForm;
     },
 
     postWorkflow: async function (body) {
       const resp = await fetch(`${this._urlWF}/v1/xsrf-token`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'X-CSRF-Token': 'Fetch'
-        }
-      })
-      const token = resp.headers.get("x-csrf-token")
-      const response = await fetch(`${this._urlWF}/v1/workflow-instances`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-Token': token,
-          'Content-Type': 'application/json'
+          "X-CSRF-Token": "Fetch",
         },
-        body: JSON.stringify(body)
-      })
+      });
+      const token = resp.headers.get("x-csrf-token");
+      const response = await fetch(`${this._urlWF}/v1/workflow-instances`, {
+        method: "POST",
+        headers: {
+          "X-CSRF-Token": token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
       return response;
     },
 
@@ -366,12 +377,11 @@ sap.ui.define([], function () {
       const oData = await fetch(url, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(oPayload)
+        body: JSON.stringify(oPayload),
       });
       return await Promise.all([oData.text()]);
-    }
-
+    },
   };
 });
