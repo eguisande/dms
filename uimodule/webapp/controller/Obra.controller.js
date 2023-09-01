@@ -474,6 +474,11 @@ sap.ui.define([
       this.navToCross("pgoregistrosobra", { ID })
     },
 
+    onNavigateToActasConstatacion: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgoactasconstatacion", { ID })
+    },
+
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
         oService.hrefForExternalAsync({
