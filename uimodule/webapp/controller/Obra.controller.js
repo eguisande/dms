@@ -443,6 +443,11 @@ sap.ui.define([
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgomemoriacalculo", { ID })
     },
+
+    onNavigateToMemoriaCalculoOCE: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgomemoriacalculooce", { ID })
+    },
     
     onNavigateToAcopioMateriales: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()

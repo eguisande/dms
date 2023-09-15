@@ -116,6 +116,7 @@
                           <items>
                             <MenuItem text="{i18n>diagramacuadra}" press="onNavigateToDiagramaCuadra" />
                             <MenuItem text="{i18n>memoriacalculo}" press="onNavigateToMemoriaCalculo" />
+                            <MenuItem text="{i18n>memoriacalculooce}" press="onNavigateToMemoriaCalculoOCE" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>inspecciondiaria}">
