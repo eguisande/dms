@@ -122,6 +122,7 @@
                         <MenuItem text="{i18n>inspecciondiaria}">
                           <items>
                             <MenuItem text="{i18n>partediario}" press="onNavigateToParteDiario" />
+                            <MenuItem text="{i18n>controlsostenimiento}" press="onNavigateToControlSostenimiento" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>inspeccioneventual}">

@@ -489,6 +489,11 @@ sap.ui.define([
       this.navToCross("pgoactasadicionales", { ID })
     },
 
+    onNavigateToControlSostenimiento: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgocontrolsostenimiento", { ID })
+    },
+
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
         oService.hrefForExternalAsync({
