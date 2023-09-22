@@ -110,6 +110,7 @@
                             <MenuItem text="{i18n>actastradicion}" press="onNavigateToActasTradicion" />
                             <MenuItem text="{i18n>actasconstatacion}" press="onNavigateToActasConstatacion" />
                             <MenuItem text="{i18n>actasadicionales}" press="onNavigateToActasAdicionales" />
+                            <MenuItem text="{i18n>actasexcedidas}" press="onNavigateToActasExcedidas" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
