@@ -498,6 +498,11 @@ sap.ui.define([
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgoactaexcedidas", { ID })
     },
+    
+    onNavigateToInspeccionSegHig: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgoinspeccionesseghig", { ID })
+    },
 
     navToCross: function (semanticObject, params) {
       sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then(oService => {
