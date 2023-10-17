@@ -29,6 +29,7 @@ sap.ui.define([
       try {
         BusyIndicator.show(0)
         const oModel = this.getModel("AppJsonModel")
+        oModel.setProperty("/Detalle", false)
         //Se reemplaza por getUserRoles
         //const { email, Groups: aGroups } = await Services.getUser()
         const { email } = await Services.getUser()
@@ -62,7 +63,7 @@ sap.ui.define([
       || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias")
       const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
       const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
-      const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector")
+      const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
         || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
         || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_UsuarioGenericoAySA")
@@ -172,6 +173,21 @@ sap.ui.define([
             }),
             new sap.ui.model.Filter({
               path: 'p3',
+              operator: sap.ui.model.FilterOperator.Contains,
+              value1: sSearch
+            }),
+            new sap.ui.model.Filter({
+              path: 'partido/descripcion',
+              operator: sap.ui.model.FilterOperator.Contains,
+              value1: sSearch
+            }),
+            new sap.ui.model.Filter({
+              path: 'contratista/registro_proveedor',
+              operator: sap.ui.model.FilterOperator.Contains,
+              value1: sSearch
+            }),
+            new sap.ui.model.Filter({
+              path: 'direccion/descripcion',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
             }),
@@ -298,7 +314,9 @@ sap.ui.define([
     },
 
     onViewObra: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel")
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      oModel.setProperty("/Detalle", true)
       this.navTo("Detalle", { ID }, false)
     },
 
@@ -464,6 +482,11 @@ sap.ui.define([
       this.navToCross("pgoinspeccioneselectro", { ID })
     },
 
+    onNavigateToInspeccionMyC: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgoinspeccionambiente", { ID })
+    },
+
     onNavigateToControlPersonal: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgocontrolpersonal", { ID })
@@ -472,6 +495,11 @@ sap.ui.define([
     onNavigateToActasTradicion: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgoactastradicion", { ID })
+    },
+
+    onNavigateToActasEconomias: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
+      this.navToCross("pgoactaeconomias", { ID })
     },
 
     onNavigateToRegistrosObra: function (oEvent) {

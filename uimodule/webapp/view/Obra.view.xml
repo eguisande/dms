@@ -111,6 +111,7 @@
                             <MenuItem text="{i18n>actasconstatacion}" press="onNavigateToActasConstatacion" />
                             <MenuItem text="{i18n>actasadicionales}" press="onNavigateToActasAdicionales" />
                             <MenuItem text="{i18n>actasexcedidas}" press="onNavigateToActasExcedidas" />
+                            <MenuItem text="{i18n>actasEconomias}" press="onNavigateToActasEconomias" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
@@ -135,6 +136,7 @@
                         <MenuItem text="{i18n>inspeccionareas}">
                           <items>
                             <MenuItem text="{i18n>inspeccionseghig}" press="onNavigateToInspeccionSegHig" />
+                            <MenuItem text="{i18n>inspeccionMyC}" press="onNavigateToInspeccionMyC" />
                             
                           </items>
                         </MenuItem>

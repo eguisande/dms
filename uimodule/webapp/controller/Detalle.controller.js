@@ -196,7 +196,7 @@ sap.ui.define([
     wizardCompletedHandler: function () {
       const oModel = this.getModel("AppJsonModel");
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
-      if (this.validateFields(oObraDetalle)) {
+      if (this.validateFields(oObraDetalle) && !oModel.getProperty("/Detalle")) {
         const message = this.getResourceBundle().getText("errorfields")
         return MessageToast.show(message)
       }
@@ -267,6 +267,8 @@ sap.ui.define([
     },
 
     handleWizardCancel: function () {
+      const oModel = this.getModel("AppJsonModel");
+      if(!oModel.getProperty("/Detalle")){
       MessageBox.confirm(this.getResourceBundle().getText("cancelarconfirm"), {
         actions: ["Sí", "No"],
         emphasizedAction: "No",
@@ -278,6 +280,9 @@ sap.ui.define([
           }
         }
       });
+    }else{
+      this.onNavBack();
+    }
     },
 
     onOpenDialogJefe: function () {

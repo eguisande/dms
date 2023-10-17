@@ -6,7 +6,7 @@ build-parameters:
   before-all:
     - builder: custom
       commands:
-        - npm install
+        - npm install --force
 
 modules:
   - name: pgo_altaobras-destination-content
