@@ -9,9 +9,9 @@
       "csrfProtection": false
     },
     {
-      "source": "^/api/(.*)$",
-      "target": "/api/$1",
-      "destination": "GeneratePDF",
+      "source": "^/generatePDF/(.*)$",
+      "target": "/generatePDF/$1",
+      "destination": "PGO",
       "authenticationType": "none",
       "csrfProtection": false
     },

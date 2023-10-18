@@ -17,7 +17,7 @@ sap.ui.define([
       const urlDMS = oManifest.resolveUri("dms")
       const urlWF = oManifest.resolveUri("bpmworkflowruntime")
       const urlUserApi = oManifest.resolveUri("user-api")
-      const urlPdfApi = oManifest.resolveUri("api")
+      const urlPdfApi = oManifest.resolveUri("generatePDF")
       Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi)
       this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
       Services.getContratistas().then(data => {
@@ -643,10 +643,10 @@ sap.ui.define([
 
     createPdf: async function () {
       const oTable = this.byId("idTablaaltaobras");
-      const oBinding = oTable.getBinding("items");
-      const oObras = oBinding.oList;
+      const oObras = oTable.getItems()
       const { firstname, lastname } = await Services.getUser();
       const oObrasPayload = oObras.map(item => {
+        item = item.getBindingContext("AppJsonModel").getObject()
         return {
           "nombre": item.nombre === null ? "" : item.nombre,
           "estado": item.estado === null ? "" : item.estado.descripcion,
@@ -671,7 +671,7 @@ sap.ui.define([
       const timeStamp = (new Date()).toLocaleString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/[^0-9]/g, '');
       let sFileName = "listado_obras_" + timeStamp;
       const sMimeType = "pdf";
-      let aBuffer = this.base64ToArrayBuffer(oBinary[0]);
+      let aBuffer = this.base64ToArrayBuffer(oBinary.data);
       File.save(aBuffer, sFileName, sMimeType);
     },
 
