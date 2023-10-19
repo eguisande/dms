@@ -57,7 +57,7 @@ sap.ui.define([
       const sAreaSegHigiene = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sAreaPermisos = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPermisos" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
+      const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_AreaGenero"
       || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
       || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias")
