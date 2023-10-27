@@ -66,25 +66,25 @@ sap.ui.define([], function () {
 
     getObras: function () {
       return this.callGetService(
-        "Obras?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)"
+        "Obras?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)&$orderby=nombre"
       );
     },
 
     getObrasJefeInspector: function (usuario, tipo_inspector) {
       return this.callGetService(
-        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)`
+        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)&$orderby=nombre`
       );
     },
 
     getObrasByContratista: function (usuario) {
       return this.callGetService(
-        `getObrasByContratista(usuario='${usuario}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)`
+        `getObrasByContratista(usuario='${usuario}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)&$orderby=nombre`
       );
     },
 
     getObra: function (ID) {
       return this.callGetService(
-        `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi`
+        `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi&$orderby=nombre&$orderby=nombre`
       );
     },
 
