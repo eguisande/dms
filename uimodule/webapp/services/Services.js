@@ -84,7 +84,7 @@ sap.ui.define([], function () {
 
     getObra: function (ID) {
       return this.callGetService(
-        `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi&$orderby=nombre`
+        `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi`
       );
     },
 
