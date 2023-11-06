@@ -67,13 +67,13 @@
               <MenuButton useDefaultActionOnly="true" icon="sap-icon://menu">
                 <menu>
                   <Menu >
-                    <MenuItem text="{i18n>detalle}" icon="sap-icon://detail-view" press="onViewObra" />
+                    <MenuItem text="{i18n>detalle}" icon="sap-icon://detail-view" press="onViewObra" visible="{AppJsonModel>/Permisos/detalle}"/>
                     <MenuItem text="{i18n>eliminar}" icon="sap-icon://delete" press="onDeleteObra" visible="{=${AppJsonModel>estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/delete} }"/>
-                    <MenuItem text="{i18n>partidimetro}" icon="sap-icon://multi-select" press="onViewPartidimetro" />
-                    <MenuItem text="{i18n>plantrabajo}" icon="sap-icon://gantt-bars" press="onNavigateToPlanTrabajo" />
-                    <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" />
+                    <MenuItem text="{i18n>partidimetro}" icon="sap-icon://multi-select" press="onViewPartidimetro" visible="{AppJsonModel>/Permisos/partidimetro}"/>
+                    <MenuItem text="{i18n>plantrabajo}" icon="sap-icon://gantt-bars" press="onNavigateToPlanTrabajo" visible="{AppJsonModel>/Permisos/planTrabajo}"/>
+                    <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" visible="{AppJsonModel>/Permisos/preconstruccion}"/>
                     <MenuItem text="{i18n>enviar}" icon="sap-icon://approvals" press="onEnviar" visible="{=${AppJsonModel>estado_ID} === 'BO' || ${AppJsonModel>estado_ID} === 'RE'}"/>
-                    <MenuItem text="{i18n>controldocumentacion}" icon="sap-icon://complete" press="onNavigateToControlDocumentacion" />
+                    <MenuItem text="{i18n>controldocumentacion}" icon="sap-icon://complete" press="onNavigateToControlDocumentacion"/>
                     <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
                       <items>
                         <MenuItem text="{i18n>cargainicial}" press="onNavigateToCargaInicial" visible="{AppJsonModel>/Permisos/cargaInicial}"/>
@@ -87,7 +87,7 @@
                         </MenuItem>
                         <MenuItem text="{i18n>interferencias}" press="onNavigateToInterferencias" visible="{AppJsonModel>/Permisos/interferencias}" />
                         <MenuItem text="{i18n>medioambiente}" press="onNavigateToCargaInicialMedioAmbiente" visible="{AppJsonModel>/Permisos/medioAmbiente}"/>
-                        <MenuItem text="{i18n>oferta}" press="onNavigateToOferta"/>
+                        <MenuItem text="{i18n>oferta}" press="onNavigateToOferta" visible="{AppJsonModel>/Permisos/oferta}"/>
                         <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos" visible="{AppJsonModel>/Permisos/permisos}"/>
                         <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
                         <MenuItem text="{i18n>seguridadhigiene}" press="onNavigateToSeguridadHigiene" visible="{AppJsonModel>/Permisos/seghigiene}" />
@@ -97,7 +97,7 @@
                       <items>
                         <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" />
                         <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" />
-                        <MenuItem text="{i18n>minutas}" press="onNavigateToNotasMinutas" />
+                        <MenuItem text="{i18n>minutas}" press="onNavigateToNotasMinutas" visible="{AppJsonModel>/Permisos/notasMinutas}"  />
                       </items>
                     </MenuItem>
                     <MenuItem text="{i18n>ejecucion}" icon="sap-icon://gantt-bars" visible="{AppJsonModel>/Permisos/ejecucion}">

@@ -47,11 +47,16 @@ sap.ui.define([
 
     setUserData: function (aGroups, user) {
       const oModel = this.getModel("AppJsonModel")
+      const sDetalle = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA"  || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
+      const sPartidimetro = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
+      const sPlanTrabajo = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
+      const sPreconstruccion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
+      const sOferta = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
       const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion")
       const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector")
       const sContratista = aGroups.find(oGrupo => oGrupo === "PGO_Contratista")
       const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaGenero" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria")
+      const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
       const sAreaSegHigiene = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
@@ -67,6 +72,7 @@ sap.ui.define([
       const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
         || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
         || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_UsuarioGenericoAySA")
+      const sNotasMinutas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista")
       const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista")
       oModel.setProperty("/Permisos", {
         user,
@@ -74,6 +80,7 @@ sap.ui.define([
         create: !!sCreateDelete && true,
         edit: !!sEdit && true,
         all: !!sAll && true,
+        detalle: !!sDetalle && true,
         jefe: !!sJefeInspector && true,
         inspector: !!sInspector && true,
         contratista: !!sContratista && true,
@@ -87,7 +94,12 @@ sap.ui.define([
         interferencias: !!sAreaInterferencias && true,
         cargaInicial: !!sCargaIncial && true,
         comunicaciones: !!sComunicaciones && true,
-        ejecucion: !!sEjecucion && true
+        ejecucion: !!sEjecucion && true,
+        partidimetro: !!sPartidimetro && true,
+        planTrabajo: !!sPlanTrabajo && true,
+        preconstruccion: !!sPreconstruccion && true,
+        oferta: !!sOferta && true,
+        notasMinutas: !!sNotasMinutas && true
       })
     },
 
