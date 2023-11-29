@@ -90,7 +90,7 @@
                         <MenuItem text="{i18n>oferta}" press="onNavigateToOferta" visible="{AppJsonModel>/Permisos/oferta}"/>
                         <MenuItem text="{i18n>permisos}" press="onNavigateToPermisos" visible="{AppJsonModel>/Permisos/permisos}"/>
                         <MenuItem text="{i18n>polizas}" press="onNavigateToPoliza" visible="{AppJsonModel>/Permisos/polizas}"/>
-                        <MenuItem text="{i18n>seguridadhigiene}" press="onNavigateToSeguridadHigiene" visible="{AppJsonModel>/Permisos/seghigiene}" />
+                        <MenuItem text="{i18n>higieneseguridad}" press="onNavigateToHigieneSeguridad" visible="{AppJsonModel>/Permisos/seghigiene}" />
                       </items>
                     </MenuItem>
                     <MenuItem text="{i18n>comunicaciones}" icon="sap-icon://marketing-campaign" visible="{AppJsonModel>/Permisos/comunicaciones}">
@@ -135,7 +135,7 @@
                         </MenuItem>
                         <MenuItem text="{i18n>inspeccionareas}">
                           <items>
-                            <MenuItem text="{i18n>inspeccionseghig}" press="onNavigateToInspeccionSegHig" />
+                            <MenuItem text="{i18n>inspeccionhigseg}" press="onNavigateToInspeccionHigSeg" />
                             <MenuItem text="{i18n>inspeccionMyC}" press="onNavigateToInspeccionMyC" />
                             
                           </items>

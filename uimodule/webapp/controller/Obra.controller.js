@@ -414,6 +414,7 @@ sap.ui.define([
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgoordenserv", { ID })
     },
+
     onNavigateToNotaPedido: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgonotapedido", { ID })
@@ -434,7 +435,7 @@ sap.ui.define([
       this.navToCross("pgolistadopresentaciones", { ID })
     },
 
-    onNavigateToSeguridadHigiene: function (oEvent) {
+    onNavigateToHigieneSeguridad: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgoseguridadhigiene", { ID })
     },
@@ -539,7 +540,7 @@ sap.ui.define([
       this.navToCross("pgoactaexcedidas", { ID })
     },
     
-    onNavigateToInspeccionSegHig: function (oEvent) {
+    onNavigateToInspeccionHigSeg: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
       this.navToCross("pgoinspeccionesseghig", { ID })
     },
