@@ -36,6 +36,15 @@ sap.ui.define([
       return new Date(anio, mes - 1, dia)
     },
 
+    formatDateTime: function (oDate) {
+      if (!oDate) {
+        return;
+      }
+      const date = new Date(oDate);
+      const formattedDate = date.toLocaleDateString('es-AR', { month: '2-digit', day: '2-digit', year: 'numeric' });
+      return formattedDate;
+    },
+
     formatQuantity: function (nQuantity = 0) {
       const oCurrencyFormat = NumberFormat.getCurrencyInstance({
         currencyCode: false,

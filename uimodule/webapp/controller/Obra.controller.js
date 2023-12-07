@@ -11,69 +11,72 @@ sap.ui.define([
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Obra", {
     onInit: async function () {
-      const oModel = this.getModel("AppJsonModel")
-      const oManifest = this.getOwnerComponent().getManifestObject()
-      const urlCatalog = oManifest.resolveUri("catalog")
-      const urlDMS = oManifest.resolveUri("dms")
-      const urlWF = oManifest.resolveUri("bpmworkflowruntime")
-      const urlUserApi = oManifest.resolveUri("user-api")
-      const urlPdfApi = oManifest.resolveUri("generatePDF")
-      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi)
+      const oModel = this.getModel("AppJsonModel");
+      const oManifest = this.getOwnerComponent().getManifestObject();
+      const urlCatalog = oManifest.resolveUri("catalog");
+      const urlDMS = oManifest.resolveUri("dms");
+      const urlWF = oManifest.resolveUri("bpmworkflowruntime");
+      const urlUserApi = oManifest.resolveUri("user-api");
+      const urlPdfApi = oManifest.resolveUri("generatePDF");
+      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi);
       this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
       Services.getContratistas().then(data => {
-        oModel.setProperty("/Contratistas", data.value)
-      })
+        oModel.setProperty("/Contratistas", data.value);
+      });
     },
 
     _onObjectMatched: async function () {
       try {
-        BusyIndicator.show(0)
-        const oModel = this.getModel("AppJsonModel")
-        oModel.setProperty("/Detalle", false)
+        BusyIndicator.show(0);
+        const oModel = this.getModel("AppJsonModel");
+        oModel.setProperty("/Detalle", false);
         //Se reemplaza por getUserRoles
         //const { email, Groups: aGroups } = await Services.getUser()
-        const { email } = await Services.getUser()
-        const oUserRoles = await Services.getUserRoles()
-        this.setUserData(oUserRoles.value, email)
-        const aaltaobras = await this.getObrasData()
-        oModel.setProperty("/altaobras", aaltaobras)
+        const { email } = await Services.getUser();
+        const oUserRoles = await Services.getUserRoles();
+        this.setUserData(oUserRoles.value, email);
+        //////////MOCK//////////
+        this.loadModelMock();
+        //////////MOCK//////////
+        // const aaltaobras = await this.getObrasData()
+        // oModel.setProperty("/altaobras", aaltaobras)
       } catch (error) {
-        const message = this.getResourceBundle().getText("errorservice")
-        MessageToast.show(message)
+        const message = this.getResourceBundle().getText("errorservice");
+        MessageToast.show(message);
       } finally {
-        BusyIndicator.hide()
+        BusyIndicator.hide();
       }
     },
 
     setUserData: function (aGroups, user) {
-      const oModel = this.getModel("AppJsonModel")
-      const sDetalle = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA"  || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
-      const sPartidimetro = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
-      const sPlanTrabajo = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
-      const sPreconstruccion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
-      const sOferta = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector")
-      const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion")
-      const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector")
-      const sContratista = aGroups.find(oGrupo => oGrupo === "PGO_Contratista")
-      const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaGenero" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaSegHigiene = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaPermisos = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPermisos" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA")
+      const oModel = this.getModel("AppJsonModel");
+      const sDetalle = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
+      const sPartidimetro = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
+      const sPlanTrabajo = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
+      const sPreconstruccion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
+      const sOferta = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
+      const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion");
+      const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector");
+      const sContratista = aGroups.find(oGrupo => oGrupo === "PGO_Contratista");
+      const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaGenero" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaSegHigiene = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaPermisos = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPermisos" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_AreaGenero"
-      || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
-      || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias")
-      const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
-      const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista")
-      const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA")
+        || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
+        || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias");
+      const sCreateDelete = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista");
+      const sEdit = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista");
+      const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
         || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
-        || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_UsuarioGenericoAySA")
-      const sNotasMinutas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista")
-      const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista")
+        || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_UsuarioGenericoAySA");
+      const sNotasMinutas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista");
+      const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista");
       oModel.setProperty("/Permisos", {
         user,
         delete: !!sCreateDelete && true,
@@ -100,27 +103,49 @@ sap.ui.define([
         preconstruccion: !!sPreconstruccion && true,
         oferta: !!sOferta && true,
         notasMinutas: !!sNotasMinutas && true
-      })
+      });
+    },
+
+    loadModelMock: async function () {
+      const oModel = this.getModel("AppJsonModel");
+      const oResponse = await Services.getLocalJSON("obras.json");
+      const aObrasList = oResponse[0].Obras;
+      oModel.setProperty("/altaobras", aObrasList);      
+      aObrasList.forEach(obra => {        
+        const data = obra.p3.map(function (p3) {
+          return {codigo: p3.codigo, tipo_contrato: p3.tipo_contrato, tipo_obra: p3.tipo_obra, tipo_fluido: p3.tipo_fluido, partido: p3.partido}
+        }); 
+        const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
+        const tipos_contratos = data.map(o => o.tipo_contrato).join(', ');
+        const p3 = data.map(o => o.codigo).join(', ');
+        const tipos_obras = data.map(o => o.tipo_obra).join(', ');
+        const partidos = data.map(o => o.partido).join(', ');
+        obra.tipo_fluido = tipos_fluidos;
+        obra.tipo_contrato = tipos_contratos; 
+        obra.p3 = p3
+        obra.tipo_obra = tipos_obras;   
+        obra.partido = partidos;
+      });      
     },
 
     getObrasData: async function () {
-      const oModel = this.getModel("AppJsonModel")
-      const { all, jefe, inspector, contratista, user } = oModel.getProperty("/Permisos")
+      const oModel = this.getModel("AppJsonModel");
+      const { all, jefe, inspector, contratista, user } = oModel.getProperty("/Permisos");
       if (all) {
-        const { value } = await Services.getObras()
-        return value
+        const { value } = await Services.getObras();
+        return value;
       }
       if (jefe) {
-        const { value } = await Services.getObrasJefeInspector(user, "JE")
-        return value
+        const { value } = await Services.getObrasJefeInspector(user, "JE");
+        return value;
       }
       if (inspector) {
-        const { value } = await Services.getObrasJefeInspector(user, "EM")
-        return value
+        const { value } = await Services.getObrasJefeInspector(user, "EM");
+        return value;
       }
       if (contratista) {
-        const { value } = await Services.getObrasByContratista()
-        return value
+        const { value } = await Services.getObrasByContratista();
+        return value;
       }
     },
 
@@ -229,17 +254,17 @@ sap.ui.define([
         });
       }
       this.pDialogAlta.then(oDialog => {
-        oDialog.setModel(oModel)
+        oDialog.setModel(oModel);
         oDialog.open();
       });
     },
 
     onCloseDialogAltaAsignacion: function () {
-      this.byId("idAltaAsignacionDialog").close()
+      this.byId("idAltaAsignacionDialog").close();
     },
 
     onCloseDialogContratista: function () {
-      this.byId("idSelectDialogContratista").close()
+      this.byId("idSelectDialogContratista").close();
     },
 
     onSearchContratista: function (oEvent) {
@@ -287,66 +312,75 @@ sap.ui.define([
 
     onSelectContratista: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
-      const { registro_proveedor } = oEvent.getParameter("selectedItem").getBindingContext("AppJsonModel").getObject()
-      oModel.setProperty("/Alta/nroProveedor", registro_proveedor)
+      const { registro_proveedor } = oEvent.getParameter("selectedItem").getBindingContext("AppJsonModel").getObject();
+      oModel.setProperty("/Alta/nroProveedor", registro_proveedor);
     },
 
     onAltaAsignacion: async function () {
-      const oModel = this.getModel("AppJsonModel")
+      const oModel = this.getModel("AppJsonModel");
       const { PI, nroProveedor } = oModel.getProperty("/Alta");
-      const resourceBundle = this.getResourceBundle()
+      const resourceBundle = this.getResourceBundle();
       try {
-        this.byId("idInputPI").setValueState(PI ? "None" : "Error")
-        this.byId("idInputNroProveedor").setValueState(nroProveedor ? "None" : "Error")
+        this.byId("idInputPI").setValueState(PI ? "None" : "Error");
+        this.byId("idInputNroProveedor").setValueState(nroProveedor ? "None" : "Error");
         if (!PI || !nroProveedor) {
-          return
+          return;
         }
-        BusyIndicator.show(0)
+        BusyIndicator.show(0);
         const [oOrdenCompra, { value: quantity }, { value: OCQuantity }, oContratista] = await Promise.all([
           Services.getValidatePIPorveedor(PI, nroProveedor),
           Services.getQuantity(PI),
           Services.getOCQuantity(PI),
           Services.getContratista(nroProveedor),
-        ])
+        ]);
         if (oOrdenCompra.ID && oContratista.ID) {
           oModel.setProperty("/ObraDetalle", oOrdenCompra);
           oModel.setProperty("/ObraDetalle/quantity", quantity);
           oModel.setProperty("/ObraDetalle/contratista", oContratista);
           oModel.setProperty("/ObraDetalle/PI", this.getPITable(OCQuantity));
-          this.navTo("Detalle", {}, false)
+          this.navTo("Detalle", {}, false);
         } else {
-          MessageToast.show(resourceBundle.getText("errorpinroproveedor"))
+          MessageToast.show(resourceBundle.getText("errorpinroproveedor"));
         }
       } catch (error) {
-        const message = resourceBundle.getText("errorservice")
-        MessageToast.show(message)
+        const message = resourceBundle.getText("errorservice");
+        MessageToast.show(message);
       } finally {
-        BusyIndicator.hide()
+        BusyIndicator.hide();
       }
     },
 
     onViewObra: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel")
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      oModel.setProperty("/Detalle", true)
-      this.navTo("Detalle", { ID }, false)
+      const oModel = this.getModel("AppJsonModel");
+      //const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      const ID = "Detalle";
+      oModel.setProperty("/Detalle", true);
+      this.navTo("Detalle", { ID }, false);
+    },
+
+    crearObra: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      //const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      oModel.setProperty("/Detalle", true);
+      const ID = "Creacion";
+      this.navTo("Detalle", { ID }, false);
     },
 
     onDeleteObra: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      BusyIndicator.show(0)
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      BusyIndicator.show(0);
       try {
         await this.showMessageConfirm("eliminarregistro");
         const message = this.getResourceBundle().getText("obraeliminada");
         MessageBox.success(message);
-        await Services.deleteObra(ID)
-        await this._onObjectMatched()
+        await Services.deleteObra(ID);
+        await this._onObjectMatched();
       } catch (error) {
-        const message = this.getResourceBundle().getText("errorservice")
-        error && MessageToast.show(message)
+        const message = this.getResourceBundle().getText("errorservice");
+        error && MessageToast.show(message);
       }
       finally {
-        BusyIndicator.hide()
+        BusyIndicator.hide();
       }
     },
 
@@ -356,193 +390,193 @@ sap.ui.define([
           actions: [MessageBox.Action.CANCEL, "Aceptar"],
           emphasizedAction: "Aceptar",
           onClose: sAction => sAction === "Aceptar" ? res() : rej(false)
-        })
-      })
+        });
+      });
     },
 
     onNavigateToCargaInicial: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocargainicial", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocargainicial", { ID });
     },
 
     onNavigateToPermisos: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgopermisos", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgopermisos", { ID });
     },
 
     onNavigateToOferta: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgooferta", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgooferta", { ID });
     },
 
     onViewPartidimetro: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgopartidimetro", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgopartidimetro", { ID });
     },
 
     onNavigateToInterferencias: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgointerferencias", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgointerferencias", { ID });
     },
 
     onNavigateToPreconstruccion: async function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgopreconstruccion", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgopreconstruccion", { ID });
     },
 
     onNavigateToCargaInicialInspeccion: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocargainicial", { ID, area_ID: "IN" })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocargainicial", { ID, area_ID: "IN" });
     },
 
     onNavigateToCargaInicialGenero: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocargainicial", { ID, area_ID: "GE" })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocargainicial", { ID, area_ID: "GE" });
     },
 
     onNavigateToCargaInicialCarteleria: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocargainicial", { ID, area_ID: "CA" })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocargainicial", { ID, area_ID: "CA" });
     },
 
     onNavigateToCargaInicialMedioAmbiente: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocargainicial", { ID, area_ID: "MA" })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocargainicial", { ID, area_ID: "MA" });
     },
 
     onNavigateToOrdenServicio: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoordenserv", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoordenserv", { ID });
     },
 
     onNavigateToNotaPedido: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgonotapedido", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgonotapedido", { ID });
     },
 
     onNavigateToPoliza: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgopolizas", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgopolizas", { ID });
     },
 
     onNavigateToPlanTrabajo: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoplantrabajo", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoplantrabajo", { ID });
     },
 
     onNavigateToListadoPresentaciones: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgolistadopresentaciones", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgolistadopresentaciones", { ID });
     },
 
     onNavigateToHigieneSeguridad: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoseguridadhigiene", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoseguridadhigiene", { ID });
     },
 
     onNavigateToListadoPlanos: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgolistadoplanos", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgolistadoplanos", { ID });
     },
 
     onNavigateToDiagramaCuadra: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgotramos", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgotramos", { ID });
     },
 
     onNavigateToControlDocumentacion: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocontroldocumentacion", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocontroldocumentacion", { ID });
     },
 
     onNavigateToActasSuspension: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactassuspension", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactassuspension", { ID });
     },
 
     onNavigateToNotasMinutas: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgonotasminutas", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgonotasminutas", { ID });
     },
 
     onNavigateToParteDiario: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgopartediario", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgopartediario", { ID });
     },
-   
+
     onNavigateToMemoriaCalculo: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgomemoriacalculo", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgomemoriacalculo", { ID });
     },
 
     onNavigateToMemoriaCalculoOCE: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgomemoriacalculooce", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgomemoriacalculooce", { ID });
     },
-    
+
     onNavigateToAcopioMateriales: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoacopiomateriales", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoacopiomateriales", { ID });
     },
 
     onNavigateToActasProrroga: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactasprorroga", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactasprorroga", { ID });
     },
 
     onNavigateToInspecElectro: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoinspeccioneselectro", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoinspeccioneselectro", { ID });
     },
 
     onNavigateToInspeccionMyC: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoinspeccionambiente", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoinspeccionambiente", { ID });
     },
 
     onNavigateToControlPersonal: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocontrolpersonal", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocontrolpersonal", { ID });
     },
 
     onNavigateToActasTradicion: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactastradicion", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactastradicion", { ID });
     },
 
     onNavigateToActasEconomias: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactaeconomias", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactaeconomias", { ID });
     },
 
     onNavigateToRegistrosObra: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoregistrosobra", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoregistrosobra", { ID });
     },
 
     onNavigateToActasConstatacion: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactasconstatacion", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactasconstatacion", { ID });
     },
 
     onNavigateToActasAdicionales: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactasadicionales", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactasadicionales", { ID });
     },
 
     onNavigateToControlSostenimiento: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgocontrolsostenimiento", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgocontrolsostenimiento", { ID });
     },
 
     onNavigateToActasExcedidas: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoactaexcedidas", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactaexcedidas", { ID });
     },
-    
+
     onNavigateToInspeccionHigSeg: function (oEvent) {
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject()
-      this.navToCross("pgoinspeccionesseghig", { ID })
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoinspeccionesseghig", { ID });
     },
 
     navToCross: function (semanticObject, params) {
@@ -554,7 +588,7 @@ sap.ui.define([
           },
           params
         }).then(sHref => {
-          sap.m.URLHelper.redirect(sHref)
+          sap.m.URLHelper.redirect(sHref);
         });
       });
     },
@@ -566,20 +600,20 @@ sap.ui.define([
         emphasizedAction: "Aceptar",
         onClose: async (sAction) => {
           if (sAction !== "Aceptar") {
-            return
+            return;
           }
           try {
-            BusyIndicator.show(0)
+            BusyIndicator.show(0);
             const jefe_inspeccion = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === "JE")
               .map(item => ({
                 usuario: item.inspector.usuario,
                 correo: item.inspector.correo
-              }))
+              }));
             const inspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID !== "JE")
               .map(item => ({
                 usuario: item.inspector.usuario,
                 correo: item.inspector.correo
-              }))
+              }));
             const oPayload = {
               definitionId: "pgo.wfaltaobra",
               context: {
@@ -607,7 +641,7 @@ sap.ui.define([
                   monto_original: item.quantity
                 }))
               }
-            }
+            };
             const response = await Services.postWorkflow(oPayload);
             if (response.status === 201) {
               Services.updateObra(oObra.ID, { estado_ID: "PI" }).then(oResponse => {
@@ -619,7 +653,7 @@ sap.ui.define([
                   MessageBox.success(message);
                   this._onObjectMatched();
                 }
-              })
+              });
             } else {
               const message = this.getResourceBundle().getText("errorservice");
               MessageToast.show(message);
@@ -649,17 +683,17 @@ sap.ui.define([
         });
       }
       this._pValueHelpDialogInspectores.then(oValueHelpDialog => {
-        oValueHelpDialog.setModel(oModel)
+        oValueHelpDialog.setModel(oModel);
         oValueHelpDialog.open();
       });
     },
 
     createPdf: async function () {
       const oTable = this.byId("idTablaaltaobras");
-      const oObras = oTable.getItems()
+      const oObras = oTable.getItems();
       const { firstname, lastname } = await Services.getUser();
       const oObrasPayload = oObras.map(item => {
-        item = item.getBindingContext("AppJsonModel").getObject()
+        item = item.getBindingContext("AppJsonModel").getObject();
         return {
           "nombre": item.nombre === null ? "" : item.nombre,
           "estado": item.estado === null ? "" : item.estado.descripcion,
@@ -671,15 +705,15 @@ sap.ui.define([
           "fluido": item.fluido === null ? "" : item.fluido.descripcion,
           "partido": item.partido === null ? "" : item.partido.descripcion,
           "tipo_obra": item.tipo_obra === null ? "" : item.tipo_obra.descripcion
-        }
-      })
+        };
+      });
       const oPayload = {
         "doc_id": "listado_obras",
         "usuario": firstname + " " + lastname,
         "fecha": this.formatter.formatDatePdf(new Date()),
         "formato": "base64",
         "obras": oObrasPayload
-      }
+      };
       const oBinary = await Services.createPdf(oPayload);
       const timeStamp = (new Date()).toLocaleString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/[^0-9]/g, '');
       let sFileName = "listado_obras_" + timeStamp;

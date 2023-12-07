@@ -2,50 +2,13 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%" title="{i18n>datosfinancieros}">
-    <FlexBox class="columns" width="100%">
-      <form:SimpleForm editable="true" title="{i18n>datosfinancieros}" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">
-        <form:content>
-          <Label text="{i18n>fechafirma}" required="true"/>
-          <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>
-          <Label text="{i18n>noredetermina}" />
-          <Switch state="{AppJsonModel>/ObraDetalle/no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>
-          <Label text="{i18n>incrementomaximo}" required="true"/>
-          <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" editable="false" description="%" fieldWidth="90%" />
-          <Label text="{i18n>plazoejecucion}" required="true"/>
-          <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" editable="false"/>
-          <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" editable="false">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-          </ComboBox>
-          <Label text="{i18n>plazomaxejecucion}" required="true"/>
-          <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" editable="false"/>
-          <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}" editable="false">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-          </ComboBox>
-          <Label text="{i18n>acopio}" />
-          <Switch state="{AppJsonModel>/ObraDetalle/acopio_materiales}" customTextOn="Si" customTextOff="No" enabled="false"/>
-          <Label text="{i18n>anticipofinanciero}" required="true"/>
-          <StepInput value="{AppJsonModel>/ObraDetalle/anticipo_financiero}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
-          <Label text="{i18n>fondoreparo}" required="true"/>
-          <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
-          <Label text="{i18n>sistemacontratacion}" required="true"/>
-
-          <Label text="{i18n>financiamiento}" required="true"/>
-          <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}" editable="false">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-          </ComboBox>
-          <Link press="editStepFour" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <layoutData>
-              <l:GridData linebreak="true"/>
-            </layoutData>
-          </Link>
-        </form:content>
-        <form:layoutData>
-          <FlexItemData growFactor="1" baseSize="0" styleClass="sapUiTinyMargin" />
-        </form:layoutData>
-      </form:SimpleForm>
-      <Table items="{AppJsonModel>/ObraDetalle/PI}" fixedLayout="false" width="100%">
+  <form:SimpleForm title="{i18n>pi}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
+    <form:content>
+      <Table items="{AppJsonModel>/PI}" fixedLayout="false" width="100%">
         <columns>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>nrop3}" />
+          </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nropi}" />
           </Column>
@@ -58,34 +21,28 @@
           <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
             <Text text="{i18n>quantity}" />
             <footer >
-              <ObjectStatus text="{
-                                path: 'AppJsonModel>/ObraDetalle/quantity',
-                                formatter: '.formatter.formatQuantity'
-                            }" />
+              <ObjectStatus text="32.098.974.424,45" />
             </footer>
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+            <Text text="Acciones" />
           </Column>
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
+              <Text text="{AppJsonModel>p3}" />
               <Text text="{AppJsonModel>pi}" />
-              <ComboBox items="{AppJsonModel>/Combos/TiposPI}" selectedKey="{AppJsonModel>tipo_pi_ID}" editable="false">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-              </ComboBox>
-              <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>sistema_contratacion_ID}" editable="false">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-              </ComboBox>
-              <Text text="{
-                        path: 'AppJsonModel>quantity',
-                        formatter: '.formatter.formatQuantity'
-                    }" />
+              <Text text="{AppJsonModel>tipo_pi}" />
+              <Text text="{AppJsonModel>sistema_contratacion}" />
+              <Text text="{AppJsonModel>importe}" />
+              <HBox>
+                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
+              </HBox>
             </cells>
           </ColumnListItem>
-        </items>
-        <layoutData>
-          <FlexItemData growFactor="1" baseSize="0" backgroundDesign="Solid" styleClass="sapUiTinyMargin" />
-        </layoutData>
+        </items>        
       </Table>
-    </FlexBox>
-  </l:VerticalLayout>
+    </form:content>
+  </form:SimpleForm>
 </core:FragmentDefinition>

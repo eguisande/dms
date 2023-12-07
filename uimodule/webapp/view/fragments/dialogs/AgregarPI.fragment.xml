@@ -1,0 +1,32 @@
+<core:FragmentDefinition xmlns="sap.m"
+  xmlns:l="sap.ui.layout"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:u="sap.ui.unified"
+  xmlns:core="sap.ui.core">
+  <Dialog id="idAddPIDialog" title="Agregar proyecto de inversión" draggable="true">
+    <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
+      <Label text="{i18n>nrop3}"/>
+      <MultiComboBox items="{AppJsonModel>/P3s}" editable="true" selectedKey="{AppJsonModel>/PI/p3s}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </MultiComboBox>
+      <Label text="{i18n>nropi}"/>
+      <Input value="{AppJsonModel>/PI/pi}" editable="true"/>
+      <Label text="{i18n>tipopi}"/>
+      <ComboBox items="{AppJsonModel>/TiposPi}" editable="true" selectedKey="{AppJsonModel>/PI/tipo_pi}">
+        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>sistemacontratacion}"/>
+      <ComboBox items="{AppJsonModel>/SistemasContratacion}" editable="true" selectedKey="{AppJsonModel>/PI/sistema_contratacion}">
+        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>importe}"/>
+      <Input value="{AppJsonModel>/PI/importe}" editable="true" type="Number"/>
+    </FlexBox>
+    <beginButton>
+      <Button text="{i18n>dialogCloseButtonText}" press="closePIDialog" type="Default" />
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>dialogAceptButtonText}" press="confirmAddPI" type="Emphasized" />
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

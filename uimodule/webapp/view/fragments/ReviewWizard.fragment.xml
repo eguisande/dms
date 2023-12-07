@@ -1,30 +1,30 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
-    xmlns:form="sap.ui.layout.form"
-    xmlns="sap.m">
-
-    <Page id="wizardReviewPage" showHeader="false">
-        <content>
-            <!-- STEP 1 -->
-            <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step1" type="XML"/>
-            <!-- STEP 2 -->
-            <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step2" type="XML"/>
-            <!-- STEP 3 -->
-            <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step3" type="XML"/>
-            <!-- STEP 4 -->
-            <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step4" type="XML"/>
-            <!-- STEP 5 -->
-            <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step5" type="XML"/>
-
-        </content>
-        <footer>
-            <Bar>
-                <contentRight>
-                    
-                    <Button text="{i18n>cancelar}" press="handleWizardCancel" />
-                    <Button id="btnGuardar" text="{i18n>guardar}" type="Emphasized" press="handleWizardSubmit" 
-                        visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' || ${AppJsonModel>/ObraDetalle/ID} === null &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
-                </contentRight>
-            </Bar>
-        </footer>
-    </Page>
+  xmlns:form="sap.ui.layout.form"
+  xmlns="sap.m">
+  <Page id="wizardReviewPage" showHeader="false">
+    <!-- <IconTabBar id="idIconTabBar" headerMode="Standard" select="onChangeTab" selectedKey="{AppJsonModel>/SelectedKeyTab}">
+      <items>
+      </items>
+    </IconTabBar> -->
+    <content>
+      <!-- STEP 1 -->
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step1" type="XML"/>
+      <!-- STEP 2 -->
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step2" type="XML"/>
+      <!-- STEP 3 -->
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step3" type="XML"/>
+      <!-- STEP 4 -->
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step4" type="XML"/>
+      <!-- STEP 5 -->
+      <core:Fragment xmlns:core="sap.ui.core" fragmentName="com.aysa.pgo.altaobras.view.fragments.review.Step5" type="XML"/>
+    </content>
+    <footer>
+      <Bar>
+        <contentRight>
+          <Button text="{i18n>cancelar}" press="handleWizardCancel" />
+          <Button id="btnGuardar" text="{i18n>guardar}" type="Emphasized" press="handleWizardSubmit" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' || ${AppJsonModel>/ObraDetalle/ID} === null &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
+        </contentRight>
+      </Bar>
+    </footer>
+  </Page>
 </core:FragmentDefinition>

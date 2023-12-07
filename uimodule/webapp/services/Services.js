@@ -7,6 +7,33 @@ sap.ui.define([], function () {
     _urlUserApi: null,
     _urlPdfApi: null,
 
+    //MOCK
+    getLocalJSON: function (sJsonName) {
+      return this.promisizer(jQuery.sap.getModulePath("com.aysa.pgo.altaobras") + "/model/" + sJsonName);
+    },
+
+    promisizer: function (oOptions) {
+      return this.toPromise(jQuery.ajax(oOptions));
+    },
+
+    toPromise: function (oPromise) {
+      return new Promise(function (resolve, reject) {
+        oPromise.then(() => {
+          const sHeaders = oPromise.done().getAllResponseHeaders();
+          const aHeaders = sHeaders.trim().split(/[\r\n]+/);
+          const oHeaderMap = {};
+          aHeaders.forEach(function (sLine) {
+            const aParts = sLine.split(': ');
+            const sHeader = aParts.shift();
+            const sValue = aParts.join(': ');
+            oHeaderMap[sHeader] = sValue;
+          });
+          resolve([oPromise.done().responseJSON, oHeaderMap]);
+        }, reject);
+      });
+    },
+    //MOCK
+
     callGetService: function (sEntity) {
       return new Promise((res, rej) => {
         fetch(`${this._urlCatalog}/${sEntity}`)
@@ -231,7 +258,7 @@ sap.ui.define([], function () {
         return {
           user_uuid: ["64ff52e3-7bef-4706-be6f-645d504d12a0"],
           value: [
-            "PGO_AreaSeguridadHigiene"
+            //"PGO_AreaSeguridadHigiene"
             // "CAI_Developer",
             // "HAA_USER",
             // "IDE_Developer",
@@ -245,7 +272,7 @@ sap.ui.define([], function () {
             // "PGO_JefeInspeccion",
             // "PGO_Launchpad_Admin",
             // "PGO_Launchpad_Advanced_Theming",
-            // "PGO_Super",
+             "PGO_Super",
             // "PGO_WorkflowManagementAdmin",
             // "PGO_WorkflowManagementBusinessExpert",
             // "PGO_WorkflowManagementDeveloper",
@@ -374,15 +401,15 @@ sap.ui.define([], function () {
     },
 
     createPdf: async function (oPayload) {
-			const url = `${this._urlPdfApi}/`;
-			const oData = await fetch(url, {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(oPayload)
-			});
-			return await oData.json();
-		},
+      const url = `${this._urlPdfApi}/`;
+      const oData = await fetch(url, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(oPayload)
+      });
+      return await oData.json();
+    },
   };
 });

@@ -1,0 +1,33 @@
+<core:FragmentDefinition xmlns="sap.m"
+  xmlns:l="sap.ui.layout"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:u="sap.ui.unified"
+  xmlns:core="sap.ui.core">
+  <Dialog id="idAddResponsablesDialog" title="Agregar responsables Aysa" draggable="true">
+    <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
+      <Label text="{i18n>direccionaysa}"/>
+      <ComboBox items="{AppJsonModel>/Direcciones}" editable="true" selectedKey="{AppJsonModel>/GrupoResponsables/direccion}">
+        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>gerenciaaysa}"/>
+      <ComboBox items="{AppJsonModel>/Gerencias}" editable="true" selectedKey="{AppJsonModel>/GrupoResponsables/gerencia}">
+        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>jefeinspeccion}"/>
+      <Input value="{AppJsonModel>/GrupoResponsables/jefe_inspeccion}" editable="true"/>
+      <Label text="{i18n>inspector}"/>
+      <Input value="{AppJsonModel>/GrupoResponsables/inspector}" editable="true"/>
+      <Label text="{i18n>nropi}"/>
+      <!-- poner multicombobox -->
+      <MultiComboBox items="{AppJsonModel>/PI}" editable="true" selectedKeys="{AppJsonModel>/GrupoResponsables/pi}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </MultiComboBox>
+    </FlexBox>
+    <beginButton>
+      <Button text="{i18n>dialogCloseButtonText}" press="closeResponsablesDialog" type="Default" />
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>dialogAceptButtonText}" press="confirmAddResponsables" type="Emphasized" />
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

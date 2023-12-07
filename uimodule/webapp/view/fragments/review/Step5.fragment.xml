@@ -1,50 +1,88 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
-    xmlns:form="sap.ui.layout.form"
-    xmlns:l="sap.ui.layout"
-    xmlns="sap.m">
-    <form:SimpleForm title="{i18n>garantiaejecucion}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
-        <form:content>
-            <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
-                <Label text="{i18n>nropoliza}" required="true"/>
-                <Input value="{AppJsonModel>/ObraDetalle/nro_poliza}" editable="false"/>
-                <Label text="{i18n>extendidapor}" required="true"/>
-                <Input value="{AppJsonModel>/ObraDetalle/extendida_por}" editable="false"/>
-                <Label text="{i18n>porcentajecobertura}" required="true"/>
-                <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
-            </form:SimpleForm>
-            <Link press="editStepFive" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-                <layoutData>
-                    <l:GridData linebreak="true"/>
-                </layoutData>
-            </Link>
-        </form:content>
-    </form:SimpleForm>
-    <form:SimpleForm title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
-        <form:content>
-            <Label text="{i18n>fechainiciocontractual}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_inicio_contractual', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechainiciofisico}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_inicio_fisico', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechafincontractualoriginal}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_fin_contractual_original', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechafincontractualvigente}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_fin_contractual_original_vigente', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechafinobrafisico}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_fin_obra_fisico', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fecharecepcionprovisoria}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_recepcion_provisoria', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fecharecepciondefinitiva}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_recepcion_definitiva', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechapuestaservicio}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_puesta_servicio', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechacao}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_cao_visita_cliente', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechatransferencia}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_transferencia', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fechahabilitacion}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_habilitacion', formatter: '.formatter.formatDate'}" editable="false"/>
-            <Label text="{i18n>fecharescision}"/>
-            <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_recision', formatter: '.formatter.formatDate'}" editable="false"/>
-        </form:content>
-    </form:SimpleForm>
+  xmlns:form="sap.ui.layout.form"
+  xmlns:l="sap.ui.layout"
+  xmlns="sap.m">
+  <form:SimpleForm title="{i18n>responsablesaysa}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
+    <form:content>
+      <Table items="{AppJsonModel>/Responsables}" fixedLayout="false" width="100%">
+        <columns>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>direccionaysa}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>gerenciaaysa}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>jefeinspeccion}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>inspector}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+            <Text text="{i18n>nropi}" />            
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+            <Text text="Acciones" />
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem vAlign="Middle">
+            <cells>
+              <Text text="{AppJsonModel>direccion}" />
+              <Text text="{AppJsonModel>gerencia}" />
+              <Text text="{AppJsonModel>jefe_inspeccion}" />
+              <Text text="{AppJsonModel>inspector}" />
+              <Text text="{AppJsonModel>nro_pi}" />
+              <HBox>
+                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
+              </HBox>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </form:content>
+  </form:SimpleForm>
+  <form:SimpleForm title="{i18n>garantiaejecucion}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+    <form:content>
+      <Label text="{i18n>nropoliza}" required="true"/>
+      <Input value="123" editable="false"/>
+      <Label text="{i18n>extendidapor}" required="true"/>
+      <Input value="Zurich Seguros" editable="false"/>
+      <Label text="{i18n>porcentajecobertura}" required="true"/>
+      <StepInput value="80" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
+      <!-- <Link press="editStepFive" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+        <layoutData>
+          <l:GridData linebreak="true"/>
+        </layoutData>
+      </Link> -->
+    </form:content>
+  </form:SimpleForm>
+  <form:SimpleForm title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+    <form:content>
+      <Label text="{i18n>fechainiciocontractual}"/>
+      <Input value="22/12/2023" editable="false"/>
+      <Label text="{i18n>fechainiciofisico}"/>
+      <Input value="10/01/2024" editable="false"/>
+      <Label text="{i18n>fechafincontractualoriginal}"/>
+      <Input value="23/09/2025" editable="false"/>
+      <Label text="{i18n>fechafincontractualvigente}"/>
+      <Input value="23/09/2025" editable="false"/>
+      <Label text="{i18n>fechafinobrafisico}"/>
+      <Input value="15/09/2025" editable="false"/>
+      <Label text="{i18n>fecharecepcionprovisoria}"/>
+      <Input value="23/12/2023" editable="false"/>
+      <Label text="{i18n>fecharecepciondefinitiva}"/>
+      <Input value="06/01/2024" editable="false"/>
+      <Label text="{i18n>fechapuestaservicio}"/>
+      <Input value="12/10/2025" editable="false"/>
+      <Label text="{i18n>fechacao}"/>
+      <Input value="16/11/2025" editable="false"/>
+      <Label text="{i18n>fechatransferencia}"/>
+      <Input value="17/11/2025" editable="false"/>
+      <Label text="{i18n>fechahabilitacion}"/>
+      <Input value="02/12/2025" editable="false"/>
+      <Label text="{i18n>fecharescision}"/>
+      <Input value="03/12/2025" editable="false"/>
+    </form:content>
+  </form:SimpleForm>
 </core:FragmentDefinition>

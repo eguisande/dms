@@ -2,8 +2,57 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <WizardStep id="idObraAltaStep4" validated="true" title="{i18n>datosfinancieros}">
-    <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%">
+  <WizardStep id="idObraAltaStep4" validated="true" title="{i18n>pi}">
+    <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+      <form:content>
+        <Table id="idProyectosInversionTable" items="{AppJsonModel>/ProyectosInversion}" fixedLayout="false" width="100%">
+          <headerToolbar>
+            <Toolbar>
+              <ToolbarSpacer />
+              <Button tooltip="Agregar proyecto de inversión" icon="sap-icon://add" press="addPI" type="Ghost"/>
+            </Toolbar>
+          </headerToolbar>
+          <columns>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nrop3}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nropi}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>tipopi}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>sistemaContratacion}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+              <Text text="{i18n>quantity}" />
+              <footer >
+                <ObjectStatus text="32.098.974.424,45" />
+              </footer>
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="Acciones" />
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem vAlign="Middle">
+              <cells>
+                <Text text="{AppJsonModel>p3}" />
+                <Text text="{AppJsonModel>pi}" />
+                <Text text="{AppJsonModel>tipo_pi}" />
+                <Text text="{AppJsonModel>sistema_contratacion}" />
+                <Text text="{AppJsonModel>importe}" />
+                <HBox>
+                  <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC"/>
+                </HBox>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+      </form:content>
+    </form:SimpleForm>
+    <!-- <l:VerticalLayout class="sapUiContentPadding equalColumns" width="100%">
       <FlexBox class="columns" width="100%">
         <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="1" emptySpanS="0" width="100%">
           <Label text="{i18n>fechafirma}" required="true"/>
@@ -66,7 +115,7 @@
                 <ComboBox items="{AppJsonModel>/Combos/TiposPI}" selectedKey="{AppJsonModel>tipo_pi_ID}" valueState="{AppJsonModel>state}">
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
-                <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>sistema_contratacion_ID}" >
+                <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" selectedKey="{AppJsonModel>sistema_contratacion_ID}">
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
                 <Text text="{
@@ -81,6 +130,6 @@
           </layoutData>
         </Table>
       </FlexBox>
-    </l:VerticalLayout>
+    </l:VerticalLayout> -->
   </WizardStep>
 </core:FragmentDefinition>

@@ -4,8 +4,9 @@ sap.ui.define([
   "sap/ui/core/Fragment",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
-  "sap/ui/core/BusyIndicator"
-], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator) {
+  "sap/ui/core/BusyIndicator",
+  "sap/m/IconTabFilter"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, IconTabFilter) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Detalle", {
@@ -15,53 +16,88 @@ sap.ui.define([
 
     onInit: function () {
       const oManifest = this.getOwnerComponent().getManifestObject();
-      const urlCatalog = oManifest.resolveUri("catalog")
-      const urlDMS = oManifest.resolveUri("dms")
-      const urlWF = oManifest.resolveUri("bpmworkflowruntime")
-      const urlUserApi = oManifest.resolveUri("user-api")
-      const urlPdfApi = oManifest.resolveUri("generatePDF")
-      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi)
+      const urlCatalog = oManifest.resolveUri("catalog");
+      const urlDMS = oManifest.resolveUri("dms");
+      const urlWF = oManifest.resolveUri("bpmworkflowruntime");
+      const urlUserApi = oManifest.resolveUri("user-api");
+      const urlPdfApi = oManifest.resolveUri("generatePDF");
+      Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi);
       this.getRouter().getRoute("Detalle").attachPatternMatched(this._onObjectMatched, this);
     },
 
     _onObjectMatched: async function (oEvent) {
-      const { ID } = oEvent.getParameter("arguments")
-      const oModel = this.getModel("AppJsonModel")
-      oModel.setProperty("/Editable", true)
-      this.clearToken()
-      this.loadCombos(ID)
+      const { ID } = oEvent.getParameter("arguments");
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/Editable", true);
+      //this.clearToken();
+      //this.loadCombos(ID); 
       const oNavPage = this.byId("wizardNavContainer");
-      const oPageWizard = this.byId("wizardContentPage")
-      const oPageReview = this.byId("wizardReviewPage")
+      //Vistas de creación
+      const oPageWizard = this.byId("wizardContentPage");
+      //Vistas de detalle-edición
+      const oPageReview = this.byId("wizardReviewPage");
       //Reset Wizard
       const oWizard = this.byId("CreateObraWizard");
       const oFirstStep = oWizard.getSteps().at(0);
       oWizard.discardProgress(oFirstStep);
       // scroll to top
       oWizard.goToStep(oFirstStep);
-      //navigate wizard
-      if (ID) {
-        oNavPage.to(oPageReview)
-        await this.setDataToView(oModel, ID)
-        const aSteps = oWizard.getSteps()
+      /////////////MOCK////////////// 
+      const oResponse = await Services.getLocalJSON("obras.json");
+      const aObras = oResponse[0].Obras;
+      if (ID === "Detalle") {
+        oNavPage.to(oPageReview);
+        const aSteps = oWizard.getSteps();
         aSteps.forEach(oStep => {
-          oWizard.nextStep()
+          oWizard.nextStep();
         });
+        oModel.setProperty("/OrdenesCompra", aObras[0].ordenes_compra);
+        oModel.setProperty("/P3", aObras[0].p3);
+        oModel.setProperty("/PI", aObras[0].pi);
+        oModel.setProperty("/Responsables", aObras[0].responsables);        
       } else {
-        oModel.setProperty("/ObraDetalle/ID", null)
-        this.setUmMaximoPLazo()
+        oModel.setProperty("/ObraDetalle/ID", null);
+        oModel.setProperty("/OrdenesCompra", []);
+        oModel.setProperty("/ProyectosInversion", []);
+        oModel.setProperty("/Responsables", []);
+        oModel.setProperty("/P3s", []);
+        //Combos
+        oModel.setProperty("/Monedas", aObras[0].monedas);
+        oModel.setProperty("/TiposPi", aObras[0].tipos_pi);
+        oModel.setProperty("/SistemasContratacion", aObras[0].sistemas_contratacion);
+        oModel.setProperty("/Direcciones", aObras[0].direcciones);
+        oModel.setProperty("/Gerencias", aObras[0].gerencias);
+        this.setUmMaximoPLazo();
         const oFirstStep = oWizard.getSteps().at(0);
         oWizard.discardProgress(oFirstStep);
         // scroll to top
         oWizard.goToStep(oFirstStep);
-        oNavPage.to(oPageWizard)
+        oNavPage.to(oPageWizard);
       }
+      /////////////MOCK//////////////
+      //navigate wizard
+      // if (ID) {
+      //   oNavPage.to(oPageReview)
+      //   await this.setDataToView(oModel, ID)
+      //   const aSteps = oWizard.getSteps()
+      //   aSteps.forEach(oStep => {
+      //     oWizard.nextStep()
+      //   });
+      // } else {
+      //   oModel.setProperty("/ObraDetalle/ID", null)
+      //   this.setUmMaximoPLazo()
+      //   const oFirstStep = oWizard.getSteps().at(0);
+      //   oWizard.discardProgress(oFirstStep);
+      //   // scroll to top
+      //   oWizard.goToStep(oFirstStep);
+      //   oNavPage.to(oPageWizard)
+      // }
     },
 
     loadCombos: async function (ID) {
       try {
-        const oModel = this.getModel("AppJsonModel")
-        BusyIndicator.show(0)
+        const oModel = this.getModel("AppJsonModel");
+        BusyIndicator.show(0);
         const [
           oObra,
           aDirecciones,
@@ -94,17 +130,17 @@ sap.ui.define([
           Services.getFinanciamientos(),
           Services.getAreas(),
           Services.getTiposPI(),
-        ])      
-        let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE')
-        if(oObra.inspectores){
+        ]);
+        let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE');
+        if (oObra.inspectores) {
           Jefes = Jefes.map(inspector => {
             oObra.inspectores.forEach(obraIn => {
-              if(inspector.ID == obraIn.inspector_ID){
-                inspector.selected = true
+              if (inspector.ID == obraIn.inspector_ID) {
+                inspector.selected = true;
               }
-            })
-            return inspector
-          }) 
+            });
+            return inspector;
+          });
         }
         oModel.setProperty("/Combos", {
           Direcciones: aDirecciones.value,
@@ -122,45 +158,206 @@ sap.ui.define([
           SistemasContratacion: aSistemasContratacion.value,
           Financiamientos: aFinanciamientos.value,
           Areas: aAreas.value,
-        })
-        BusyIndicator.hide()
+        });
+        BusyIndicator.hide();
       } catch (error) {
         console.log(error);
-        const message = this.getResourceBundle().getText("errorservice")
-        BusyIndicator.hide()
-        MessageToast.show(message)
+        const message = this.getResourceBundle().getText("errorservice");
+        BusyIndicator.hide();
+        MessageToast.show(message);
       }
     },
 
+    /////////////MOCK//////////////
+    addOC: function () {
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/OrdenCompra", {});
+      if (!this._oOCDialog) {
+        this._oOCDialog = Fragment.load({
+          id: this.getView().getId(),
+          controller: this,
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AgregarOC"
+        }).then(oDialog => {
+          this.getView().addDependent(oDialog);
+          return oDialog;
+        });
+      }
+      this._oOCDialog.then(oDialog => {
+        oDialog.open();
+      });
+    },
+
+    closeOCDialog: function () {
+      this.byId("idAddOCDialog").close();
+    },
+
+    confirmAddOC: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const OC = oModel.getProperty("/OrdenCompra");
+      const ordenes_compra = oModel.getProperty("/OrdenesCompra");
+      ordenes_compra.push(OC);
+      oModel.setProperty("/OrdenesCompra", ordenes_compra);
+      this.closeOCDialog();
+    },
+
+    deleteOC: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
+      const idx = /[0-9]+$/.exec(path)[0];
+      const items = oModel.getProperty("/OrdenesCompra");
+      items.splice(idx, 1);
+      this.byId("idOrdenesCompraTable").getBinding("items").refresh();    
+    },
+
+    addPI: function () {
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/PI", {});
+      if (!this._oPIDialog) {
+        this._oPIDialog = Fragment.load({
+          id: this.getView().getId(),
+          controller: this,
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AgregarPI"
+        }).then(oDialog => {
+          this.getView().addDependent(oDialog);
+          return oDialog;
+        });
+      }
+      this._oPIDialog.then(oDialog => {
+        oDialog.open();
+      });
+    },
+
+    closePIDialog: function () {
+      this.byId("idAddPIDialog").close();
+    },
+
+    confirmAddPI: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const PI = oModel.getProperty("/PI");
+      const proyectos_inversion = oModel.getProperty("/ProyectosInversion");
+      proyectos_inversion.push(PI);
+      oModel.setProperty("/ProyectosInversion", proyectos_inversion);
+      this.closePIDialog();
+    },
+
+    deletePI: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
+      const idx = /[0-9]+$/.exec(path)[0];
+      const items = oModel.getProperty("/ProyectosInversion");
+      items.splice(idx, 1);
+      this.byId("idProyectosInversionTable").getBinding("items").refresh();    
+    },
+
+    addResponsables: function () {
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/GrupoResponsables", {});
+      if (!this._oResponsablesDialog) {
+        this._oResponsablesDialog = Fragment.load({
+          id: this.getView().getId(),
+          controller: this,
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AgregarResponsables"
+        }).then(oDialog => {
+          this.getView().addDependent(oDialog);
+          return oDialog;
+        });
+      }
+      this._oResponsablesDialog.then(oDialog => {
+        oDialog.open();
+      });
+    },
+
+    closeResponsablesDialog: function () {
+      this.byId("idAddResponsablesDialog").close();
+    },
+
+    confirmAddResponsables: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const grupoResponsables = oModel.getProperty("/GrupoResponsables");
+      const responsables = oModel.getProperty("/Responsables");
+      responsables.push(grupoResponsables);
+      oModel.setProperty("/Responsables", responsables);
+      this.closeResponsablesDialog();
+    },
+
+    deleteResponsable: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
+      const idx = /[0-9]+$/.exec(path)[0];
+      const items = oModel.getProperty("/Responsables");
+      items.splice(idx, 1);
+      this.byId("idResponsablesTable").getBinding("items").refresh();    
+    },
+
+    addP3: function () {
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/P3", {});
+      if (!this._oP3Dialog) {
+        this._oP3Dialog = Fragment.load({
+          id: this.getView().getId(),
+          controller: this,
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AgregarP3"
+        }).then(oDialog => {
+          this.getView().addDependent(oDialog);
+          return oDialog;
+        });
+      }
+      this._oP3Dialog.then(oDialog => {
+        oDialog.open();
+      });
+    },
+
+    closeP3Dialog: function () {
+      this.byId("idAddP3Dialog").close();
+    },
+
+    confirmAddP3: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const P3 = oModel.getProperty("/P3");
+      const p3s = oModel.getProperty("/P3s");
+      p3s.push(P3);
+      oModel.setProperty("/P3s", p3s);
+      this.closeP3Dialog();
+    },
+
+    deleteP3: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
+      const idx = /[0-9]+$/.exec(path)[0];
+      const items = oModel.getProperty("/P3s");
+      items.splice(idx, 1);
+      this.byId("idP3Table").getBinding("items").refresh();    
+    },
+    
+    /////////////MOCK//////////////
+
     setInspectoresDeUnJefe: async function (select) {
-      const oModel = this.getModel("AppJsonModel")
+      const oModel = this.getModel("AppJsonModel");
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
-      const aInspectores = await Services.getInspectores()
-      let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID))
-        Inspectores = Inspectores.map(inspector => {
-          if(select){
-            inspector.selected = true
-          }
-          return inspector
-        }) 
-      oModel.setProperty("/Combos/Inspectores",Inspectores )
+      const aInspectores = await Services.getInspectores();
+      let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID));
+      Inspectores = Inspectores.map(inspector => {
+        if (select) {
+          inspector.selected = true;
+        }
+        return inspector;
+      });
+      oModel.setProperty("/Combos/Inspectores", Inspectores);
     },
 
     setDataToView: async function (oModel, ID) {
       try {
-        const oObra = await Services.getObra(ID)
+        const oObra = await Services.getObra(ID);
         const [oOrdenCompra, { value: quantity }, { value: OCQuantity }] = await Promise.all([
           Services.getValidatePIPorveedor(oObra.proyecto_inversion, oObra.contratista.registro_proveedor),
           Services.getQuantity(oObra.proyecto_inversion),
           Services.getOCQuantity(oObra.proyecto_inversion)
-        ])
-        const oMultiJefes = this.getView().byId("idMultiInputJefes")
-        const oMultiInspectores = this.getView().byId("idMultiInputInspectores")
-        const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null)
-        const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE')
-        const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM')
-        // const aJefes = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === 'JE')
-        // const aInspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === 'EM')
+        ]);
+        const oMultiJefes = this.getView().byId("idMultiInputJefes");
+        const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
+        const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null);
+        const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE');
+        const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM');
         const oObraDetalle = {
           ID,
           ...oOrdenCompra,
@@ -170,16 +367,16 @@ sap.ui.define([
           fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
           JefesInspectores: aJefes.map(item => (item.inspector_ID)),
           Inspectores: aInspectores.map(item => (item.inspector_ID))
-        }
-        this.setTokensWizard(oMultiJefes, aJefes)
-        this.setTokensWizard(oMultiInspectores, aInspectores)
+        };
+        this.setTokensWizard(oMultiJefes, aJefes);
+        this.setTokensWizard(oMultiInspectores, aInspectores);
         oModel.setProperty("/ObraDetalle", oObraDetalle);
-        oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE")
-        oModel.updateBindings(true)
-        this.setInspectoresDeUnJefe(true)
+        oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
+        oModel.updateBindings(true);
+        this.setInspectoresDeUnJefe(true);
       } catch (error) {
-        const message = this.getResourceBundle().getText("errorservice")
-        MessageToast.show(message)
+        const message = this.getResourceBundle().getText("errorservice");
+        MessageToast.show(message);
         oModel.setProperty("/ObraDetalle", []);
       }
     },
@@ -188,7 +385,7 @@ sap.ui.define([
       oMultiInput.setTokens(
         aData.map(item => {
           const { ID, nombre } = item.inspector;
-          return new sap.m.Token({ text: nombre, key: ID })
+          return new sap.m.Token({ text: nombre, key: ID });
         })
       );
     },
@@ -197,92 +394,92 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
       if (this.validateFields(oObraDetalle) && !oModel.getProperty("/Detalle")) {
-        const message = this.getResourceBundle().getText("errorfields")
-        return MessageToast.show(message)
+        const message = this.getResourceBundle().getText("errorfields");
+        return MessageToast.show(message);
       }
       const oNavPage = this.byId("wizardNavContainer");
-      const oPageReview = this.byId("wizardReviewPage")
-      oNavPage.to(oPageReview)
+      const oPageReview = this.byId("wizardReviewPage");
+      oNavPage.to(oPageReview);
     },
 
     onChangeDireccion: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
-      const sDireccion = oModel.getProperty("/ObraDetalle/direccion_ID")
+      const sDireccion = oModel.getProperty("/ObraDetalle/direccion_ID");
       const oDialogJefes = this.byId("idSelectDialogJefes");
       const oDialogInspectores = this.byId("idSelectDialogInspectores");
-      oModel.setProperty("/ObraDetalle/gerencia_ID", null)
-      oModel.setProperty("/ObraDetalle/JefesInspectores", [])
-      oModel.setProperty("/ObraDetalle/Inspectores", [])
-      oDialogJefes && oDialogJefes.clearSelection()
-      oDialogInspectores && oDialogInspectores.clearSelection()
-      this.setComboFilter(sDireccion)
-      this.clearToken()
+      oModel.setProperty("/ObraDetalle/gerencia_ID", null);
+      oModel.setProperty("/ObraDetalle/JefesInspectores", []);
+      oModel.setProperty("/ObraDetalle/Inspectores", []);
+      oDialogJefes && oDialogJefes.clearSelection();
+      oDialogInspectores && oDialogInspectores.clearSelection();
+      this.setComboFilter(sDireccion);
+      this.clearToken();
     },
 
     clearToken: function () {
-      const oMultiJefes = this.getView().byId("idMultiInputJefes")
-      const oMultiInspectores = this.getView().byId("idMultiInputInspectores")
-      oMultiJefes.setTokens([])
-      oMultiInspectores.setTokens([])
+      const oMultiJefes = this.getView().byId("idMultiInputJefes");
+      const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
+      oMultiJefes.setTokens([]);
+      oMultiInspectores.setTokens([]);
     },
 
     setComboFilter: function (sDireccion) {
-      const oCombo = this.byId("idComboDireccionGerencias", sDireccion)
-      const oBinding = oCombo.getBinding("items")
+      const oCombo = this.byId("idComboDireccionGerencias", sDireccion);
+      const oBinding = oCombo.getBinding("items");
       const aFilter = [new sap.ui.model.Filter({
         path: 'direccion_ID',
         operator: sap.ui.model.FilterOperator.EQ,
         value1: sDireccion
-      })]
-      oBinding.filter(aFilter)
+      })];
+      oBinding.filter(aFilter);
     },
 
     editStepOne: function () {
-      this.navigationToStep(0)
+      this.navigationToStep(0);
     },
 
     editStepTwo: function () {
-      this.navigationToStep(1)
+      this.navigationToStep(1);
     },
 
     editStepThree: function () {
-      this.navigationToStep(2)
+      this.navigationToStep(2);
     },
 
     editStepFour: function () {
-      this.navigationToStep(3)
+      this.navigationToStep(3);
     },
 
     editStepFive: function () {
-      this.navigationToStep(4)
+      this.navigationToStep(4);
     },
 
     navigationToStep: function (nStep) {
-      this.byId("wizardNavContainer").back()
+      this.byId("wizardNavContainer").back();
       const oWizard = this.byId("CreateObraWizard");
       const oStep = oWizard.getSteps().at(nStep);
       setTimeout(() => {
-        oWizard.goToStep(oStep)
+        oWizard.goToStep(oStep);
       }, 200);
     },
 
     handleWizardCancel: function () {
       const oModel = this.getModel("AppJsonModel");
-      if(!oModel.getProperty("/Detalle")){
-      MessageBox.confirm(this.getResourceBundle().getText("cancelarconfirm"), {
-        actions: ["Sí", "No"],
-        emphasizedAction: "No",
-        onClose: async (sAction) => {
-          if (sAction === "No") {
-            return
-          } else {
-            this.onNavBack();
+      if (!oModel.getProperty("/Detalle")) {
+        MessageBox.confirm(this.getResourceBundle().getText("cancelarconfirm"), {
+          actions: ["Sí", "No"],
+          emphasizedAction: "No",
+          onClose: async (sAction) => {
+            if (sAction === "No") {
+              return;
+            } else {
+              this.onNavBack();
+            }
           }
-        }
-      });
-    }else{
-      this.onNavBack();
-    }
+        });
+      } else {
+        this.onNavBack();
+      }
     },
 
     onOpenDialogJefe: function () {
@@ -299,8 +496,8 @@ sap.ui.define([
         });
       }
       this._pValueHelpDialogJefes.then(oValueHelpDialog => {
-        oValueHelpDialog.setModel(oModel)
-        this.setFilterDireccion(oValueHelpDialog, oModel)
+        oValueHelpDialog.setModel(oModel);
+        this.setFilterDireccion(oValueHelpDialog, oModel);
         oValueHelpDialog.open();
       });
     },
@@ -319,43 +516,43 @@ sap.ui.define([
         });
       }
       this._pValueHelpDialogInspectores.then(oValueHelpDialog => {
-        oValueHelpDialog.setModel(oModel)
-        this.setFilterDireccion(oValueHelpDialog, oModel)
+        oValueHelpDialog.setModel(oModel);
+        this.setFilterDireccion(oValueHelpDialog, oModel);
         oValueHelpDialog.open();
       });
     },
 
     setFilterDireccion: function (oValueHelpDialog, oModel) {
-      const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID")
-      const oBinding = oValueHelpDialog.getBinding("items")
+      const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID");
+      const oBinding = oValueHelpDialog.getBinding("items");
       oBinding.filter([
         new sap.ui.model.Filter("direccion_ID", sap.ui.model.FilterOperator.Contains, idDireccion),
         new sap.ui.model.Filter("borrado", sap.ui.model.FilterOperator.NE, true)
-      ])
+      ]);
     },
 
     onValueHelpDialogJefesConfirm: function (oEvent) {
       const oMultiJefes = this.getView().byId("idMultiInputJefes");
-      this.setDataMultiInput(oEvent, oMultiJefes, "JefesInspectores")
-      this.setInspectoresDeUnJefe(false)
+      this.setDataMultiInput(oEvent, oMultiJefes, "JefesInspectores");
+      this.setInspectoresDeUnJefe(false);
     },
 
     onValueHelpDialogInpectoresConfirm: function (oEvent) {
       const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
-      this.setDataMultiInput(oEvent, oMultiInspectores, "Inspectores")
+      this.setDataMultiInput(oEvent, oMultiInspectores, "Inspectores");
     },
 
     setDataMultiInput: function (oEvent, oMultiJefes, sProperty) {
-      const oSelectedItem = oEvent.getParameter("selectedItems")
+      const oSelectedItem = oEvent.getParameter("selectedItems");
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty(`/ObraDetalle/${sProperty}`, oSelectedItem.map(item => {
         const { ID } = item.getBindingContext("AppJsonModel").getObject();
         return ID;
-      }))
+      }));
       oMultiJefes.setTokens(
         oSelectedItem.map(item => {
           const { ID, nombre } = item.getBindingContext("AppJsonModel").getObject();
-          return new sap.m.Token({ text: nombre, key: ID })
+          return new sap.m.Token({ text: nombre, key: ID });
         })
       );
     },
@@ -365,15 +562,15 @@ sap.ui.define([
       let sType = oEvent.getParameter("type"),
         aRemovedTokens = oEvent.getParameter("removedTokens"),
         oMultiJefes = this.getView().byId("idMultiInputJefes"),
-        aJefes = oModel.getProperty("/Combos/JefeInspectores")
+        aJefes = oModel.getProperty("/Combos/JefeInspectores");
       if (sType == "removed") {
         aJefes.forEach(item => {
-          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false
-        })
-        oMultiJefes = oMultiJefes.getTokens().filter(function (oContext) {
-          return oContext.getKey() !== aRemovedTokens[0].getKey()
+          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false;
         });
-        oModel.refresh()
+        oMultiJefes = oMultiJefes.getTokens().filter(function (oContext) {
+          return oContext.getKey() !== aRemovedTokens[0].getKey();
+        });
+        oModel.refresh();
       }
       oModel.setProperty(`/ObraDetalle/JefesInspectores`, oMultiJefes)
         ;
@@ -384,32 +581,32 @@ sap.ui.define([
       let sType = oEvent.getParameter("type"),
         aRemovedTokens = oEvent.getParameter("removedTokens"),
         oMultiInspectores = this.getView().byId("idMultiInputInspectores"),
-        aInspectores = oModel.getProperty("/Combos/Inspectores")
+        aInspectores = oModel.getProperty("/Combos/Inspectores");
       if (sType == "removed") {
         aInspectores.forEach(item => {
-          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false
-        })
-        oMultiInspectores = oMultiInspectores.getTokens().filter(function (oContext) {
-          return oContext.getKey() !== aRemovedTokens[0].getKey()
+          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false;
         });
-        oModel.refresh()
+        oMultiInspectores = oMultiInspectores.getTokens().filter(function (oContext) {
+          return oContext.getKey() !== aRemovedTokens[0].getKey();
+        });
+        oModel.refresh();
       }
       oModel.setProperty(`/ObraDetalle/Inspectores`, oMultiInspectores)
         ;
     },
 
     onValueHelpDialogJefesClose: function () {
-      this.byId("idSelectDialogJefes").close()
+      this.byId("idSelectDialogJefes").close();
     },
 
     onValueHelpDialogInspectoresClose: function () {
-      this.byId("idSelectDialogInspectores").close()
+      this.byId("idSelectDialogInspectores").close();
     },
 
     onSearchInspector: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
       const sValue = oEvent.getParameter("value");
-      const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID")
+      const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID");
       const aFilter =
         [
           new sap.ui.model.Filter("nombre", sap.ui.model.FilterOperator.Contains, sValue),
@@ -455,24 +652,24 @@ sap.ui.define([
         emphasizedAction: "Aceptar",
         onClose: async (sAction) => {
           if (sAction !== "Aceptar") {
-            return
+            return;
           }
           try {
-            BusyIndicator.show(0)
+            BusyIndicator.show(0);
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
             const aAreas = oModel.getProperty("/Combos/Areas");
-            const inspectores = [...oObraDetalle.JefesInspectores?.map(jefe => { return { inspector_ID: jefe } }) || [],
-            ...oObraDetalle.Inspectores?.map(item => { return { inspector_ID: item } }) || []]
+            const inspectores = [...oObraDetalle.JefesInspectores?.map(jefe => { return { inspector_ID: jefe }; }) || [],
+            ...oObraDetalle.Inspectores?.map(item => { return { inspector_ID: item }; }) || []];
             const pi = oObraDetalle.PI.map(item => {
               const oPI = {
                 pi: item.pi,
                 tipo_pi_ID: item.tipo_pi_ID,
                 quantity: item.quantity,
                 sistema_contratacion_ID: item.sistema_contratacion_ID,
-              }
-              return item.ID ? { ID: item.ID, ...oPI } : oPI
-            })
+              };
+              return item.ID ? { ID: item.ID, ...oPI } : oPI;
+            });
             const oPayload = {
               p3: oObraDetalle.p3,
               nombre: oObraDetalle.nombre,
@@ -517,12 +714,12 @@ sap.ui.define([
               oc: oObraDetalle.oc,
               fecha_oc: oObraDetalle.fecha_oc,
               quantity: oObraDetalle.quantity,
-              tasa_cambio: oObraDetalle.tasa_cambio,              
-            }
+              tasa_cambio: oObraDetalle.tasa_cambio,
+            };
             if (oObraDetalle.ID) {
-              await Services.updateObra(oObraDetalle.ID, oPayload)
+              await Services.updateObra(oObraDetalle.ID, oPayload);
             } else {
-              const oPreconstruccion = await Services.cretePreconstruccion()
+              const oPreconstruccion = await Services.cretePreconstruccion();
               await Promise.all([
                 Services.postObra({
                   ...oPayload,
@@ -531,7 +728,7 @@ sap.ui.define([
                   preconstruccion_ID: oPreconstruccion.ID
                 }),
                 Services.createFolderDMS(oObraDetalle.p3, oObraDetalle.nro_proveedor, aAreas)
-              ])
+              ]);
             }
             const message = this.getResourceBundle().getText("cambiosguardados");
             MessageBox.success(message, {
@@ -541,10 +738,10 @@ sap.ui.define([
               }
             });
           } catch (error) {
-            const message = this.getResourceBundle().getText("errorservice")
-            MessageToast.show(message)
+            const message = this.getResourceBundle().getText("errorservice");
+            MessageToast.show(message);
           } finally {
-            BusyIndicator.hide()
+            BusyIndicator.hide();
           }
         }
       });
@@ -558,7 +755,7 @@ sap.ui.define([
       const idStep2Representante = this.byId("idStep2Representante");
       const oModel = this.getModel("AppJsonModel");
       if (!oModel.getProperty("/Combos")) {
-        return
+        return;
       }
       const aInputs = [
         this.byId("idStep1P3"),
@@ -587,7 +784,7 @@ sap.ui.define([
         this.byId("idStep5ExtendidaPor"),
         this.byId("idStep5Cobertura"),
         ...oModel.getProperty("/ObraDetalle/PI")
-      ]
+      ];
       aInputs.forEach(oInput => {
         oInput.setValueState(oInput.getValue() ? "None" : "Error");
         oInput.getType && oInput.getType() === "Email" && oInput.setValueState(this.mailRegex.test(oInput.getValue()) ? "None" : "Error");

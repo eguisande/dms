@@ -1,14 +1,52 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
-    xmlns:form="sap.ui.layout.form"
-    xmlns="sap.m">
-    <WizardStep id="idObraAltaStep5" validated="true" title="{i18n>garantiaejecucion}">
-        <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
-            <Label text="{i18n>nropoliza}" required="true"/>
-            <Input id="idStep5Poliza" value="{AppJsonModel>/ObraDetalle/nro_poliza}" type="Number"/>
-            <Label text="{i18n>extendidapor}" required="true"/>
-            <Input id="idStep5ExtendidaPor" value="{AppJsonModel>/ObraDetalle/extendida_por}" />
-            <Label text="{i18n>porcentajecobertura}" required="true"/>
-            <StepInput id="idStep5Cobertura" value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" description="%" fieldWidth="90%"/>
-        </form:SimpleForm>        
-    </WizardStep>
+  xmlns:form="sap.ui.layout.form"
+  xmlns="sap.m">
+  <WizardStep id="idObraAltaStep5" validated="true" title="{i18n>responsablesaysa}">
+    <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+      <form:content>
+        <Table id="idResponsablesTable" items="{AppJsonModel>/Responsables}" fixedLayout="false" width="100%">
+          <headerToolbar>
+            <Toolbar>
+              <ToolbarSpacer />
+              <Button tooltip="Agregar responsables" icon="sap-icon://add" press="addResponsables" type="Ghost"/>
+            </Toolbar>
+          </headerToolbar>
+          <columns>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>direccionaysa}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>gerenciaaysa}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>jefeinspeccion}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>inspector}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nropi}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="Acciones" />
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem vAlign="Middle">
+              <cells>
+                <Text text="{AppJsonModel>direccion}" />
+                <Text text="{AppJsonModel>gerencia}" />
+                <Text text="{AppJsonModel>jefe_inspeccion}" />
+                <Text text="{AppJsonModel>inspector}" />
+                <Text text="{AppJsonModel>nro_pi}" />
+                <HBox>
+                  <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteResponsable"/>
+                </HBox>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+      </form:content>
+    </form:SimpleForm>
+  </WizardStep>
 </core:FragmentDefinition>

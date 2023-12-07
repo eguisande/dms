@@ -2,19 +2,50 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <form:SimpleForm title="{i18n>respcontratista}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="6" emptySpanL="6" emptySpanM="4" emptySpanS="0">
+  <form:SimpleForm title="{i18n>ordenescompra}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Label text="{i18n>representantelegal}" />
-      <Input value="{AppJsonModel>/ObraDetalle/representante}" editable="false"/>
-      <Label text="{i18n>telefono}" />
-      <Input value="{AppJsonModel>/ObraDetalle/telefono}" editable="false"/>
-      <Label text="{i18n>correo}" />
-      <Input value="{AppJsonModel>/ObraDetalle/correo}" editable="false"/>
-      <Link press="editStepTwo" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-        <layoutData>
-          <l:GridData linebreak="true"/>
-        </layoutData>
-      </Link>
+      <Table items="{AppJsonModel>/OrdenesCompra}" fixedLayout="false" width="100%">
+        <headerToolbar>
+          <Toolbar visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+            <ToolbarSpacer />
+            <Button tooltip="Agregar orden de compra" icon="sap-icon://add" press="addOC" type="Ghost"/>
+          </Toolbar>
+        </headerToolbar>
+        <columns>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>nroordencompra}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>fechaordencompra}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>moneda}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+            <Text text="{i18n>tasa}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+            <Text text="{i18n>noredetermina}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+            <Text text="Acciones" />
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem vAlign="Middle">
+            <cells>
+              <Text text="{AppJsonModel>nro_oc}" />
+              <Text text="{AppJsonModel>fecha}" />
+              <Text text="{AppJsonModel>moneda}" />
+              <Text text="{AppJsonModel>tipo_cambio}" />
+              <Switch state="{AppJsonModel>no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>
+              <HBox>
+                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
+              </HBox>
+            </cells>
+          </ColumnListItem>
+        </items>        
+      </Table>
     </form:content>
   </form:SimpleForm>
 </core:FragmentDefinition>

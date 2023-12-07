@@ -1,0 +1,227 @@
+{
+	"Obras": [
+		{
+			"nombre": "Obra 1",
+			"estado_ID": "CO",
+			"contratista_ID": "72ca0f25-b38d-48c5-8353-955905348a08",
+			"fecha_firma": "2023-11-09",
+			"representante": "RL Asociados",
+			"telefono": "11555000",
+			"correo": "rlasociados@rl.net",
+			"representante_tecnico": "Mariano Suarez",
+			"nro_matricula": "5678",
+			"apoderado": "Julio Luque",
+			"incremento_maximo": 0,
+			"moneda_ID": "ARS",
+			"plazo_ejecucion": 100,
+			"um_plazo_ID": "D",
+			"maximo_plazo_extension": 100,
+			"um_plazo_maximo_ID": "D",
+			"fondo_reparo": null,
+			"financiamiento_obra_ID": "AY",
+			"nro_poliza": "123",
+			"extendida_por": "Zurich Seguros",
+			"porcentaje_cobertura": 100,
+			"fecha_inicio_contractual": "2023-12-07",
+			"fecha_inicio_fisico": "2023-12-10",
+			"fecha_fin_contractual_original": "2024-02-09",
+			"fecha_fin_contractual_original_vigente": "2024-02-09",
+			"fecha_fin_obra_fisico": null,
+			"fecha_recepcion_provisoria": null,
+			"fecha_recepcion_definitiva": null,
+			"fecha_puesta_servicio": null,
+			"fecha_cao_visita_cliente": null,
+			"fecha_transferencia": null,
+			"fecha_habilitacion": null,
+			"fecha_recision": null,
+			"nro_contrato": "XN1237/0",
+			"nro_proveedor": "9987",
+			"proveedor": "PRATES Y CIA S.A.",
+			"cuit": "30501443367",
+			"monedas": [
+				{
+					"ID": "ARS",
+					"descripcion": "Peso argentino"
+				},
+				{
+					"ID": "USD",
+					"descripcion": "Dólar americano"
+				},
+				{
+					"ID": "EUR",
+					"descripcion": "Euro"
+				}
+			],
+			"tipos_pi": [
+				{
+					"ID": "CI",
+					"descripcion": "Civil"
+				},
+				{
+					"ID": "EL",
+					"descripcion": "Electromecánica"
+				},
+				{
+					"ID": "RE",
+					"descripcion": "Redes"
+				}
+			],
+			"sistemas_contratacion": [
+				{
+					"ID": "AA",
+					"descripcion": "Ajuste alzado"
+				},
+				{
+					"ID": "CC",
+					"descripcion": "Costes/Costas"
+				},
+				{
+					"ID": "UM",
+					"descripcion": "Unidad de medida"
+				}
+			],
+			"direcciones": [
+				{
+					"ID": "DO",
+					"descripcion": "Dirección de Obras Civiles y Electromecánicas"
+				},
+				{
+					"ID": "DR",
+					"descripcion": "Dirección de Redes"
+				}
+			],
+			"gerencias": [
+				{
+					"ID": "AA",
+					"descripcion": "Ajuste alzado"
+				},
+				{
+					"ID": "CC",
+					"descripcion": "Costes/Costas"
+				},
+				{
+					"ID": "UM",
+					"descripcion": "Unidad de medida"
+				}
+			],
+			"ordenes_compra": [
+				{
+					"nro_oc": "61697",
+					"fecha": "04/11/2022",
+					"revision": null,
+					"tipo_cambio": "10",
+					"moneda": "ARS",
+					"no_redetermina": true
+				},
+				{
+					"nro_oc": "22390",
+					"fecha": "12/12/2022",
+					"revision": null,
+					"tipo_cambio": "2",
+					"moneda": "USD",
+					"no_redetermina": false
+				}
+			],
+			"p3": [
+				{
+					"codigo": "SC70232",
+					"nombre": "P3 de prueba",
+					"tipo_obra": "Estación de Bombeo",
+					"tipo_contrato": "Civil y Electromecánica",
+					"tipo_fluido": "Agua",
+					"partido": "CABA",
+					"sistema_cuenca": "Sur",
+					"acumar": true,
+					"acopio": false,
+					"anticipo_financiero": 30,
+					"moneda_local": 40,
+					"moneda_extranjera": 60,
+					"nro_pi": "279B01, 279B02",
+					"monto_pi": "9.362.200.873,80 ARS, 13.374.572.676,85 ARS"
+				},
+				{
+					"codigo": "SC79999",
+					"nombre": "Test P3",
+					"tipo_obra": "Red Primaria",
+					"tipo_contrato": "Redes",
+					"tipo_fluido": "Cloaca",
+					"partido": "La Matanza",
+					"sistema_cuenca": "Matanza",
+					"acumar": false,
+					"acopio": false,
+					"anticipo_financiero": 55,
+					"moneda_local": 80,
+					"moneda_extranjera": 20,
+					"nro_pi": "279B03",
+					"monto_pi": "9.362.200.873,80 ARS"
+				}
+			],
+			"pi": [
+				{
+					"p3": "SC70232",
+					"pi": "279B01",
+					"tipo_pi": "Electromecánica",
+					"sistema_contratacion": "Ajuste alzado",
+					"importe": "9.362.200.873,80 ARS"
+				},
+				{
+					"p3": "SC70232",
+					"pi": "279B02",
+					"tipo_pi": "Civil",
+					"sistema_contratacion": "Unidad de medida",
+					"importe": "13.374.572.676,85 ARS"
+				},
+				{
+					"p3": "SC79999",
+					"pi": "279B03",
+					"tipo_pi": "Electromecánica",
+					"sistema_contratacion": "Ajuste alzado",
+					"importe": "9.362.200.873,80"
+				}
+			],
+			"estado": {
+				"ID": "CO",
+				"descripcion": "Contratada",
+				"color": "Success"
+			},
+			"direccion": {
+				"ID": "DO",
+				"descripcion": "Dirección de Obras Civiles y Electromecánicas"
+			},
+			"gerencia": {
+				"ID": "EB",
+				"descripcion": "Estaciones de Bombeo",
+				"direccion_ID": "DO"
+			},
+			"contratista": {
+				"tipo_contratista_ID": "JU",
+				"razonsocial": "Baitcon SA",
+				"registro_proveedor": "9987",
+				"tipo_documento_ID": "CT",
+				"nro_documento": "20555555555558",
+				"telefono": "1155556666",
+				"email": "hola@baitcon.com",
+				"pais_ID": "5af01db4-3366-4ca8-8a46-4bb86fc2bcc3",
+				"domicilio_legal": "San Martin 640",
+				"abreviatura": "BAI",
+				"borrado": null
+			},
+			"responsables": [
+				{
+					"direccion": "Dirección de Obras Civiles y Electromecánicas",
+					"gerencia": "Estaciones de Bombeo",
+					"jefe_inspeccion": "Guillermo Fernandez",
+					"inspector": "Juan Perez",
+					"nro_pi": "279B03"
+				},
+				{
+					"direccion": "Dirección de Obras Civiles y Electromecánicas",
+					"gerencia": "Estaciones de Bombeo",
+					"jefe_inspeccion": "Ana Fiorucci",
+					"inspector": "Fernando Miño",
+					"nro_pi": "279B01, 279B02"
+				}
+			]
+		}
+	]
+}

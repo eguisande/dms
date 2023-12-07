@@ -57,13 +57,17 @@
             <cells>
               <Text text="{AppJsonModel>nombre}" />
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
-              <Text text="{AppJsonModel>tipo_contrato/descripcion}" />
+              <!-- <Text text="{AppJsonModel>tipo_contrato/descripcion}" /> -->
+              <Text text="{AppJsonModel>tipo_contrato}" />
               <Text text="{AppJsonModel>p3}" />
               <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
               <Text text="{AppJsonModel>direccion/descripcion}" />
-              <Text text="{AppJsonModel>tipo_obra/descripcion}" />
-              <Text text="{AppJsonModel>fluido/descripcion}" />
-              <Text text="{AppJsonModel>partido/descripcion}" />
+              <Text text="{AppJsonModel>tipo_obra}" />
+              <!-- <Text text="{AppJsonModel>tipo_obra/descripcion}" /> -->
+              <Text text="{AppJsonModel>tipo_fluido}" />
+              <!-- <Text text="{AppJsonModel>fluido/descripcion}" /> -->
+              <Text text="{AppJsonModel>partido}" />
+              <!-- <Text text="{AppJsonModel>partido/descripcion}" /> -->
               <MenuButton useDefaultActionOnly="true" icon="sap-icon://menu">
                 <menu>
                   <Menu >
@@ -155,7 +159,7 @@
     <f:footer>
       <OverflowToolbar>
         <ToolbarSpacer/>
-        <Button type="Emphasized" text="{i18n>altayasignacion}" press="openDialogAltaAsignacion">
+        <Button type="Emphasized" text="{i18n>altayasignacion}" press="crearObra">
           <layoutData>
             <OverflowToolbarLayoutData priority="NeverOverflow" />
           </layoutData>
