@@ -4,34 +4,64 @@
     xmlns="sap.m">
     <form:SimpleForm title="{i18n>detalleobra}" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="2" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2">
         <Label text="{i18n>nombreobra}" />
-        <Input value="Obra 1" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/nombre}" editable="false"/>
         <Label text="{i18n>nrocontrato}" />
-        <Input value="XN1237/0" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}" editable="false"/>
         <Label text="{i18n>monto}" />
-        <Input value="32.098.974.424,45" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}" editable="false"/>
         <Label text="{i18n>moneda}" />
-        <Input value="ARS" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/moneda_ID}" editable="false"/>
         <Label text="{i18n>registroproveedor}" />
-        <Input value="9987" editable="false"/>
+        <ComboBox items="{AppJsonModel>/Combos/Contratistas}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/registro_proveedor}">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
+        </ComboBox>
         <Label text="{i18n>razonsocial}" />
-        <Input value="PRATES Y CIA S.A." editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/razonsocial}" editable="false"/>
         <Label text="{i18n>cuitcuilcdi}" />
-        <Input value="30501443367" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/nro_documento}" editable="false"/>
         <core:Title text="{i18n>respcontratista}" />
         <Label text="{i18n>representantelegal}" />
-        <Input value="RL Asociados" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/representante}" editable="false"/>
         <Label text="{i18n>telefono}" />
-        <Input value="11555000" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/telefono}" editable="false"/>
         <Label text="{i18n>correo}" />
-        <Input value="rlasociados@rl.net" editable="false"/>
-        <Label text="Representate Técnico Contratista" />
-        <Input value="Mariano Suarez" editable="false"/>
-        <Label text="Matrícula" />
-        <Input value="5678" editable="false"/>        
-        <!-- <Link press="editStepOne" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+        <Input value="{AppJsonModel>/ObraDetalle/correo}" editable="false"/>
+        <Label text="{i18n>representantetecnico}" />
+        <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" editable="false"/>
+        <Label text="{i18n>matricula}" />
+        <Input value="{AppJsonModel>/ObraDetalle/nro_matricula}" editable="false"/>       
+        <core:Title text="{i18n>datosfinancieros}" />
+        <Label text="{i18n>fechafirma}" required="true"/>
+        <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>
+        <Label text="{i18n>incrementomaximo}" required="true"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
+        <Label text="{i18n>plazoejecucion}" required="true"/>
+        <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" editable="false" change=".setMaximoPlazo" type="Number"/>
+        <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ejecucion}">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>plazomaxejecucion}" required="true"/>
+        <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number" editable="false"/>
+        <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <Label text="{i18n>fondoreparo}" required="true"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" description="%" fieldWidth="90%" editable="false"/>
+        <Label text="{i18n>financiamiento}" required="true"/>
+        <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
+        <core:Title text="{i18n>garantiaejecucion}" />
+        <Label text="{i18n>nropoliza}" required="true"/>
+        <Input value="{AppJsonModel>/ObraDetalle/nro_poliza}" editable="false"/>
+        <Label text="{i18n>extendidapor}" required="true"/>
+        <Input value="{AppJsonModel>/ObraDetalle/extendida_por}" editable="false"/>
+        <Label text="{i18n>porcentajecobertura}" required="true"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
+        <Link press="editStepOne" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
             <layoutData>
                 <l:GridData linebreak="true"/>
             </layoutData>
-        </Link> -->       
+        </Link>
     </form:SimpleForm>
 </core:FragmentDefinition>

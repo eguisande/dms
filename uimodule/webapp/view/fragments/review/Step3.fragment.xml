@@ -4,7 +4,7 @@
   xmlns="sap.m">
   <form:SimpleForm title="P3" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/P3}" fixedLayout="false" width="100%">
+      <Table items="{AppJsonModel>/ObraDetalle/p3}" fixedLayout="false" width="100%">
         <headerToolbar>
           <Toolbar visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
             <ToolbarSpacer/>
@@ -21,37 +21,37 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>montopi}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipocontrato}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipofluido}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipoobra}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>partido}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>sistema}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>acumar}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>acopio}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>anticipofinanciero}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>porcmonedalocal}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>porcmonedaextr}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+          <Column minScreenWidth="Tablet" demandPopin="true" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
             <Text text="Acciones" />
           </Column>
         </columns>
@@ -59,13 +59,13 @@
           <ColumnListItem vAlign="Middle">
             <cells>
               <Text text="{AppJsonModel>codigo}" />
-              <Text text="{AppJsonModel>nro_pi}" />             
-              <Text text="{AppJsonModel>monto_pi}" />
-              <Text text="{AppJsonModel>tipo_contrato}" />
-              <Text text="{AppJsonModel>tipo_fluido}" />
-              <Text text="{AppJsonModel>tipo_obra}" />
-              <Text text="{AppJsonModel>partido}" />
-              <Text text="{AppJsonModel>sistema_cuenca}" />
+              <Text text="{AppJsonModel>nros_pi}" />
+              <Text text="{AppJsonModel>montos_pi}" />
+              <Text text="{AppJsonModel>tipo_contrato/descripcion}" />
+              <Text text="{AppJsonModel>fluido/descripcion}" />
+              <Text text="{AppJsonModel>tipo_obra/descripcion}" />
+              <Text text="{AppJsonModel>partido/descripcion}" />
+              <Text text="{AppJsonModel>sistema/descripcion}" />
               <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
               <Switch state="{AppJsonModel>acopio}" customTextOn="Si" customTextOff="No" enabled="false"/>
               <Text text="{AppJsonModel>anticipo_financiero}%"/>
@@ -76,13 +76,13 @@
               </HBox>
             </cells>
           </ColumnListItem>
-        </items>        
+        </items>
       </Table>
-    </form:content>
-  </form:SimpleForm>
-      <!-- <Link press="editStepThree" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+      <Link press="editStepThree" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
         <layoutData>
           <l:GridData linebreak="true"/>
         </layoutData>
-      </Link>  -->
+      </Link>
+    </form:content>
+  </form:SimpleForm>
 </core:FragmentDefinition>

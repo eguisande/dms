@@ -57,17 +57,13 @@
             <cells>
               <Text text="{AppJsonModel>nombre}" />
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
-              <!-- <Text text="{AppJsonModel>tipo_contrato/descripcion}" /> -->
               <Text text="{AppJsonModel>tipo_contrato}" />
               <Text text="{AppJsonModel>p3}" />
               <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
               <Text text="{AppJsonModel>direccion/descripcion}" />
               <Text text="{AppJsonModel>tipo_obra}" />
-              <!-- <Text text="{AppJsonModel>tipo_obra/descripcion}" /> -->
               <Text text="{AppJsonModel>tipo_fluido}" />
-              <!-- <Text text="{AppJsonModel>fluido/descripcion}" /> -->
               <Text text="{AppJsonModel>partido}" />
-              <!-- <Text text="{AppJsonModel>partido/descripcion}" /> -->
               <MenuButton useDefaultActionOnly="true" icon="sap-icon://menu">
                 <menu>
                   <Menu >
@@ -109,7 +105,7 @@
                         <MenuItem text="{i18n>actas}">
                           <items>
                             <MenuItem text="{i18n>actassuspension}" press="onNavigateToActasSuspension" />
-                            <MenuItem text="{i18n>acopiomateriales}" press="onNavigateToAcopioMateriales" />
+                            <MenuItem text="{i18n>acopio}" press="onNavigateToAcopioMateriales" />
                             <MenuItem text="{i18n>actasprorroga}" press="onNavigateToActasProrroga" />
                             <MenuItem text="{i18n>actastradicion}" press="onNavigateToActasTradicion" />
                             <MenuItem text="{i18n>actasconstatacion}" press="onNavigateToActasConstatacion" />

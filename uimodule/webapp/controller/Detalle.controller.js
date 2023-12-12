@@ -30,7 +30,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/Editable", true);
       //this.clearToken();
-      //this.loadCombos(ID); 
+      this.loadCombos(ID);
       const oNavPage = this.byId("wizardNavContainer");
       //Vistas de creación
       const oPageWizard = this.byId("wizardContentPage");
@@ -42,31 +42,16 @@ sap.ui.define([
       oWizard.discardProgress(oFirstStep);
       // scroll to top
       oWizard.goToStep(oFirstStep);
-      /////////////MOCK////////////// 
-      const oResponse = await Services.getLocalJSON("obras.json");
-      const aObras = oResponse[0].Obras;
-      if (ID === "Detalle") {
+      //navigate wizard
+      if (ID) {
         oNavPage.to(oPageReview);
+        await this.setDataToView(oModel, ID);
         const aSteps = oWizard.getSteps();
         aSteps.forEach(oStep => {
           oWizard.nextStep();
         });
-        oModel.setProperty("/OrdenesCompra", aObras[0].ordenes_compra);
-        oModel.setProperty("/P3", aObras[0].p3);
-        oModel.setProperty("/PI", aObras[0].pi);
-        oModel.setProperty("/Responsables", aObras[0].responsables);        
       } else {
         oModel.setProperty("/ObraDetalle/ID", null);
-        oModel.setProperty("/OrdenesCompra", []);
-        oModel.setProperty("/ProyectosInversion", []);
-        oModel.setProperty("/Responsables", []);
-        oModel.setProperty("/P3s", []);
-        //Combos
-        oModel.setProperty("/Monedas", aObras[0].monedas);
-        oModel.setProperty("/TiposPi", aObras[0].tipos_pi);
-        oModel.setProperty("/SistemasContratacion", aObras[0].sistemas_contratacion);
-        oModel.setProperty("/Direcciones", aObras[0].direcciones);
-        oModel.setProperty("/Gerencias", aObras[0].gerencias);
         this.setUmMaximoPLazo();
         const oFirstStep = oWizard.getSteps().at(0);
         oWizard.discardProgress(oFirstStep);
@@ -74,24 +59,6 @@ sap.ui.define([
         oWizard.goToStep(oFirstStep);
         oNavPage.to(oPageWizard);
       }
-      /////////////MOCK//////////////
-      //navigate wizard
-      // if (ID) {
-      //   oNavPage.to(oPageReview)
-      //   await this.setDataToView(oModel, ID)
-      //   const aSteps = oWizard.getSteps()
-      //   aSteps.forEach(oStep => {
-      //     oWizard.nextStep()
-      //   });
-      // } else {
-      //   oModel.setProperty("/ObraDetalle/ID", null)
-      //   this.setUmMaximoPLazo()
-      //   const oFirstStep = oWizard.getSteps().at(0);
-      //   oWizard.discardProgress(oFirstStep);
-      //   // scroll to top
-      //   oWizard.goToStep(oFirstStep);
-      //   oNavPage.to(oPageWizard)
-      // }
     },
 
     loadCombos: async function (ID) {
@@ -113,7 +80,8 @@ sap.ui.define([
           aSistemasContratacion,
           aFinanciamientos,
           aAreas,
-          aTiposPI
+          aTiposPI,
+          aContratistas
         ] = await Promise.all([
           ID ? Services.getObra(ID) : {},
           Services.getDirecciones(),
@@ -130,6 +98,7 @@ sap.ui.define([
           Services.getFinanciamientos(),
           Services.getAreas(),
           Services.getTiposPI(),
+          Services.getContratistas()
         ]);
         let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE');
         if (oObra.inspectores) {
@@ -158,6 +127,7 @@ sap.ui.define([
           SistemasContratacion: aSistemasContratacion.value,
           Financiamientos: aFinanciamientos.value,
           Areas: aAreas.value,
+          Contratistas: aContratistas.value
         });
         BusyIndicator.hide();
       } catch (error) {
@@ -168,7 +138,6 @@ sap.ui.define([
       }
     },
 
-    /////////////MOCK//////////////
     addOC: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/OrdenCompra", {});
@@ -206,7 +175,7 @@ sap.ui.define([
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/OrdenesCompra");
       items.splice(idx, 1);
-      this.byId("idOrdenesCompraTable").getBinding("items").refresh();    
+      this.byId("idOrdenesCompraTable").getBinding("items").refresh();
     },
 
     addPI: function () {
@@ -246,7 +215,7 @@ sap.ui.define([
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/ProyectosInversion");
       items.splice(idx, 1);
-      this.byId("idProyectosInversionTable").getBinding("items").refresh();    
+      this.byId("idProyectosInversionTable").getBinding("items").refresh();
     },
 
     addResponsables: function () {
@@ -286,7 +255,7 @@ sap.ui.define([
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/Responsables");
       items.splice(idx, 1);
-      this.byId("idResponsablesTable").getBinding("items").refresh();    
+      this.byId("idResponsablesTable").getBinding("items").refresh();
     },
 
     addP3: function () {
@@ -326,10 +295,8 @@ sap.ui.define([
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/P3s");
       items.splice(idx, 1);
-      this.byId("idP3Table").getBinding("items").refresh();    
+      this.byId("idP3Table").getBinding("items").refresh();
     },
-    
-    /////////////MOCK//////////////
 
     setInspectoresDeUnJefe: async function (select) {
       const oModel = this.getModel("AppJsonModel");
@@ -348,37 +315,82 @@ sap.ui.define([
     setDataToView: async function (oModel, ID) {
       try {
         const oObra = await Services.getObra(ID);
-        const [oOrdenCompra, { value: quantity }, { value: OCQuantity }] = await Promise.all([
-          Services.getValidatePIPorveedor(oObra.proyecto_inversion, oObra.contratista.registro_proveedor),
-          Services.getQuantity(oObra.proyecto_inversion),
-          Services.getOCQuantity(oObra.proyecto_inversion)
-        ]);
-        const oMultiJefes = this.getView().byId("idMultiInputJefes");
-        const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
-        const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null);
-        const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE');
-        const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM');
+        //Info de los pi de cada p3
+        await this.getPiData(oObra);
+        //Lista de pi para tabla de proyectos de inversion
+        await this.getPiList(oObra);
+        //Lista de responsables de cada pi - to do 
+        //await this.getResponsables(oObra);
+        // const [oOrdenCompra, { value: quantity }, { value: OCQuantity }] = await Promise.all([
+        //   Services.getValidatePIPorveedor(oObra.proyecto_inversion, oObra.contratista.registro_proveedor),
+        //   Services.getQuantity(oObra.proyecto_inversion),
+        //   Services.getOCQuantity(oObra.proyecto_inversion)
+        // ]);
+        // const oMultiJefes = this.getView().byId("idMultiInputJefes");
+        // const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
+        // const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null);
+        // const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE');
+        // const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM');
         const oObraDetalle = {
           ID,
-          ...oOrdenCompra,
+          //...oOrdenCompra,
           ...oObra,
-          quantity,
-          PI: this.getPITable(oObra.pi),
+          //quantity,
+          //PI: this.getPITable(oObra.pi),
           fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
-          JefesInspectores: aJefes.map(item => (item.inspector_ID)),
-          Inspectores: aInspectores.map(item => (item.inspector_ID))
+          // JefesInspectores: aJefes.map(item => (item.inspector_ID)),
+          // Inspectores: aInspectores.map(item => (item.inspector_ID))
         };
-        this.setTokensWizard(oMultiJefes, aJefes);
-        this.setTokensWizard(oMultiInspectores, aInspectores);
+        // this.setTokensWizard(oMultiJefes, aJefes);
+        // this.setTokensWizard(oMultiInspectores, aInspectores);
         oModel.setProperty("/ObraDetalle", oObraDetalle);
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
         oModel.updateBindings(true);
-        this.setInspectoresDeUnJefe(true);
+        //this.setInspectoresDeUnJefe(true);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
         MessageToast.show(message);
         oModel.setProperty("/ObraDetalle", []);
       }
+    },
+
+    //Obtengo los pi que pertenecen a cada p3
+    getPiData: function (oObra) {
+      oObra.p3.forEach(p3 => {
+        const data = p3.pi.map(function (item) {
+          return {
+            nro_pi: item.pi,
+            monto: item.monto
+          };
+        });
+        const nros_pi = data.map(o => o.nro_pi).join(', ');
+        const montos_pi = data.map(o => o.monto).join(', ');
+        p3.nros_pi = nros_pi;
+        p3.montos_pi = montos_pi;
+      });
+    },
+
+    getPiList: function (oObra) {
+      const piData = [];
+      oObra.p3.forEach(p3 => {
+        p3.pi.forEach(pi => {  
+          piData.push(pi);                        
+        })       
+      });
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/PiList", piData);
+    },
+
+    //TO DO
+    getResponsables: function (oObra) {
+      const piData = [];
+      oObra.p3.forEach(p3 => {
+        p3.pi.forEach(pi => {  
+          piData.push(pi.ID);                        
+        })       
+      });
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/PiList", piData);
     },
 
     setTokensWizard: function (oMultiInput, aData) {
@@ -393,10 +405,10 @@ sap.ui.define([
     wizardCompletedHandler: function () {
       const oModel = this.getModel("AppJsonModel");
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
-      if (this.validateFields(oObraDetalle) && !oModel.getProperty("/Detalle")) {
-        const message = this.getResourceBundle().getText("errorfields");
-        return MessageToast.show(message);
-      }
+      // if (this.validateFields(oObraDetalle) && !oModel.getProperty("/Detalle")) {
+      //   const message = this.getResourceBundle().getText("errorfields");
+      //   return MessageToast.show(message);
+      // }
       const oNavPage = this.byId("wizardNavContainer");
       const oPageReview = this.byId("wizardReviewPage");
       oNavPage.to(oPageReview);

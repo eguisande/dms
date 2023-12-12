@@ -5,34 +5,7 @@ sap.ui.define([], function () {
     _urlDMS: null,
     _urlWF: null,
     _urlUserApi: null,
-    _urlPdfApi: null,
-
-    //MOCK
-    getLocalJSON: function (sJsonName) {
-      return this.promisizer(jQuery.sap.getModulePath("com.aysa.pgo.altaobras") + "/model/" + sJsonName);
-    },
-
-    promisizer: function (oOptions) {
-      return this.toPromise(jQuery.ajax(oOptions));
-    },
-
-    toPromise: function (oPromise) {
-      return new Promise(function (resolve, reject) {
-        oPromise.then(() => {
-          const sHeaders = oPromise.done().getAllResponseHeaders();
-          const aHeaders = sHeaders.trim().split(/[\r\n]+/);
-          const oHeaderMap = {};
-          aHeaders.forEach(function (sLine) {
-            const aParts = sLine.split(': ');
-            const sHeader = aParts.shift();
-            const sValue = aParts.join(': ');
-            oHeaderMap[sHeader] = sValue;
-          });
-          resolve([oPromise.done().responseJSON, oHeaderMap]);
-        }, reject);
-      });
-    },
-    //MOCK
+    _urlPdfApi: null,    
 
     callGetService: function (sEntity) {
       return new Promise((res, rej) => {
@@ -93,30 +66,38 @@ sap.ui.define([], function () {
 
     getObras: function () {
       return this.callGetService(
-        "Obras?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)&$orderby=nombre"
+        "Obras?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
       );
     },
 
     getObrasJefeInspector: function (usuario, tipo_inspector) {
       return this.callGetService(
-        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)&$orderby=nombre`
+        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObrasByContratista: function (usuario) {
       return this.callGetService(
-        `getObrasByContratista(usuario='${usuario}')?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi($expand=tipo_pi)&$orderby=nombre`
+        `getObrasByContratista(usuario='${usuario}')?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObra: function (ID) {
       return this.callGetService(
-        `Obras/${ID}?$expand=fluido,tipo_obra,inspectores($expand=inspector($expand=tipo_inspector)),gerencia,direccion,estado,sistema,tipo_contrato,partido,contratista,pi`
+        `Obras/${ID}?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)`
       );
     },
 
     deleteObra: function (ID) {
       return this.callDeleteService(`Obras/${ID}`);
+    },
+
+    getContratistas: function () {
+      return this.callGetService("Contratistas");
+    },
+
+    getResponsables: function (ID) {
+      return this.callGetService("ResponsablesPI");
     },
 
     getDirecciones: function () {

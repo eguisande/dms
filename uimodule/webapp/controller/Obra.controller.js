@@ -29,17 +29,34 @@ sap.ui.define([
       try {
         BusyIndicator.show(0);
         const oModel = this.getModel("AppJsonModel");
-        oModel.setProperty("/Detalle", false);
-        //Se reemplaza por getUserRoles
-        //const { email, Groups: aGroups } = await Services.getUser()
+        oModel.setProperty("/Detalle", false);        
         const { email } = await Services.getUser();
         const oUserRoles = await Services.getUserRoles();
-        this.setUserData(oUserRoles.value, email);
-        //////////MOCK//////////
-        this.loadModelMock();
-        //////////MOCK//////////
-        // const aaltaobras = await this.getObrasData()
-        // oModel.setProperty("/altaobras", aaltaobras)
+        this.setUserData(oUserRoles.value, email);        
+        const aObras = await this.getObrasData()        
+        aObras.forEach(obra => {        
+          const data = obra.p3.map(function (p3) {
+            return {
+              codigo: p3.codigo, 
+              tipo_contrato: p3.tipo_contrato.descripcion, 
+              tipo_obra: p3.tipo_obra.descripcion, 
+              tipo_fluido: p3.fluido.descripcion, 
+              partido: p3.partido.descripcion              
+            }
+          }); 
+          const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
+          const tipos_contratos = data.map(o => o.tipo_contrato).join(', ');
+          const p3 = data.map(o => o.codigo).join(', ');
+          const tipos_obras = data.map(o => o.tipo_obra).join(', ');
+          const partidos = data.map(o => o.partido).join(', ');
+          obra.tipo_fluido = tipos_fluidos;
+          obra.tipo_contrato = tipos_contratos; 
+          obra.p3 = p3
+          obra.tipo_obra = tipos_obras;   
+          obra.partido = partidos;
+          obra.contratista = obra.contratista[0].contratista;
+        });     
+        oModel.setProperty("/altaobras", aObras);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
         MessageToast.show(message);
@@ -104,29 +121,7 @@ sap.ui.define([
         oferta: !!sOferta && true,
         notasMinutas: !!sNotasMinutas && true
       });
-    },
-
-    loadModelMock: async function () {
-      const oModel = this.getModel("AppJsonModel");
-      const oResponse = await Services.getLocalJSON("obras.json");
-      const aObrasList = oResponse[0].Obras;
-      oModel.setProperty("/altaobras", aObrasList);      
-      aObrasList.forEach(obra => {        
-        const data = obra.p3.map(function (p3) {
-          return {codigo: p3.codigo, tipo_contrato: p3.tipo_contrato, tipo_obra: p3.tipo_obra, tipo_fluido: p3.tipo_fluido, partido: p3.partido}
-        }); 
-        const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
-        const tipos_contratos = data.map(o => o.tipo_contrato).join(', ');
-        const p3 = data.map(o => o.codigo).join(', ');
-        const tipos_obras = data.map(o => o.tipo_obra).join(', ');
-        const partidos = data.map(o => o.partido).join(', ');
-        obra.tipo_fluido = tipos_fluidos;
-        obra.tipo_contrato = tipos_contratos; 
-        obra.p3 = p3
-        obra.tipo_obra = tipos_obras;   
-        obra.partido = partidos;
-      });      
-    },
+    },    
 
     getObrasData: async function () {
       const oModel = this.getModel("AppJsonModel");
@@ -235,29 +230,29 @@ sap.ui.define([
       oBinding.filter(aFilter);
     },
 
-    openDialogAltaAsignacion: function () {
-      const oView = this.getView();
-      const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/Alta", {});
-      // oModel.setProperty("/Alta", {
-      //   PI: "1960N06",
-      //   //nroProveedor: "9987"
-      // })
-      if (!this.pDialogAlta) {
-        this.pDialogAlta = Fragment.load({
-          id: oView.getId(),
-          controller: this,
-          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AltaAsignacion"
-        }).then(oDialog => {
-          oView.addDependent(oDialog);
-          return oDialog;
-        });
-      }
-      this.pDialogAlta.then(oDialog => {
-        oDialog.setModel(oModel);
-        oDialog.open();
-      });
-    },
+    // openDialogAltaAsignacion: function () {
+    //   const oView = this.getView();
+    //   const oModel = this.getModel("AppJsonModel");
+    //   oModel.setProperty("/Alta", {});
+    //   // oModel.setProperty("/Alta", {
+    //   //   PI: "1960N06",
+    //   //   //nroProveedor: "9987"
+    //   // })
+    //   if (!this.pDialogAlta) {
+    //     this.pDialogAlta = Fragment.load({
+    //       id: oView.getId(),
+    //       controller: this,
+    //       name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AltaAsignacion"
+    //     }).then(oDialog => {
+    //       oView.addDependent(oDialog);
+    //       return oDialog;
+    //     });
+    //   }
+    //   this.pDialogAlta.then(oDialog => {
+    //     oDialog.setModel(oModel);
+    //     oDialog.open();
+    //   });
+    // },
 
     onCloseDialogAltaAsignacion: function () {
       this.byId("idAltaAsignacionDialog").close();
@@ -352,18 +347,15 @@ sap.ui.define([
 
     onViewObra: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
-      //const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
-      const ID = "Detalle";
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();      
       oModel.setProperty("/Detalle", true);
       this.navTo("Detalle", { ID }, false);
     },
 
     crearObra: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel");
-      //const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
-      oModel.setProperty("/Detalle", true);
-      const ID = "Creacion";
-      this.navTo("Detalle", { ID }, false);
+      const oModel = this.getModel("AppJsonModel");      
+      oModel.setProperty("/Detalle", false);
+      this.navTo("Detalle", false);
     },
 
     onDeleteObra: async function (oEvent) {

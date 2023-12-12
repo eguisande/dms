@@ -4,7 +4,7 @@
   xmlns="sap.m">
   <form:SimpleForm title="{i18n>ordenescompra}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/OrdenesCompra}" fixedLayout="false" width="100%">
+      <Table items="{AppJsonModel>/ObraDetalle/ordenes_compra}" fixedLayout="false" width="100%">
         <headerToolbar>
           <Toolbar visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
             <ToolbarSpacer />
@@ -44,8 +44,13 @@
               </HBox>
             </cells>
           </ColumnListItem>
-        </items>        
+        </items>
       </Table>
+      <Link press="editStepTwo" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
+        <layoutData>
+          <l:GridData linebreak="true"/>
+        </layoutData>
+      </Link>
     </form:content>
   </form:SimpleForm>
 </core:FragmentDefinition>
