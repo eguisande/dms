@@ -29,6 +29,10 @@ sap.ui.define([
       const { ID } = oEvent.getParameter("arguments");
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/Editable", true);
+      oModel.setProperty("/SelectedContratista", "");
+      oModel.setProperty("/P3s", []);
+      oModel.setProperty("/ProyectosInversion", []);
+      oModel.setProperty("/OrdenesCompra", []);
       //this.clearToken();
       this.loadCombos(ID);
       const oNavPage = this.byId("wizardNavContainer");
@@ -51,7 +55,7 @@ sap.ui.define([
           oWizard.nextStep();
         });
       } else {
-        oModel.setProperty("/ObraDetalle/ID", null);
+        oModel.setProperty("/ObraDetalle", []);
         this.setUmMaximoPLazo();
         const oFirstStep = oWizard.getSteps().at(0);
         oWizard.discardProgress(oFirstStep);
@@ -74,7 +78,7 @@ sap.ui.define([
           aFluidos,
           aPartidos,
           aSistemas,
-          aTiposaltaobras,
+          aTiposObras,
           aMonedas,
           aUnidadesMedida,
           aSistemasContratacion,
@@ -121,7 +125,7 @@ sap.ui.define([
           Fluidos: aFluidos.value,
           Partidos: aPartidos.value,
           Sistemas: aSistemas.value,
-          Tiposaltaobras: aTiposaltaobras.value,
+          TiposObras: aTiposObras.value,
           Monedas: aMonedas.value,
           UnidadesMedida: aUnidadesMedida.value,
           SistemasContratacion: aSistemasContratacion.value,
@@ -178,6 +182,7 @@ sap.ui.define([
       this.byId("idOrdenesCompraTable").getBinding("items").refresh();
     },
 
+    //Agregar proyectos de inversion
     addPI: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/PI", {});
@@ -206,6 +211,8 @@ sap.ui.define([
       const proyectos_inversion = oModel.getProperty("/ProyectosInversion");
       proyectos_inversion.push(PI);
       oModel.setProperty("/ProyectosInversion", proyectos_inversion);
+      //Sumos los importes de cada pi
+      this.sumaImportes(proyectos_inversion);
       this.closePIDialog();
     },
 
@@ -215,9 +222,21 @@ sap.ui.define([
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/ProyectosInversion");
       items.splice(idx, 1);
+      //Sumos los importes de cada pi
+      this.sumaImportes(items);
       this.byId("idProyectosInversionTable").getBinding("items").refresh();
     },
 
+    sumaImportes: function (importes) {
+      const oModel = this.getModel("AppJsonModel");
+      let suma = 0;
+      importes.forEach(e => {
+        suma = suma + Number(e.importe)
+      });
+      oModel.setProperty("/monto_total", suma);
+    },
+
+    //Agregar responsables de cada pi
     addResponsables: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/GrupoResponsables", {});
@@ -258,6 +277,7 @@ sap.ui.define([
       this.byId("idResponsablesTable").getBinding("items").refresh();
     },
 
+    //Agregar P3
     addP3: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/P3", {});
@@ -310,6 +330,16 @@ sap.ui.define([
         return inspector;
       });
       oModel.setProperty("/Combos/Inspectores", Inspectores);
+    },
+
+    //Selección de contratista
+    onChangeContratista: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const aContratistas = oModel.getProperty("/Combos/Contratistas");
+      const selected = oModel.getProperty("/SelectedContratista");
+      const contratistaData = aContratistas.filter(item => item.ID === selected);
+      oModel.setProperty("/ObraDetalle/razonsocial", contratistaData[0].razonsocial);
+      oModel.setProperty("/ObraDetalle/nro_documento", contratistaData[0].nro_documento);
     },
 
     setDataToView: async function (oModel, ID) {
@@ -373,9 +403,9 @@ sap.ui.define([
     getPiList: function (oObra) {
       const piData = [];
       oObra.p3.forEach(p3 => {
-        p3.pi.forEach(pi => {  
-          piData.push(pi);                        
-        })       
+        p3.pi.forEach(pi => {
+          piData.push(pi);
+        });
       });
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/PiList", piData);
@@ -385,9 +415,9 @@ sap.ui.define([
     getResponsables: function (oObra) {
       const piData = [];
       oObra.p3.forEach(p3 => {
-        p3.pi.forEach(pi => {  
-          piData.push(pi.ID);                        
-        })       
+        p3.pi.forEach(pi => {
+          piData.push(pi.ID);
+        });
       });
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/PiList", piData);

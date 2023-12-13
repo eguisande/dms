@@ -6,17 +6,17 @@
   <Dialog id="idAddPIDialog" title="Agregar proyecto de inversión" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>nrop3}"/>
-      <MultiComboBox items="{AppJsonModel>/P3s}" editable="true" selectedKey="{AppJsonModel>/PI/p3s}">
-        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-      </MultiComboBox>
+      <ComboBox items="{AppJsonModel>/P3s}" editable="true" selectedKey="{AppJsonModel>/PI/p3}">
+        <core:Item key="{AppJsonModel>codigo}" text="{AppJsonModel>codigo}" />
+      </ComboBox>
       <Label text="{i18n>nropi}"/>
       <Input value="{AppJsonModel>/PI/pi}" editable="true"/>
       <Label text="{i18n>tipopi}"/>
-      <ComboBox items="{AppJsonModel>/TiposPi}" editable="true" selectedKey="{AppJsonModel>/PI/tipo_pi}">
+      <ComboBox items="{AppJsonModel>/Combos/TiposPI}" editable="true" selectedKey="{AppJsonModel>/PI/tipo_pi}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>sistemacontratacion}"/>
-      <ComboBox items="{AppJsonModel>/SistemasContratacion}" editable="true" selectedKey="{AppJsonModel>/PI/sistema_contratacion}">
+      <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" editable="true" selectedKey="{AppJsonModel>/PI/sistema_contratacion}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>importe}"/>

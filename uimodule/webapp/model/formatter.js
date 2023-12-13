@@ -45,7 +45,10 @@ sap.ui.define([
       return formattedDate;
     },
 
-    formatQuantity: function (nQuantity = 0) {
+    formatQuantity: function (nTotal = 0) {
+      if (!nTotal) {
+        return nTotal;
+      }
       const oCurrencyFormat = NumberFormat.getCurrencyInstance({
         currencyCode: false,
         customCurrencies: {
@@ -55,7 +58,7 @@ sap.ui.define([
           }
         }
       });
-      return oCurrencyFormat.format(nQuantity, "ARS")
+      return isNaN(nTotal) ? null : oCurrencyFormat.format(nTotal, "ARS");
     }
 
   };

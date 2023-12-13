@@ -4,32 +4,34 @@
   <WizardStep id="idObraAltaStep1" title="{i18n>detalleobra}" validated="true">
     <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="2" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2">
       <Label text="{i18n>nombreobra}" required="true"/>
-      <Input id="idStep1Nombre" value="{AppJsonModel>/ObraDetalle/nombre}" />
-      <Label text="{i18n>nrocontrato}" />
+      <Input value="{AppJsonModel>/ObraDetalle/nombre}" />
+      <Label text="{i18n>nrocontrato}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}"/>
-      <Label text="{i18n>monto}" />
-      <Input value="{AppJsonModel>/ObraDetalle/monto}"/>
-      <Label text="{i18n>moneda}" />
-      <ComboBox items="{AppJsonModel>/Monedas}" editable="true" selectedKey="{AppJsonModel>/ObraDetalle/moneda}">
+      <Label text="{i18n>monto}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}"/>
+      <Label text="{i18n>moneda}" required="true"/>
+      <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/SelectedMoneda}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>registroproveedor}" />
-      <Input value="9987" editable="false"/>
-      <Label text="{i18n>razonsocial}" />
-      <Input value="PRATES Y CIA S.A." editable="false"/>
-      <Label text="{i18n>cuitcuilcdi}" />
-      <Input value="30501443367" editable="false"/>
+      <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/SelectedContratista}" change="onChangeContratista">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
+        </ComboBox>
+      <Label text="{i18n>razonsocial}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/razonsocial}" editable="false"/>
+      <Label text="{i18n>cuitcuilcdi}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/nro_documento}" editable="false"/>
       <core:Title text="{i18n>respcontratista}" />
-      <Label text="{i18n>representantelegal}" />
-      <Input id="idStep1Representante" value="{AppJsonModel>/ObraDetalle/representante}" />
-      <Label text="{i18n>telefono}" />
-      <Input id="idStep1Telefono" value="{AppJsonModel>/ObraDetalle/telefono}" type="Number"/>
-      <Label text="{i18n>correo}" />
-      <Input id="idStep1Correo" value="{AppJsonModel>/ObraDetalle/correo}" type="Email"/>
-      <Label text="Representate Técnico Contratista" />
-      <Input id="idStep1RepTecnico" value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
-      <Label text="Matrícula" />
-      <Input id="idStep1Matricula" value="{AppJsonModel>/ObraDetalle/matricula}" type="Number"/>
+      <Label text="{i18n>representantelegal}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/representante}" />
+      <Label text="{i18n>telefono}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/telefono}" type="Number"/>
+      <Label text="{i18n>correo}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/correo}" type="Email"/>
+      <Label text="Representate Técnico Contratista" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
+      <Label text="Matrícula" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/matricula}" type="Number"/>
       <core:Title text="{i18n>garantiaejecucion}" />
       <Label text="{i18n>nropoliza}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_poliza}" editable="true"/>

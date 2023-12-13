@@ -10,7 +10,7 @@
       <Label text="{i18n>fechaordencompra}"/>
       <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/OrdenCompra/fecha}"/>
       <Label text="{i18n>moneda}"/>
-      <ComboBox items="{AppJsonModel>/Monedas}" editable="true" selectedKey="{AppJsonModel>/OrdenCompra/moneda}">
+      <ComboBox items="{AppJsonModel>/Combos/Monedas}" editable="true" selectedKey="{AppJsonModel>/OrdenCompra/moneda}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tasa}"/>

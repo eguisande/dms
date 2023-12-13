@@ -10,9 +10,11 @@
         <Label text="{i18n>monto}" />
         <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}" editable="false"/>
         <Label text="{i18n>moneda}" />
-        <Input value="{AppJsonModel>/ObraDetalle/moneda_ID}" editable="false"/>
+        <ComboBox items="{AppJsonModel>/Combos/Monedas}" editable="false" selectedKey="{AppJsonModel>/SelectedMoneda}">
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        </ComboBox>
         <Label text="{i18n>registroproveedor}" />
-        <ComboBox items="{AppJsonModel>/Combos/Contratistas}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/registro_proveedor}">
+        <ComboBox items="{AppJsonModel>/Combos/Contratistas}" editable="false" selectedKey="{AppJsonModel>/SelectedContratista}">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
         </ComboBox>
         <Label text="{i18n>razonsocial}" />

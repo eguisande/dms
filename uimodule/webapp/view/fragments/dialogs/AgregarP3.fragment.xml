@@ -6,29 +6,27 @@
   <Dialog id="idAddP3Dialog" title="Agregar P3" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>nrop3}"/>
-      <Input value="{AppJsonModel>/P3/codigo}" editable="true"/>
-      <Label text="{i18n>nropi}"/>
-      <Input value="{AppJsonModel>/P3/nro_pi}" editable="true"/>
-      <Label text="{i18n>montopi}"/>
-      <Input value="{AppJsonModel>/P3/monto_pi}" editable="true"/>
+      <Input value="{AppJsonModel>/P3/codigo}" editable="true"/>   
+      <Label text="{i18n>nombrep3}"/>
+      <Input value="{AppJsonModel>/P3/nombre}" editable="true"/>      
       <Label text="{i18n>tipocontrato}"/>
-      <ComboBox items="{AppJsonModel>/TiposContrato}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_contrato}">
+      <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_contrato}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tipofluido}"/>
-      <ComboBox items="{AppJsonModel>/TiposFluido}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_fluido}">
+      <ComboBox items="{AppJsonModel>/Combos/Fluidos}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_fluido}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tipoobra}"/>
-      <ComboBox items="{AppJsonModel>/TiposObra}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_obra}">
+      <ComboBox items="{AppJsonModel>/Combos/TiposObras}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_obra}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>partido}"/>
-      <ComboBox items="{AppJsonModel>/Partidos}" editable="true" selectedKey="{AppJsonModel>/P3/partido}">
+      <ComboBox items="{AppJsonModel>/Combos/Partidos}" editable="true" selectedKey="{AppJsonModel>/P3/partido}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>sistema}"/>
-      <ComboBox items="{AppJsonModel>/Sistemas}" editable="true" selectedKey="{AppJsonModel>/P3/sistema_cuenca}">
+      <ComboBox items="{AppJsonModel>/Combos/Sistemas}" editable="true" selectedKey="{AppJsonModel>/P3/sistema_cuenca}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>acumar}"/>

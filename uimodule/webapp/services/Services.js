@@ -122,11 +122,11 @@ sap.ui.define([], function () {
       );
     },
 
-    getContratistas: function () {
-      return this.callGetService(
-        "Contratistas?$expand=tipo_documento,tipo_contratista"
-      );
-    },
+    // getContratistas: function () {
+    //   return this.callGetService(
+    //     "Contratistas?$expand=tipo_documento,tipo_contratista"
+    //   );
+    // },
 
     getOCQuantity: function (proyecto_inversion) {
       return this.callGetService(
