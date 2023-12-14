@@ -42,7 +42,7 @@
                 <Text text="{AppJsonModel>pi}" />
                 <Text text="{AppJsonModel>tipo_pi}" />
                 <Text text="{AppJsonModel>sistema_contratacion}" />
-                <Text text="{AppJsonModel>importe}" />
+                <Text text="{AppJsonModel>importe} {AppJsonModel>moneda_ID}" />
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deletePI"/>
                 </HBox>

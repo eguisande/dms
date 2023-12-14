@@ -8,7 +8,7 @@
           <headerToolbar>
             <Toolbar>
               <ToolbarSpacer/>
-              <Button tooltip="Agregar P3" icon="sap-icon://add" press="addP3" type="Ghost"/>
+              <Button tooltip="{i18n>agregarp3}" icon="sap-icon://add" press="addP3" type="Ghost"/>
             </Toolbar>
           </headerToolbar>
           <columns>

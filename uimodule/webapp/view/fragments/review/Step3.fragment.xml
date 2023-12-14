@@ -4,13 +4,7 @@
   xmlns="sap.m">
   <form:SimpleForm title="P3" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/ObraDetalle/p3}" fixedLayout="false" width="100%">
-        <headerToolbar>
-          <Toolbar visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <ToolbarSpacer/>
-            <Button tooltip="Agregar P3" icon="sap-icon://add" press="addP3" type="Ghost"/>
-          </Toolbar>
-        </headerToolbar>
+      <Table items="{AppJsonModel>/ObraDetalle/p3}" fixedLayout="false" width="100%">        
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nrop3}" />
@@ -51,9 +45,15 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>porcmonedaextr}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <Text text="Acciones" />
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>importes}" />
           </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>tiposcambio}" />
+          </Column> 
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>monedas}" />
+          </Column>          
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
@@ -70,10 +70,10 @@
               <Switch state="{AppJsonModel>acopio}" customTextOn="Si" customTextOff="No" enabled="false"/>
               <Text text="{AppJsonModel>anticipo_financiero}%"/>
               <Text text="{AppJsonModel>moneda_local}%"/>
-              <Text text="{AppJsonModel>moneda_extranjera}%"/>
-              <HBox>
-                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
-              </HBox>
+              <Text text="{AppJsonModel>moneda_extranjera}%"/>   
+              <Text text="{AppJsonModel>importesP3}"/> 
+              <Text text="{AppJsonModel>tipos_cambioP3}"/> 
+              <Text text="{AppJsonModel>monedasP3}"/>            
             </cells>
           </ColumnListItem>
         </items>

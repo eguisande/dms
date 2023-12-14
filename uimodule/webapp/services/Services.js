@@ -377,7 +377,7 @@ sap.ui.define([], function () {
       return response;
     },
 
-    cretePreconstruccion: function () {
+    createPreconstruccion: function () {
       return this.callPostService("Preconstrucciones", { estado_ID: "BO" });
     },
 

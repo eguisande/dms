@@ -8,7 +8,7 @@
           <headerToolbar>
             <Toolbar>
               <ToolbarSpacer />
-              <Button tooltip="Agregar responsables" icon="sap-icon://add" press="addResponsables" type="Ghost"/>
+              <Button tooltip="{i18n>agregarresponsables}" icon="sap-icon://add" press="addResponsables" type="Ghost"/>
             </Toolbar>
           </headerToolbar>
           <columns>

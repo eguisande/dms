@@ -4,13 +4,7 @@
   xmlns="sap.m">
   <form:SimpleForm title="{i18n>pi}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/PiList}" fixedLayout="false" width="100%">
-        <headerToolbar>
-          <Toolbar visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <ToolbarSpacer />
-            <Button tooltip="Agregar orden de compra" icon="sap-icon://add" press="addOC" type="Ghost"/>
-          </Toolbar>
-        </headerToolbar>
+      <Table items="{AppJsonModel>/PiList}" fixedLayout="false" width="100%">        
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nrop3}" />
@@ -27,12 +21,9 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>importe}" />
             <footer >
-              <ObjectStatus text="32.098.974.424,45" />
+               <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'}" />
             </footer>
-          </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <Text text="Acciones" />
-          </Column>
+          </Column>          
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
@@ -41,10 +32,7 @@
               <Text text="{AppJsonModel>pi}" />
               <Text text="{AppJsonModel>tipo_pi/descripcion}" />
               <Text text="{AppJsonModel>sistema_contratacion/descripcion}" />
-              <Text text="{AppJsonModel>monto}" />
-              <HBox>
-                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
-              </HBox>
+              <Text text="{AppJsonModel>monto} {AppJsonModel>moneda_ID}" />             
             </cells>
           </ColumnListItem>
         </items>

@@ -142,6 +142,132 @@ sap.ui.define([
       }
     },
 
+    setDataToView: async function (oModel, ID) {
+      try {
+        const oObra = await Services.getObra(ID);
+        //Info de los pi de cada p3
+        await this.getPiData(oObra);
+        //Lista de pi para tabla de proyectos de inversion
+        await this.getPiList(oObra);
+        //Obtengo los importes y tipos de cambio de cada p3
+        await this.getImportesP3(oObra);
+        //Lista de responsables de cada pi - to do 
+        //await this.getResponsables(oObra);
+        // const [oOrdenCompra, { value: quantity }, { value: OCQuantity }] = await Promise.all([
+        //   Services.getValidatePIPorveedor(oObra.proyecto_inversion, oObra.contratista.registro_proveedor),
+        //   Services.getQuantity(oObra.proyecto_inversion),
+        //   Services.getOCQuantity(oObra.proyecto_inversion)
+        // ]);
+        // const oMultiJefes = this.getView().byId("idMultiInputJefes");
+        // const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
+        // const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null);
+        // const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE');
+        // const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM');
+        const oObraDetalle = {
+          //...oOrdenCompra,
+          //quantity,
+          //PI: this.getPITable(oObra.pi),
+          // JefesInspectores: aJefes.map(item => (item.inspector_ID)), //Jefes de inspección
+          // Inspectores: aInspectores.map(item => (item.inspector_ID)) //Inspectores
+          ID,
+          ...oObra,
+          fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
+          monto_total: this.getMontoTotal(oObra)      
+        };
+        // this.setTokensWizard(oMultiJefes, aJefes);
+        // this.setTokensWizard(oMultiInspectores, aInspectores);
+        oModel.setProperty("/ObraDetalle", oObraDetalle);
+        oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
+        oModel.updateBindings(true);
+        //this.setInspectoresDeUnJefe(true);
+      } catch (error) {
+        const message = this.getResourceBundle().getText("errorservice");
+        MessageToast.show(message);
+        oModel.setProperty("/ObraDetalle", []);
+      }
+    },
+
+     //Obtengo los pi que pertenecen a cada p3
+     getPiData: function (oObra) {
+      oObra.p3.forEach(p3 => {
+        const data = p3.pi.map(function (item) {
+          return {
+            nro_pi: item.pi,
+            monto: item.monto
+          };
+        });
+        const nros_pi = data.map(o => o.nro_pi).join(', ');
+        const montos_pi = data.map(o => o.monto).join(', ');
+        p3.nros_pi = nros_pi;
+        p3.montos_pi = montos_pi;
+      });
+    },
+
+    //Obtengo los importes y tipos de cambio de cada p3
+    getImportesP3: function (oObra) {
+      oObra.p3.forEach(p3 => {
+        const data = p3.importes.map(function (item) {
+          return {
+            importe: item.importe,
+            tipo_cambio: item.tipo_cambio,
+            moneda_ID: item.moneda_ID
+          };
+        });
+        const importes = data.map(o => o.importe).join(', ');
+        const tipos_cambio = data.map(o => o.tipo_cambio).join(', ');
+        const monedas = data.map(o => o.moneda_ID).join(', '); 
+        p3.importesP3 = importes;
+        p3.tipos_cambioP3 = tipos_cambio;
+        p3.monedasP3 = monedas;
+      });
+    },
+
+    getPiList: function (oObra) {
+      const piData = [];
+      oObra.p3.forEach(p3 => {
+        p3.pi.forEach(pi => {
+          piData.push(pi);
+        });
+      });
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/PiList", piData);
+    },
+
+    //Obtengo los inspectores
+    setInspectoresDeUnJefe: async function (select) {
+      const oModel = this.getModel("AppJsonModel");
+      const oObraDetalle = oModel.getProperty("/ObraDetalle");
+      const aInspectores = await Services.getInspectores();
+      let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID));
+      Inspectores = Inspectores.map(inspector => {
+        if (select) {
+          inspector.selected = true;
+        }
+        return inspector;
+      });
+      oModel.setProperty("/Combos/Inspectores", Inspectores);
+    },
+
+    //Sumo los importes de cada pi
+    getMontoTotal: function (oObra) {
+      const oModel = this.getModel("AppJsonModel");
+      let suma = 0;
+      oObra.p3.forEach(e => {
+        e.importes.forEach(i => {
+          if (i.tipo_cambio !== 1) {
+            let montoArs = i.importe * i.tipo_cambio
+            suma = suma + montoArs
+          } else {
+            suma = suma + i.importe            
+          }
+        })
+        return suma
+      });
+      oModel.setProperty("/monto_total", suma);
+      oModel.setProperty("/monto_contrato", suma);
+    },
+
+    //Agregar ordenes de compra
     addOC: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/OrdenCompra", {});
@@ -227,13 +353,20 @@ sap.ui.define([
       this.byId("idProyectosInversionTable").getBinding("items").refresh();
     },
 
+    //Sumo los importes de cada pi
     sumaImportes: function (importes) {
       const oModel = this.getModel("AppJsonModel");
       let suma = 0;
       importes.forEach(e => {
-        suma = suma + Number(e.importe)
+        if (e.tipo_cambio !== 1) {
+          let montoArs = Number(e.importe) * Number(e.tipo_cambio)
+          suma = suma + montoArs
+        } else {
+          suma = suma + Number(e.importe)            
+        }
       });
       oModel.setProperty("/monto_total", suma);
+      oModel.setProperty("/monto_contrato", suma);
     },
 
     //Agregar responsables de cada pi
@@ -318,20 +451,6 @@ sap.ui.define([
       this.byId("idP3Table").getBinding("items").refresh();
     },
 
-    setInspectoresDeUnJefe: async function (select) {
-      const oModel = this.getModel("AppJsonModel");
-      const oObraDetalle = oModel.getProperty("/ObraDetalle");
-      const aInspectores = await Services.getInspectores();
-      let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID));
-      Inspectores = Inspectores.map(inspector => {
-        if (select) {
-          inspector.selected = true;
-        }
-        return inspector;
-      });
-      oModel.setProperty("/Combos/Inspectores", Inspectores);
-    },
-
     //Selección de contratista
     onChangeContratista: function () {
       const oModel = this.getModel("AppJsonModel");
@@ -340,75 +459,6 @@ sap.ui.define([
       const contratistaData = aContratistas.filter(item => item.ID === selected);
       oModel.setProperty("/ObraDetalle/razonsocial", contratistaData[0].razonsocial);
       oModel.setProperty("/ObraDetalle/nro_documento", contratistaData[0].nro_documento);
-    },
-
-    setDataToView: async function (oModel, ID) {
-      try {
-        const oObra = await Services.getObra(ID);
-        //Info de los pi de cada p3
-        await this.getPiData(oObra);
-        //Lista de pi para tabla de proyectos de inversion
-        await this.getPiList(oObra);
-        //Lista de responsables de cada pi - to do 
-        //await this.getResponsables(oObra);
-        // const [oOrdenCompra, { value: quantity }, { value: OCQuantity }] = await Promise.all([
-        //   Services.getValidatePIPorveedor(oObra.proyecto_inversion, oObra.contratista.registro_proveedor),
-        //   Services.getQuantity(oObra.proyecto_inversion),
-        //   Services.getOCQuantity(oObra.proyecto_inversion)
-        // ]);
-        // const oMultiJefes = this.getView().byId("idMultiInputJefes");
-        // const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
-        // const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null);
-        // const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE');
-        // const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM');
-        const oObraDetalle = {
-          ID,
-          //...oOrdenCompra,
-          ...oObra,
-          //quantity,
-          //PI: this.getPITable(oObra.pi),
-          fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
-          // JefesInspectores: aJefes.map(item => (item.inspector_ID)),
-          // Inspectores: aInspectores.map(item => (item.inspector_ID))
-        };
-        // this.setTokensWizard(oMultiJefes, aJefes);
-        // this.setTokensWizard(oMultiInspectores, aInspectores);
-        oModel.setProperty("/ObraDetalle", oObraDetalle);
-        oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
-        oModel.updateBindings(true);
-        //this.setInspectoresDeUnJefe(true);
-      } catch (error) {
-        const message = this.getResourceBundle().getText("errorservice");
-        MessageToast.show(message);
-        oModel.setProperty("/ObraDetalle", []);
-      }
-    },
-
-    //Obtengo los pi que pertenecen a cada p3
-    getPiData: function (oObra) {
-      oObra.p3.forEach(p3 => {
-        const data = p3.pi.map(function (item) {
-          return {
-            nro_pi: item.pi,
-            monto: item.monto
-          };
-        });
-        const nros_pi = data.map(o => o.nro_pi).join(', ');
-        const montos_pi = data.map(o => o.monto).join(', ');
-        p3.nros_pi = nros_pi;
-        p3.montos_pi = montos_pi;
-      });
-    },
-
-    getPiList: function (oObra) {
-      const piData = [];
-      oObra.p3.forEach(p3 => {
-        p3.pi.forEach(pi => {
-          piData.push(pi);
-        });
-      });
-      const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/PiList", piData);
     },
 
     //TO DO
@@ -432,6 +482,7 @@ sap.ui.define([
       );
     },
 
+    //TO DO - validar campos obligatorios
     wizardCompletedHandler: function () {
       const oModel = this.getModel("AppJsonModel");
       const oObraDetalle = oModel.getProperty("/ObraDetalle");
@@ -658,6 +709,7 @@ sap.ui.define([
       oBinding.filter(aFilter);
     },
 
+    //Datos financieros y cumplimientos: seteo maximo plazo de extension
     setMaximoPlazo: function () {
       const oModel = this.getModel("AppJsonModel");
       const message = this.getResourceBundle().getText("errorplazomax");
@@ -761,7 +813,7 @@ sap.ui.define([
             if (oObraDetalle.ID) {
               await Services.updateObra(oObraDetalle.ID, oPayload);
             } else {
-              const oPreconstruccion = await Services.cretePreconstruccion();
+              const oPreconstruccion = await Services.createPreconstruccion();
               await Promise.all([
                 Services.postObra({
                   ...oPayload,

@@ -3,6 +3,7 @@
   xmlns="sap.m">
   <WizardStep id="idObraAltaStep1" title="{i18n>detalleobra}" validated="true">
     <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="2" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2">
+      <!-- Datos basicos de la obra -->
       <Label text="{i18n>nombreobra}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/nombre}" />
       <Label text="{i18n>nrocontrato}" required="true"/>
@@ -13,32 +14,56 @@
       <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/SelectedMoneda}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>registroproveedor}" />
+      <Label text="{i18n>registroproveedor}" required="true"/>
       <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/SelectedContratista}" change="onChangeContratista">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
-        </ComboBox>
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
+      </ComboBox>
       <Label text="{i18n>razonsocial}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/razonsocial}" editable="false"/>
       <Label text="{i18n>cuitcuilcdi}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_documento}" editable="false"/>
+      <!-- Responsables contratista -->
       <core:Title text="{i18n>respcontratista}" />
-      <Label text="{i18n>representantelegal}" required="true"/>
+      <Label text="{i18n>representantelegal}"/>
       <Input value="{AppJsonModel>/ObraDetalle/representante}" />
-      <Label text="{i18n>telefono}" required="true"/>
+      <Label text="{i18n>telefono}"/>
       <Input value="{AppJsonModel>/ObraDetalle/telefono}" type="Number"/>
-      <Label text="{i18n>correo}" required="true"/>
+      <Label text="{i18n>correo}"/>
       <Input value="{AppJsonModel>/ObraDetalle/correo}" type="Email"/>
-      <Label text="Representate Técnico Contratista" required="true"/>
+      <Label text="Representate Técnico Contratista"/>
       <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
-      <Label text="Matrícula" required="true"/>
+      <Label text="Matrícula"/>
       <Input value="{AppJsonModel>/ObraDetalle/matricula}" type="Number"/>
+      <!-- Datos financieros y cumplimientos       -->
+      <core:Title text="{i18n>datosfinancieros}" />
+      <Label text="{i18n>fechafirma}" required="true"/>
+      <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}"/>
+      <Label text="{i18n>incrementomaximo}" required="true"/>
+      <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" description="%" fieldWidth="90%"/>
+      <Label text="{i18n>plazoejecucion}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" change=".setMaximoPlazo" type="Number"/>
+      <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" editable="false">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>plazomaxejecucion}" required="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number"/>
+      <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}" editable="false">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <Label text="{i18n>fondoreparo}" required="true"/>
+      <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" description="%" fieldWidth="90%"/>
+      <Label text="{i18n>financiamiento}" required="true"/>
+      <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+      </ComboBox>
+      <!-- Garantia por ejecucion de contrato -->
       <core:Title text="{i18n>garantiaejecucion}" />
       <Label text="{i18n>nropoliza}" required="true"/>
-      <Input value="{AppJsonModel>/ObraDetalle/nro_poliza}" editable="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/nro_poliza}"/>
       <Label text="{i18n>extendidapor}" required="true"/>
-      <Input value="{AppJsonModel>/ObraDetalle/extendida_por}" editable="true"/>
+      <Input value="{AppJsonModel>/ObraDetalle/extendida_por}"/>
       <Label text="{i18n>porcentajecobertura}" required="true"/>
-      <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" editable="true" description="%" fieldWidth="90%"/>      
+      <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" description="%" fieldWidth="90%"/>
     </form:SimpleForm>
   </WizardStep>
 </core:FragmentDefinition>

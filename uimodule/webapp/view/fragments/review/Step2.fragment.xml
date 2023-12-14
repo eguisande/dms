@@ -5,12 +5,6 @@
   <form:SimpleForm title="{i18n>ordenescompra}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
       <Table items="{AppJsonModel>/ObraDetalle/ordenes_compra}" fixedLayout="false" width="100%">
-        <headerToolbar>
-          <Toolbar visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <ToolbarSpacer />
-            <Button tooltip="Agregar orden de compra" icon="sap-icon://add" press="addOC" type="Ghost"/>
-          </Toolbar>
-        </headerToolbar>
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nroordencompra}" />
@@ -26,22 +20,16 @@
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
             <Text text="{i18n>noredetermina}" />
-          </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
-            <Text text="Acciones" />
-          </Column>
+          </Column>        
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
               <Text text="{AppJsonModel>nro_oc}" />
-              <Text text="{AppJsonModel>fecha}" />
-              <Text text="{AppJsonModel>moneda}" />
+              <Text text="{path: 'AppJsonModel>fecha', formatter: '.formatter.formatDate'}" />
+              <Text text="{AppJsonModel>moneda_ID}" />
               <Text text="{AppJsonModel>tipo_cambio}" />
-              <Switch state="{AppJsonModel>no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>
-              <HBox>
-                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
-              </HBox>
+              <Switch state="{AppJsonModel>no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>              
             </cells>
           </ColumnListItem>
         </items>
