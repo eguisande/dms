@@ -9,7 +9,7 @@
       <Label text="{i18n>nrocontrato}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}"/>
       <Label text="{i18n>monto}" required="true"/>
-      <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}"/>
+      <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}" textAlign="End"/>
       <Label text="{i18n>moneda}" required="true"/>
       <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/SelectedMoneda}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
@@ -34,6 +34,8 @@
       <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
       <Label text="Matrícula"/>
       <Input value="{AppJsonModel>/ObraDetalle/matricula}" type="Number"/>
+      <Label text="{i18n>apoderado}"/>
+      <Input value="{AppJsonModel>/ObraDetalle/apoderado}"/> 
       <!-- Datos financieros y cumplimientos       -->
       <core:Title text="{i18n>datosfinancieros}" />
       <Label text="{i18n>fechafirma}" required="true"/>

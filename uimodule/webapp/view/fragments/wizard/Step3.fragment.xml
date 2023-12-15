@@ -41,13 +41,7 @@
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true" >
               <Text text="{i18n>anticipofinanciero}" />
-            </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true" >
-              <Text text="{i18n>porcmonedalocal}" />
-            </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true" >
-              <Text text="{i18n>porcmonedaextr}" />
-            </Column>
+            </Column>            
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="Acciones" />
             </Column>
@@ -64,9 +58,7 @@
                 <Text text="{AppJsonModel>sistema_cuenca}" />
                 <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
                 <Switch state="{AppJsonModel>acopio}" customTextOn="Si" customTextOff="No" enabled="false"/>
-                <Text text="{AppJsonModel>anticipo_financiero}%"/>
-                <Text text="{AppJsonModel>moneda_local}%"/>
-                <Text text="{AppJsonModel>moneda_extranjera}%"/>
+                <Text text="{AppJsonModel>anticipo_financiero}%"/>                
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteP3"/>
                 </HBox>

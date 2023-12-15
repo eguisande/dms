@@ -21,7 +21,7 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>importe}" />
             <footer >
-               <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'}" />
+               <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'} ARS" />
             </footer>
           </Column>          
         </columns>

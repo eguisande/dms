@@ -33,6 +33,8 @@ sap.ui.define([
       oModel.setProperty("/P3s", []);
       oModel.setProperty("/ProyectosInversion", []);
       oModel.setProperty("/OrdenesCompra", []);
+      oModel.setProperty("/monto_total", "");
+      oModel.setProperty("/monto_contrato", "");
       //this.clearToken();
       this.loadCombos(ID);
       const oNavPage = this.byId("wizardNavContainer");
@@ -172,13 +174,14 @@ sap.ui.define([
           ID,
           ...oObra,
           fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
-          monto_total: this.getMontoTotal(oObra)      
+          monto_total: this.getMontoTotal(oObra)
         };
         // this.setTokensWizard(oMultiJefes, aJefes);
         // this.setTokensWizard(oMultiInspectores, aInspectores);
         oModel.setProperty("/ObraDetalle", oObraDetalle);
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
         oModel.updateBindings(true);
+        await this.calculatePercentages(oObraDetalle);
         //this.setInspectoresDeUnJefe(true);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
@@ -187,8 +190,8 @@ sap.ui.define([
       }
     },
 
-     //Obtengo los pi que pertenecen a cada p3
-     getPiData: function (oObra) {
+    //Obtengo los pi que pertenecen a cada p3
+    getPiData: function (oObra) {
       oObra.p3.forEach(p3 => {
         const data = p3.pi.map(function (item) {
           return {
@@ -215,7 +218,7 @@ sap.ui.define([
         });
         const importes = data.map(o => o.importe).join(', ');
         const tipos_cambio = data.map(o => o.tipo_cambio).join(', ');
-        const monedas = data.map(o => o.moneda_ID).join(', '); 
+        const monedas = data.map(o => o.moneda_ID).join(', ');
         p3.importesP3 = importes;
         p3.tipos_cambioP3 = tipos_cambio;
         p3.monedasP3 = monedas;
@@ -255,13 +258,13 @@ sap.ui.define([
       oObra.p3.forEach(e => {
         e.importes.forEach(i => {
           if (i.tipo_cambio !== 1) {
-            let montoArs = i.importe * i.tipo_cambio
-            suma = suma + montoArs
+            let montoArs = i.importe * i.tipo_cambio;
+            suma = suma + montoArs;
           } else {
-            suma = suma + i.importe            
+            suma = suma + i.importe;
           }
-        })
-        return suma
+        });
+        return suma;
       });
       oModel.setProperty("/monto_total", suma);
       oModel.setProperty("/monto_contrato", suma);
@@ -359,10 +362,10 @@ sap.ui.define([
       let suma = 0;
       importes.forEach(e => {
         if (e.tipo_cambio !== 1) {
-          let montoArs = Number(e.importe) * Number(e.tipo_cambio)
-          suma = suma + montoArs
+          let montoArs = Number(e.importe) * Number(e.tipo_cambio);
+          suma = suma + montoArs;
         } else {
-          suma = suma + Number(e.importe)            
+          suma = suma + Number(e.importe);
         }
       });
       oModel.setProperty("/monto_total", suma);
@@ -739,6 +742,7 @@ sap.ui.define([
       oModel.setProperty("/ObraDetalle/um_plazo_maximo_ID", um_plazo_original);
     },
 
+    //TO DO completar
     handleWizardSubmit: async function () {
       let that = this;
       MessageBox.confirm(this.getResourceBundle().getText("saveConfirm"), {
@@ -752,38 +756,53 @@ sap.ui.define([
             BusyIndicator.show(0);
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
+            await this.calculatePercentages(oObraDetalle);
             const aAreas = oModel.getProperty("/Combos/Areas");
-            const inspectores = [...oObraDetalle.JefesInspectores?.map(jefe => { return { inspector_ID: jefe }; }) || [],
-            ...oObraDetalle.Inspectores?.map(item => { return { inspector_ID: item }; }) || []];
-            const pi = oObraDetalle.PI.map(item => {
-              const oPI = {
-                pi: item.pi,
-                tipo_pi_ID: item.tipo_pi_ID,
-                quantity: item.quantity,
-                sistema_contratacion_ID: item.sistema_contratacion_ID,
+            // const inspectores = [...oObraDetalle.JefesInspectores?.map(jefe => { return { inspector_ID: jefe }; }) || [],
+            // ...oObraDetalle.Inspectores?.map(item => { return { inspector_ID: item }; }) || []];  
+            const p3 = oModel.P3.map(item => {
+              return {
+                codigo: item.codigo,
+                tipo_obra_ID: item.tipo_obra_ID,
+                tipo_contrato_ID: item.tipo_contrato_ID,
+                fluido_ID: item.fluido_ID,
+                partido_ID: item.partido_ID,
+                sistema_ID: item.sistema_ID,
+                obra_ID: item.obra_ID,
+                acumar: item.acumar,
+                acopio_materiales: item.acopio_materiales,
+                anticipo_financiero: item.anticipo_financiero,
+                descuento_monto_contrato: null, //dudas con este campo
+                importes: null, //to do
+                pi: null //to do
               };
-              return item.ID ? { ID: item.ID, ...oPI } : oPI;
+            });
+            const contratista = oObraDetalle.contratista.map(item => {
+              return {
+                contratista_ID: oObraDetalle.selectedContratista,
+                vigencia_desde: "2023-12-15", //de donde saco estas fechas?
+                vigencia_hasta: "2024-02-08"
+              };
+            });
+            const ordenes_compra = oModel.OrdenesCompra.map(item => {
+              return {
+                moneda_ID: item.moneda_ID,
+                tipo_cambio: item.tipo_cambio,
+                no_redetermina: item.no_redetermina,
+                nro_oc: item.nro_oc,
+                revision: null, //de donde saco este campo?
+                fecha: item.fecha
+              };
             });
             const oPayload = {
-              p3: oObraDetalle.p3,
+              p3: p3,
               nombre: oObraDetalle.nombre,
-              proyecto_inversion: oObraDetalle.proyecto_inversion,
-              tipo_obra_ID: oObraDetalle.tipo_obra_ID,
-              tipo_contrato_ID: oObraDetalle.tipo_contrato_ID,
-              tipo_pi_ID: oObraDetalle.tipo_pi_ID,
-              fluido_ID: oObraDetalle.fluido_ID,
-              partido_ID: oObraDetalle.partido_ID,
-              sistema_ID: oObraDetalle.sistema_ID,
-              direccion_ID: oObraDetalle.direccion_ID,
-              gerencia_ID: oObraDetalle.gerencia_ID,
-              inspectores,
-              acumar: oObraDetalle.acumar,
+              contratista: contratista,
+              ordenes_compra: ordenes_compra,              
               representante: oObraDetalle.representante,
               telefono: oObraDetalle.telefono,
               correo: oObraDetalle.correo,
-              no_redetermina: oObraDetalle.no_redetermina,
               fecha_firma: this.formatter.formatDateToBack(oObraDetalle.fecha_firma),
-              pi,
               representante_tecnico: oObraDetalle.representante_tecnico,
               nro_matricula: oObraDetalle.nro_matricula,
               apoderado: oObraDetalle.apoderado,
@@ -792,23 +811,15 @@ sap.ui.define([
               plazo_ejecucion: Number(oObraDetalle.plazo_ejecucion),
               um_plazo_ID: oObraDetalle.um_plazo_ID,
               maximo_plazo_extension: Number(oObraDetalle.maximo_plazo_extension),
-              um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,
-              acopio_materiales: oObraDetalle.acopio_materiales,
-              anticipo_financiero: oObraDetalle.anticipo_financiero,
-              fondo_reparo: oObraDetalle.fondo_reparo,
-              financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
-              contratista_ID: oObraDetalle.contratista.ID,
+              um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,              
+              financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,            
               nro_poliza: oObraDetalle.nro_poliza,
               extendida_por: oObraDetalle.extendida_por,
               porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
               nro_contrato: oObraDetalle.nro_contrato,
               nro_proveedor: oObraDetalle.nro_proveedor,
               proveedor: oObraDetalle.proveedor,
-              cuit: oObraDetalle.cuit,
-              oc: oObraDetalle.oc,
-              fecha_oc: oObraDetalle.fecha_oc,
-              quantity: oObraDetalle.quantity,
-              tasa_cambio: oObraDetalle.tasa_cambio,
+              cuit: oObraDetalle.cuit              
             };
             if (oObraDetalle.ID) {
               await Services.updateObra(oObraDetalle.ID, oPayload);
@@ -841,6 +852,25 @@ sap.ui.define([
       });
     },
 
+    calculatePercentages: function (oObraDetalle) {
+      const oModel = this.getModel("AppJsonModel");
+      const monto_total = oModel.getProperty("/monto_total");
+      let porcentaje_local = 0;
+      let porcentaje_extr = 0;
+      oObraDetalle.p3.forEach(p3 => {
+        p3.importes.forEach(i => {
+          if (i.moneda_ID === "ARS") {
+            porcentaje_local = (i.importe / monto_total) * 100;
+          } else {
+            porcentaje_extr = (i.importe / monto_total) * 100;
+          }
+        });
+        p3.moneda_local = porcentaje_local.toString();
+        p3.moneda_extranjera = porcentaje_extr.toString();
+      });
+    },
+
+    //TO DO
     validateFields: function (oObraDetalle) {
       const idMultiInputJefes = this.byId("idMultiInputJefes");
       const idMultiInputInspectores = this.byId("idMultiInputInspectores");

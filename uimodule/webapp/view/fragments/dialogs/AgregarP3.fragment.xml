@@ -35,10 +35,6 @@
       <Switch state="{AppJsonModel>/P3/acopio}" customTextOn="Si" customTextOff="No"/>
       <Label text="{i18n>anticipofinanciero}"/>
       <StepInput value="{AppJsonModel>/P3/anticipo_financiero}" min="0" max="100" editable="true" description="%" fieldWidth="90%"/>
-      <Label text="{i18n>porcmonedalocal}"/>
-      <StepInput value="{AppJsonModel>/P3/moneda_local}" min="0" max="100" editable="true" description="%" fieldWidth="90%"/>
-      <Label text="{i18n>porcmonedaextr}"/>
-      <StepInput value="{AppJsonModel>/P3/moneda_extranjera}" min="0" max="100" editable="true" description="%" fieldWidth="90%"/>
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closeP3Dialog" type="Default" />
