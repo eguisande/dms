@@ -11,11 +11,11 @@
       <Label text="{i18n>monto}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}" textAlign="End"/>
       <Label text="{i18n>moneda}" required="true"/>
-      <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/SelectedMoneda}">
+      <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/ObraDetalle/moneda_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>registroproveedor}" required="true"/>
-      <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/SelectedContratista}" change="onChangeContratista">
+      <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/ObraDetalle/registro_proveedor}" change="onChangeContratista">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
       </ComboBox>
       <Label text="{i18n>razonsocial}" required="true"/>
@@ -41,14 +41,14 @@
       <Label text="{i18n>fechafirma}" required="true"/>
       <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}"/>
       <Label text="{i18n>incrementomaximo}" required="true"/>
-      <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" description="%" fieldWidth="90%"/>
+      <StepInput id="idIncrementoMax" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" description="%" fieldWidth="90%"/>
       <Label text="{i18n>plazoejecucion}" required="true"/>
-      <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" change=".setMaximoPlazo" type="Number"/>
+      <Input id="idPlazoEjecucion" value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" change=".setMaximoPlazo" type="Number"/>
       <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" editable="false">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>plazomaxejecucion}" required="true"/>
-      <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number"/>
+      <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number" editable="false"/>
       <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}" editable="false">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>

@@ -104,38 +104,8 @@ sap.ui.define([], function () {
       return this.callGetService("Direcciones");
     },
 
-    getValidatePIPorveedor: function (proyecto_inversion, nro_proveedor) {
-      return this.callGetService(
-        `validatePIPorveedor(proyecto_inversion='${proyecto_inversion}',nro_proveedor='${nro_proveedor}')`
-      );
-    },
-
-    getQuantity: function (proyecto_inversion) {
-      return this.callGetService(
-        `getQuantity(proyecto_inversion='${proyecto_inversion}')`
-      );
-    },
-
-    getContratista: function (registro_proveedor) {
-      return this.callGetService(
-        `getContratista(registro_proveedor='${registro_proveedor}')`
-      );
-    },
-
-    // getContratistas: function () {
-    //   return this.callGetService(
-    //     "Contratistas?$expand=tipo_documento,tipo_contratista"
-    //   );
-    // },
-
-    getOCQuantity: function (proyecto_inversion) {
-      return this.callGetService(
-        `getOCQuantity(proyecto_inversion='${proyecto_inversion}')`
-      );
-    },
-
     getInspectores: function () {
-      return this.callGetService("Inspectores?$expand=tipo_inspector");
+      return this.callGetService("Inspectores?$expand=tipo_inspector&$orderby=nombre");
     },
 
     getGerencias: function () {
@@ -193,6 +163,36 @@ sap.ui.define([], function () {
     updateObra: function (ID, oPayload) {
       return this.callUpdateService(`Obras/${ID}`, oPayload);
     },
+
+     // getValidatePIPorveedor: function (proyecto_inversion, nro_proveedor) {
+    //   return this.callGetService(
+    //     `validatePIPorveedor(proyecto_inversion='${proyecto_inversion}',nro_proveedor='${nro_proveedor}')`
+    //   );
+    // },
+
+    // getQuantity: function (proyecto_inversion) {
+    //   return this.callGetService(
+    //     `getQuantity(proyecto_inversion='${proyecto_inversion}')`
+    //   );
+    // },
+
+    // getContratista: function (registro_proveedor) {
+    //   return this.callGetService(
+    //     `getContratista(registro_proveedor='${registro_proveedor}')`
+    //   );
+    // },
+
+    // getContratistas: function () {
+    //   return this.callGetService(
+    //     "Contratistas?$expand=tipo_documento,tipo_contratista"
+    //   );
+    // },
+
+    // getOCQuantity: function (proyecto_inversion) {
+    //   return this.callGetService(
+    //     `getOCQuantity(proyecto_inversion='${proyecto_inversion}')`
+    //   );
+    // },
 
     getUser: async function () {
       try {

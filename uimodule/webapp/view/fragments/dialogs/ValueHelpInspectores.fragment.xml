@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <SelectDialog multiSelect="true" title="{i18n>agregarinspectores}" search="searchInspectores" confirm="closeInspectorDialog" cancel="closeInspectorDialog" showClearButton="true" 
+    items="{AppJsonModel>/Combos/Inspectores}">
+    <StandardListItem selected="{selected}" title="{AppJsonModel>nombre}" type="Active" />
+  </SelectDialog>
+</core:FragmentDefinition>

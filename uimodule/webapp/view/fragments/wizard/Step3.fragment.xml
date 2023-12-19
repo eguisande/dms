@@ -4,7 +4,7 @@
   <WizardStep id="idObraAltaStep3" validated="true" title="{i18n>p3}">
     <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
       <form:content>
-        <Table id="idP3Table" items="{AppJsonModel>/P3s}" fixedLayout="false" width="100%">
+        <Table id="idP3Table" items="{AppJsonModel>/p3s}" fixedLayout="false" width="100%">
           <headerToolbar>
             <Toolbar>
               <ToolbarSpacer/>

@@ -30,9 +30,6 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/Editable", true);
       oModel.setProperty("/SelectedContratista", "");
-      oModel.setProperty("/P3s", []);
-      oModel.setProperty("/ProyectosInversion", []);
-      oModel.setProperty("/OrdenesCompra", []);
       oModel.setProperty("/monto_total", "");
       oModel.setProperty("/monto_contrato", "");
       //this.clearToken();
@@ -58,6 +55,11 @@ sap.ui.define([
         });
       } else {
         oModel.setProperty("/ObraDetalle", []);
+        oModel.setProperty("/ObraDetalle/ID", null);
+        oModel.setProperty("/ordenes_compra", []);
+        oModel.setProperty("/proyectos_inversion", []);
+        oModel.setProperty("/p3s", []);
+        oModel.setProperty("/responsables", []);
         this.setUmMaximoPLazo();
         const oFirstStep = oWizard.getSteps().at(0);
         oWizard.discardProgress(oFirstStep);
@@ -74,7 +76,7 @@ sap.ui.define([
         const [
           oObra,
           aDirecciones,
-          aDireccionGerencias,
+          aGerencias,
           aInspectores,
           aTiposContratos,
           aFluidos,
@@ -119,7 +121,7 @@ sap.ui.define([
         }
         oModel.setProperty("/Combos", {
           Direcciones: aDirecciones.value,
-          DireccionGerencias: aDireccionGerencias.value,
+          Gerencias: aGerencias.value,
           JefeInspectores: Jefes,
           Inspectores: aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM'),
           TiposContratos: aTiposContratos.value,
@@ -147,6 +149,8 @@ sap.ui.define([
     setDataToView: async function (oModel, ID) {
       try {
         const oObra = await Services.getObra(ID);
+        //Ordenes de compra
+        await this.getOrdenesCompra(oObra);
         //Info de los pi de cada p3
         await this.getPiData(oObra);
         //Lista de pi para tabla de proyectos de inversion
@@ -154,40 +158,36 @@ sap.ui.define([
         //Obtengo los importes y tipos de cambio de cada p3
         await this.getImportesP3(oObra);
         //Lista de responsables de cada pi - to do 
-        //await this.getResponsables(oObra);
-        // const [oOrdenCompra, { value: quantity }, { value: OCQuantity }] = await Promise.all([
-        //   Services.getValidatePIPorveedor(oObra.proyecto_inversion, oObra.contratista.registro_proveedor),
-        //   Services.getQuantity(oObra.proyecto_inversion),
-        //   Services.getOCQuantity(oObra.proyecto_inversion)
-        // ]);
-        // const oMultiJefes = this.getView().byId("idMultiInputJefes");
-        // const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
-        // const aInspectoresNotNull = oObra.inspectores.filter(item => item.inspector !== null);
-        // const aJefes = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'JE');
-        // const aInspectores = aInspectoresNotNull.filter(item => item.inspector.tipo_inspector_ID === 'EM');
-        const oObraDetalle = {
-          //...oOrdenCompra,
-          //quantity,
-          //PI: this.getPITable(oObra.pi),
-          // JefesInspectores: aJefes.map(item => (item.inspector_ID)), //Jefes de inspección
-          // Inspectores: aInspectores.map(item => (item.inspector_ID)) //Inspectores
+        //await this.getResponsables(oObra);        
+        const oObraDetalle = {          
           ID,
           ...oObra,
           fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
-          monto_total: this.getMontoTotal(oObra)
+          monto_total: this.getMontoTotal(oObra),
+          registro_proveedor: oObra.contratista[0].contratista.registro_proveedor,
+          razonsocial: oObra.contratista[0].contratista.razonsocial,
+          nro_documento: oObra.contratista[0].contratista.nro_documento,
+          //responsables: responsables TO DO cuando tenga el expand
         };
-        // this.setTokensWizard(oMultiJefes, aJefes);
-        // this.setTokensWizard(oMultiInspectores, aInspectores);
         oModel.setProperty("/ObraDetalle", oObraDetalle);
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
         oModel.updateBindings(true);
         await this.calculatePercentages(oObraDetalle);
-        //this.setInspectoresDeUnJefe(true);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
         MessageToast.show(message);
         oModel.setProperty("/ObraDetalle", []);
       }
+    },
+
+    //Obtengo la lista de ordenes de compra
+    getOrdenesCompra: function (oObra) {
+      let ocData = [];
+      oObra.ordenes_compra.forEach(oc => {
+        ocData.push(oc);
+      });
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/ordenes_compra", ocData);
     },
 
     //Obtengo los pi que pertenecen a cada p3
@@ -208,6 +208,7 @@ sap.ui.define([
 
     //Obtengo los importes y tipos de cambio de cada p3
     getImportesP3: function (oObra) {
+      const p3Data = [];
       oObra.p3.forEach(p3 => {
         const data = p3.importes.map(function (item) {
           return {
@@ -222,7 +223,10 @@ sap.ui.define([
         p3.importesP3 = importes;
         p3.tipos_cambioP3 = tipos_cambio;
         p3.monedasP3 = monedas;
+        p3Data.push(p3);
       });
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/p3s", p3Data);
     },
 
     getPiList: function (oObra) {
@@ -233,23 +237,8 @@ sap.ui.define([
         });
       });
       const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/PiList", piData);
-    },
-
-    //Obtengo los inspectores
-    setInspectoresDeUnJefe: async function (select) {
-      const oModel = this.getModel("AppJsonModel");
-      const oObraDetalle = oModel.getProperty("/ObraDetalle");
-      const aInspectores = await Services.getInspectores();
-      let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && oObraDetalle.JefesInspectores.includes(item.jefe_inspeccion_ID));
-      Inspectores = Inspectores.map(inspector => {
-        if (select) {
-          inspector.selected = true;
-        }
-        return inspector;
-      });
-      oModel.setProperty("/Combos/Inspectores", Inspectores);
-    },
+      oModel.setProperty("/proyectos_inversion", piData);
+    },    
 
     //Sumo los importes de cada pi
     getMontoTotal: function (oObra) {
@@ -296,9 +285,9 @@ sap.ui.define([
     confirmAddOC: function () {
       const oModel = this.getModel("AppJsonModel");
       const OC = oModel.getProperty("/OrdenCompra");
-      const ordenes_compra = oModel.getProperty("/OrdenesCompra");
+      const ordenes_compra = oModel.getProperty("/ordenes_compra");
       ordenes_compra.push(OC);
-      oModel.setProperty("/OrdenesCompra", ordenes_compra);
+      oModel.setProperty("/ordenes_compra", ordenes_compra);
       this.closeOCDialog();
     },
 
@@ -306,7 +295,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
-      const items = oModel.getProperty("/OrdenesCompra");
+      const items = oModel.getProperty("/ordenes_compra");
       items.splice(idx, 1);
       this.byId("idOrdenesCompraTable").getBinding("items").refresh();
     },
@@ -337,9 +326,9 @@ sap.ui.define([
     confirmAddPI: function () {
       const oModel = this.getModel("AppJsonModel");
       const PI = oModel.getProperty("/PI");
-      const proyectos_inversion = oModel.getProperty("/ProyectosInversion");
+      const proyectos_inversion = oModel.getProperty("/proyectos_inversion");
       proyectos_inversion.push(PI);
-      oModel.setProperty("/ProyectosInversion", proyectos_inversion);
+      oModel.setProperty("/proyectos_inversion", proyectos_inversion);
       //Sumos los importes de cada pi
       this.sumaImportes(proyectos_inversion);
       this.closePIDialog();
@@ -349,7 +338,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
-      const items = oModel.getProperty("/ProyectosInversion");
+      const items = oModel.getProperty("/proyectos_inversion");
       items.splice(idx, 1);
       //Sumos los importes de cada pi
       this.sumaImportes(items);
@@ -398,9 +387,18 @@ sap.ui.define([
     confirmAddResponsables: function () {
       const oModel = this.getModel("AppJsonModel");
       const grupoResponsables = oModel.getProperty("/GrupoResponsables");
-      const responsables = oModel.getProperty("/Responsables");
+      const responsables = oModel.getProperty("/responsables");
+      grupoResponsables.map(item => {
+        return {
+          direccion: item.direccion,
+          gerencia: item.gerencia,
+          jefe_inspeccion: item.importe,
+          inspector: item.moneda,
+          nro_pi: item.pi
+        };
+      });
       responsables.push(grupoResponsables);
-      oModel.setProperty("/Responsables", responsables);
+      oModel.setProperty("/responsables", responsables);
       this.closeResponsablesDialog();
     },
 
@@ -408,11 +406,84 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
-      const items = oModel.getProperty("/Responsables");
+      const items = oModel.getProperty("/responsables");
       items.splice(idx, 1);
       this.byId("idResponsablesTable").getBinding("items").refresh();
     },
 
+    openJefeInspeccionDialog: function () {
+			var oView = this.getView();
+			if (!this._pJefesDialog) {
+				this._pJefesDialog = Fragment.load({
+					id: oView.getId(),
+					name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpJefesInspeccion",
+					controller: this
+				}).then(function (oJefesDialog){
+					oView.addDependent(oJefesDialog);
+					return oJefesDialog;
+				});
+			}
+			this._pJefesDialog.then(function(oJefesDialog){				
+				oJefesDialog.open();
+			}.bind(this));
+		},
+
+    searchJefesInspeccion: function (oEvent) {
+      var sValue = oEvent.getParameter("value");
+			var oFilter = new sap.ui.model.Filter("nombre", sap.ui.model.FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getParameter("itemsBinding");
+			oBinding.filter([oFilter]);
+    },
+
+    closeJefesInspeccionDialog: function (oEvent) {
+      const aSelectedItems = oEvent.getParameter("selectedItems");
+      // const jefes = aSelectedItems.map(function (oContext) { return oContext.getObject().nombre })
+			const oMultiInput = this.byId("idJefesInspeccion");
+			if (aSelectedItems && aSelectedItems.length > 0) {
+				aSelectedItems.forEach(function (oItem) {
+					oMultiInput.addToken(new sap.m.Token({
+						text: oItem.getTitle()
+					}));
+				});
+			}
+    },
+
+    openInspectorDialog: function () {
+			var oView = this.getView();
+			if (!this._pInspectorDialog) {
+				this._pInspectorDialog = Fragment.load({
+					id: oView.getId(),
+					name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpInspector",
+					controller: this
+				}).then(function (oInspectorDialog){
+					oView.addDependent(oInspectorDialog);
+					return oInspectorDialog;
+				});
+			}
+			this._pInspectorDialog.then(function(oInspectorDialog){				
+				oInspectorDialog.open();
+			}.bind(this));
+		},
+
+    searchInspectores: function (oEvent) {
+      var sValue = oEvent.getParameter("value");
+			var oFilter = new sap.ui.model.Filter("nombre", sap.ui.model.FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getParameter("itemsBinding");
+			oBinding.filter([oFilter]);
+    },
+
+    closeInspectorDialog: function (oEvent) {
+      const aSelectedItems = oEvent.getParameter("selectedItems");
+			const oMultiInput = this.byId("idInspectores");
+			if (aSelectedItems && aSelectedItems.length > 0) {
+				aSelectedItems.forEach(function (oItem) {
+					oMultiInput.addToken(new sap.m.Token({
+						text: oItem.getTitle()
+					}));
+				});
+			}
+    },
+    
     //Agregar P3
     addP3: function () {
       const oModel = this.getModel("AppJsonModel");
@@ -439,9 +510,9 @@ sap.ui.define([
     confirmAddP3: function () {
       const oModel = this.getModel("AppJsonModel");
       const P3 = oModel.getProperty("/P3");
-      const p3s = oModel.getProperty("/P3s");
+      const p3s = oModel.getProperty("/p3s");
       p3s.push(P3);
-      oModel.setProperty("/P3s", p3s);
+      oModel.setProperty("/p3s", p3s);
       this.closeP3Dialog();
     },
 
@@ -449,7 +520,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
-      const items = oModel.getProperty("/P3s");
+      const items = oModel.getProperty("/p3s");
       items.splice(idx, 1);
       this.byId("idP3Table").getBinding("items").refresh();
     },
@@ -458,7 +529,7 @@ sap.ui.define([
     onChangeContratista: function () {
       const oModel = this.getModel("AppJsonModel");
       const aContratistas = oModel.getProperty("/Combos/Contratistas");
-      const selected = oModel.getProperty("/SelectedContratista");
+      const selected = oModel.getProperty("/ObraDetalle/registro_proveedor");
       const contratistaData = aContratistas.filter(item => item.ID === selected);
       oModel.setProperty("/ObraDetalle/razonsocial", contratistaData[0].razonsocial);
       oModel.setProperty("/ObraDetalle/nro_documento", contratistaData[0].nro_documento);
@@ -466,23 +537,7 @@ sap.ui.define([
 
     //TO DO
     getResponsables: function (oObra) {
-      const piData = [];
-      oObra.p3.forEach(p3 => {
-        p3.pi.forEach(pi => {
-          piData.push(pi.ID);
-        });
-      });
-      const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/PiList", piData);
-    },
 
-    setTokensWizard: function (oMultiInput, aData) {
-      oMultiInput.setTokens(
-        aData.map(item => {
-          const { ID, nombre } = item.inspector;
-          return new sap.m.Token({ text: nombre, key: ID });
-        })
-      );
     },
 
     //TO DO - validar campos obligatorios
@@ -498,29 +553,11 @@ sap.ui.define([
       oNavPage.to(oPageReview);
     },
 
-    onChangeDireccion: function (oEvent) {
+    //Seteo las gerencias que corresponden a cada direccion en los combos del apartado de responsables
+    onChangeDireccion: function () {
       const oModel = this.getModel("AppJsonModel");
-      const sDireccion = oModel.getProperty("/ObraDetalle/direccion_ID");
-      const oDialogJefes = this.byId("idSelectDialogJefes");
-      const oDialogInspectores = this.byId("idSelectDialogInspectores");
-      oModel.setProperty("/ObraDetalle/gerencia_ID", null);
-      oModel.setProperty("/ObraDetalle/JefesInspectores", []);
-      oModel.setProperty("/ObraDetalle/Inspectores", []);
-      oDialogJefes && oDialogJefes.clearSelection();
-      oDialogInspectores && oDialogInspectores.clearSelection();
-      this.setComboFilter(sDireccion);
-      this.clearToken();
-    },
-
-    clearToken: function () {
-      const oMultiJefes = this.getView().byId("idMultiInputJefes");
-      const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
-      oMultiJefes.setTokens([]);
-      oMultiInspectores.setTokens([]);
-    },
-
-    setComboFilter: function (sDireccion) {
-      const oCombo = this.byId("idComboDireccionGerencias", sDireccion);
+      const sDireccion = oModel.getProperty("/GrupoResponsables/direccion");
+      const oCombo = this.byId("idComboGerencias", sDireccion);
       const oBinding = oCombo.getBinding("items");
       const aFilter = [new sap.ui.model.Filter({
         path: 'direccion_ID',
@@ -576,47 +613,7 @@ sap.ui.define([
       } else {
         this.onNavBack();
       }
-    },
-
-    onOpenDialogJefe: function () {
-      const oView = this.getView();
-      const oModel = this.getModel("AppJsonModel");
-      if (!this._pValueHelpDialogJefes) {
-        this._pValueHelpDialogJefes = Fragment.load({
-          id: oView.getId(),
-          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpDialogJefes",
-          controller: this
-        }).then(oValueHelpDialog => {
-          oView.addDependent(oValueHelpDialog);
-          return oValueHelpDialog;
-        });
-      }
-      this._pValueHelpDialogJefes.then(oValueHelpDialog => {
-        oValueHelpDialog.setModel(oModel);
-        this.setFilterDireccion(oValueHelpDialog, oModel);
-        oValueHelpDialog.open();
-      });
-    },
-
-    onOpenDialogInspectores: function () {
-      const oView = this.getView();
-      const oModel = this.getModel("AppJsonModel");
-      if (!this._pValueHelpDialogInspectores) {
-        this._pValueHelpDialogInspectores = Fragment.load({
-          id: oView.getId(),
-          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpDialogInspectores",
-          controller: this
-        }).then(oValueHelpDialog => {
-          oView.addDependent(oValueHelpDialog);
-          return oValueHelpDialog;
-        });
-      }
-      this._pValueHelpDialogInspectores.then(oValueHelpDialog => {
-        oValueHelpDialog.setModel(oModel);
-        this.setFilterDireccion(oValueHelpDialog, oModel);
-        oValueHelpDialog.open();
-      });
-    },
+    },    
 
     setFilterDireccion: function (oValueHelpDialog, oModel) {
       const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID");
@@ -626,98 +623,13 @@ sap.ui.define([
         new sap.ui.model.Filter("borrado", sap.ui.model.FilterOperator.NE, true)
       ]);
     },
-
-    onValueHelpDialogJefesConfirm: function (oEvent) {
-      const oMultiJefes = this.getView().byId("idMultiInputJefes");
-      this.setDataMultiInput(oEvent, oMultiJefes, "JefesInspectores");
-      this.setInspectoresDeUnJefe(false);
-    },
-
-    onValueHelpDialogInpectoresConfirm: function (oEvent) {
-      const oMultiInspectores = this.getView().byId("idMultiInputInspectores");
-      this.setDataMultiInput(oEvent, oMultiInspectores, "Inspectores");
-    },
-
-    setDataMultiInput: function (oEvent, oMultiJefes, sProperty) {
-      const oSelectedItem = oEvent.getParameter("selectedItems");
-      const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty(`/ObraDetalle/${sProperty}`, oSelectedItem.map(item => {
-        const { ID } = item.getBindingContext("AppJsonModel").getObject();
-        return ID;
-      }));
-      oMultiJefes.setTokens(
-        oSelectedItem.map(item => {
-          const { ID, nombre } = item.getBindingContext("AppJsonModel").getObject();
-          return new sap.m.Token({ text: nombre, key: ID });
-        })
-      );
-    },
-
-    deleteJefe: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel");
-      let sType = oEvent.getParameter("type"),
-        aRemovedTokens = oEvent.getParameter("removedTokens"),
-        oMultiJefes = this.getView().byId("idMultiInputJefes"),
-        aJefes = oModel.getProperty("/Combos/JefeInspectores");
-      if (sType == "removed") {
-        aJefes.forEach(item => {
-          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false;
-        });
-        oMultiJefes = oMultiJefes.getTokens().filter(function (oContext) {
-          return oContext.getKey() !== aRemovedTokens[0].getKey();
-        });
-        oModel.refresh();
-      }
-      oModel.setProperty(`/ObraDetalle/JefesInspectores`, oMultiJefes)
-        ;
-    },
-
-    deleteInspector: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel");
-      let sType = oEvent.getParameter("type"),
-        aRemovedTokens = oEvent.getParameter("removedTokens"),
-        oMultiInspectores = this.getView().byId("idMultiInputInspectores"),
-        aInspectores = oModel.getProperty("/Combos/Inspectores");
-      if (sType == "removed") {
-        aInspectores.forEach(item => {
-          if (item.ID == aRemovedTokens[0].getKey()) item.selected = false;
-        });
-        oMultiInspectores = oMultiInspectores.getTokens().filter(function (oContext) {
-          return oContext.getKey() !== aRemovedTokens[0].getKey();
-        });
-        oModel.refresh();
-      }
-      oModel.setProperty(`/ObraDetalle/Inspectores`, oMultiInspectores)
-        ;
-    },
-
-    onValueHelpDialogJefesClose: function () {
-      this.byId("idSelectDialogJefes").close();
-    },
-
-    onValueHelpDialogInspectoresClose: function () {
-      this.byId("idSelectDialogInspectores").close();
-    },
-
-    onSearchInspector: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel");
-      const sValue = oEvent.getParameter("value");
-      const idDireccion = oModel.getProperty("/ObraDetalle/direccion_ID");
-      const aFilter =
-        [
-          new sap.ui.model.Filter("nombre", sap.ui.model.FilterOperator.Contains, sValue),
-          new sap.ui.model.Filter("direccion_ID", sap.ui.model.FilterOperator.Contains, idDireccion)
-        ];
-      const oBinding = oEvent.getParameter("itemsBinding");
-      oBinding.filter(aFilter);
-    },
-
+   
     //Datos financieros y cumplimientos: seteo maximo plazo de extension
     setMaximoPlazo: function () {
       const oModel = this.getModel("AppJsonModel");
       const message = this.getResourceBundle().getText("errorplazomax");
       let plazo_ejecucion_model = oModel.getProperty("/ObraDetalle/plazo_ejecucion");
-      if (this.byId("idStep4Incremento").getValue() === 0) {
+      if (this.byId("idIncrementoMax").getValue() === 0) {
         oModel.setProperty("/ObraDetalle/incremento_maximo", 0);
       }
       let incremento_maximo_model = oModel.getProperty("/ObraDetalle/incremento_maximo");
@@ -727,10 +639,10 @@ sap.ui.define([
       maximo_plazo_extension = Math.round(maximo_plazo_extension);
       oModel.setProperty("/ObraDetalle/maximo_plazo_extension", maximo_plazo_extension);
       if (maximo_plazo_extension > plazo_ejecucion + 180) {
-        this.byId("idStep4PlazoEjecucion").setValueState("Error");
+        this.byId("idPlazoEjecucion").setValueState("Error");
         MessageToast.show(message);
       } else {
-        this.byId("idStep4PlazoEjecucion").setValueState("None");
+        this.byId("idPlazoEjecucion").setValueState("None");
       }
     },
 
@@ -758,9 +670,19 @@ sap.ui.define([
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
             await this.calculatePercentages(oObraDetalle);
             const aAreas = oModel.getProperty("/Combos/Areas");
-            // const inspectores = [...oObraDetalle.JefesInspectores?.map(jefe => { return { inspector_ID: jefe }; }) || [],
-            // ...oObraDetalle.Inspectores?.map(item => { return { inspector_ID: item }; }) || []];  
-            const p3 = oModel.P3.map(item => {
+            const pi = oObraDetalle.proyectos_inversion.map(item => {
+              return {
+                p3: item.p3,
+                tipo_pi_ID: item.tipo_pi,
+                monto: item.importe,
+                moneda_ID: item.moneda,
+                sistema_contratacion_ID: item.sistema_contratacion,
+                pi: item.pi
+              };
+            });
+            let proyectos_inversion = [];
+            proyectos_inversion.push(pi);
+            const p3 = oModel.p3s.map(item => {
               return {
                 codigo: item.codigo,
                 tipo_obra_ID: item.tipo_obra_ID,
@@ -774,17 +696,17 @@ sap.ui.define([
                 anticipo_financiero: item.anticipo_financiero,
                 descuento_monto_contrato: null, //dudas con este campo
                 importes: null, //to do
-                pi: null //to do
+                pi: proyectos_inversion
               };
             });
-            const contratista = oObraDetalle.contratista.map(item => {
+            const contratista = oObraDetalle.map(item => {
               return {
-                contratista_ID: oObraDetalle.selectedContratista,
+                contratista_ID: item.registro_proveedor,
                 vigencia_desde: "2023-12-15", //de donde saco estas fechas?
                 vigencia_hasta: "2024-02-08"
               };
             });
-            const ordenes_compra = oModel.OrdenesCompra.map(item => {
+            const ordenes_compra = oObraDetalle.ordenes_compra.map(item => {
               return {
                 moneda_ID: item.moneda_ID,
                 tipo_cambio: item.tipo_cambio,
@@ -798,7 +720,8 @@ sap.ui.define([
               p3: p3,
               nombre: oObraDetalle.nombre,
               contratista: contratista,
-              ordenes_compra: ordenes_compra,              
+              ordenes_compra: ordenes_compra,
+              nro_contrato: oObraDetalle.nro_contrato,
               representante: oObraDetalle.representante,
               telefono: oObraDetalle.telefono,
               correo: oObraDetalle.correo,
@@ -806,20 +729,18 @@ sap.ui.define([
               representante_tecnico: oObraDetalle.representante_tecnico,
               nro_matricula: oObraDetalle.nro_matricula,
               apoderado: oObraDetalle.apoderado,
-              incremento_maximo: oObraDetalle.incremento_maximo,
-              moneda_ID: oObraDetalle.moneda,
+              incremento_maximo: Number(oObraDetalle.incremento_maximo),
+              moneda_ID: oObraDetalle.moneda_ID,
               plazo_ejecucion: Number(oObraDetalle.plazo_ejecucion),
               um_plazo_ID: oObraDetalle.um_plazo_ID,
               maximo_plazo_extension: Number(oObraDetalle.maximo_plazo_extension),
-              um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,              
-              financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,            
+              um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,
+              financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
               nro_poliza: oObraDetalle.nro_poliza,
               extendida_por: oObraDetalle.extendida_por,
               porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
-              nro_contrato: oObraDetalle.nro_contrato,
-              nro_proveedor: oObraDetalle.nro_proveedor,
-              proveedor: oObraDetalle.proveedor,
-              cuit: oObraDetalle.cuit              
+              direccion_ID: oObraDetalle.direccion_ID,
+              gerencia_ID: oObraDetalle.gerencia_ID
             };
             if (oObraDetalle.ID) {
               await Services.updateObra(oObraDetalle.ID, oPayload);
@@ -893,7 +814,7 @@ sap.ui.define([
         this.byId("idStep2Telefono"),
         this.byId("idStep2Correo"),
         this.byId("idStep3Direccion"),
-        this.byId("idComboDireccionGerencias"),
+        this.byId("idComboGerencias"),
         //this.byId("idStep4TipoPI"),
         this.byId("idStep4FechaFirma"),
         this.byId("idStep4PlazoEjecucion"),

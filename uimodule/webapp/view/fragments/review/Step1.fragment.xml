@@ -11,17 +11,15 @@
         <Label text="{i18n>monto}" required="true"/>
         <Input value="{AppJsonModel>/monto_contrato}" editable="false" textAlign="End"/>
         <Label text="{i18n>moneda}" required="true"/>
-        <ComboBox items="{AppJsonModel>/Combos/Monedas}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/moneda_ID}">
-            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-        </ComboBox>
+        <Input value="{AppJsonModel>/ObraDetalle/moneda_ID}" editable="false"/>
         <Label text="{i18n>registroproveedor}" required="true"/>
-        <ComboBox items="{AppJsonModel>/Combos/Contratistas}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/contratista/0/contratista_ID}">
+        <ComboBox items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/ObraDetalle/registro_proveedor}" editable="false">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
         </ComboBox>
         <Label text="{i18n>razonsocial}" required="true"/>
-        <Input value="{AppJsonModel>/ObraDetalle/contratista/0/contratista/razonsocial}" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/razonsocial}" editable="false"/>
         <Label text="{i18n>cuitcuilcdi}" required="true"/>
-        <Input value="{AppJsonModel>/ObraDetalle/contratista/0/contratista/nro_documento}" editable="false"/>
+        <Input value="{AppJsonModel>/ObraDetalle/nro_documento}" editable="false"/>
         <!-- Responsable contratista -->
         <core:Title text="{i18n>respcontratista}" />
         <Label text="{i18n>representantelegal}"/>
@@ -35,7 +33,7 @@
         <Label text="{i18n>matricula}"/>
         <Input value="{AppJsonModel>/ObraDetalle/nro_matricula}" editable="false"/>
         <Label text="{i18n>apoderado}"/>
-        <Input value="{AppJsonModel>/ObraDetalle/apoderado}" editable="false"/> 
+        <Input value="{AppJsonModel>/ObraDetalle/apoderado}" editable="false"/>
         <!-- Datos financieros y cumplimientos       -->
         <core:Title text="{i18n>datosfinancieros}" />
         <Label text="{i18n>fechafirma}" required="true"/>
@@ -43,7 +41,7 @@
         <Label text="{i18n>incrementomaximo}" required="true"/>
         <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
         <Label text="{i18n>plazoejecucion}" required="true"/>
-        <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" editable="false" change=".setMaximoPlazo" type="Number" textAlign="End"/>
+        <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" editable="false" type="Number" textAlign="End"/>
         <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
         </ComboBox>
@@ -70,6 +68,6 @@
         <Label text="{i18n>extendidapor}" required="true"/>
         <Input value="{AppJsonModel>/ObraDetalle/extendida_por}" editable="false"/>
         <Label text="{i18n>porcentajecobertura}" required="true"/>
-        <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>      
+        <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
     </form:SimpleForm>
 </core:FragmentDefinition>
