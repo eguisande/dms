@@ -97,7 +97,7 @@
                       <items>
                         <MenuItem text="{i18n>notaspedido}" press="onNavigateToNotaPedido" />
                         <MenuItem text="{i18n>ordenservicio}" press="onNavigateToOrdenServicio" />
-                        <MenuItem text="{i18n>minutas}" press="onNavigateToNotasMinutas" visible="{AppJsonModel>/Permisos/notasMinutas}"  />
+                        <MenuItem text="{i18n>minutas}" press="onNavigateToNotasMinutas" visible="{AppJsonModel>/Permisos/notasMinutas}" />
                       </items>
                     </MenuItem>
                     <MenuItem text="{i18n>ejecucion}" icon="sap-icon://gantt-bars" visible="{AppJsonModel>/Permisos/ejecucion}">
@@ -137,10 +137,9 @@
                           <items>
                             <MenuItem text="{i18n>inspeccionhigseg}" press="onNavigateToInspeccionHigSeg" />
                             <MenuItem text="{i18n>inspeccionMyC}" press="onNavigateToInspeccionMyC" />
-                            
                           </items>
                         </MenuItem>
-                        <MenuItem text="{i18n>registrosobra}" press="onNavigateToRegistrosObra" />                          
+                        <MenuItem text="{i18n>registrosobra}" press="onNavigateToRegistrosObra" />
                       </items>
                     </MenuItem>
                   </Menu>

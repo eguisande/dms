@@ -5,8 +5,8 @@ sap.ui.define([
   "sap/m/MessageBox",
   "sap/m/MessageToast",
   "sap/ui/core/BusyIndicator",
-  "sap/m/IconTabFilter"
-], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, IconTabFilter) {
+  "com/aysa/pgo/altaobras/model/formatter"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, formatter) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Detalle", {
@@ -59,6 +59,7 @@ sap.ui.define([
         oModel.setProperty("/ordenes_compra", []);
         oModel.setProperty("/proyectos_inversion", []);
         oModel.setProperty("/p3s", []);
+        oModel.setProperty("/importes_p3", []);
         oModel.setProperty("/responsables", []);
         this.setUmMaximoPLazo();
         const oFirstStep = oWizard.getSteps().at(0);
@@ -172,7 +173,6 @@ sap.ui.define([
         oModel.setProperty("/ObraDetalle", oObraDetalle);
         oModel.setProperty("/Editable", oObraDetalle.estado_ID === "BO" || oObraDetalle.estado_ID === "RE");
         oModel.updateBindings(true);
-        await this.calculatePercentages(oObraDetalle);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
         MessageToast.show(message);
@@ -208,25 +208,11 @@ sap.ui.define([
 
     //Obtengo los importes y tipos de cambio de cada p3
     getImportesP3: function (oObra) {
-      const p3Data = [];
-      oObra.p3.forEach(p3 => {
-        const data = p3.importes.map(function (item) {
-          return {
-            importe: item.importe,
-            tipo_cambio: item.tipo_cambio,
-            moneda_ID: item.moneda_ID
-          };
-        });
-        const importes = data.map(o => o.importe).join(', ');
-        const tipos_cambio = data.map(o => o.tipo_cambio).join(', ');
-        const monedas = data.map(o => o.moneda_ID).join(', ');
-        p3.importesP3 = importes;
-        p3.tipos_cambioP3 = tipos_cambio;
-        p3.monedasP3 = monedas;
-        p3Data.push(p3);
-      });
-      const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/p3s", p3Data);
+      //const importes = [];
+      const oModel = this.getModel("AppJsonModel");     
+      const importes = oObra.p3.map(function(i){return i.importes}) 
+      oModel.setProperty("/p3s", oObra.p3);
+      oModel.setProperty("/importes_p3", importes[0]);
     },
 
     getPiList: function (oObra) {
@@ -453,7 +439,7 @@ sap.ui.define([
 			if (!this._pInspectorDialog) {
 				this._pInspectorDialog = Fragment.load({
 					id: oView.getId(),
-					name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpInspector",
+					name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpInspectores",
 					controller: this
 				}).then(function (oInspectorDialog){
 					oView.addDependent(oInspectorDialog);
@@ -487,7 +473,7 @@ sap.ui.define([
     //Agregar P3
     addP3: function () {
       const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/P3", {});
+      oModel.setProperty("/P3", {});      
       if (!this._oP3Dialog) {
         this._oP3Dialog = Fragment.load({
           id: this.getView().getId(),
@@ -509,7 +495,8 @@ sap.ui.define([
 
     confirmAddP3: function () {
       const oModel = this.getModel("AppJsonModel");
-      const P3 = oModel.getProperty("/P3");
+      const P3 = oModel.getProperty("/P3");      
+      //const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
       const p3s = oModel.getProperty("/p3s");
       p3s.push(P3);
       oModel.setProperty("/p3s", p3s);
@@ -523,6 +510,68 @@ sap.ui.define([
       const items = oModel.getProperty("/p3s");
       items.splice(idx, 1);
       this.byId("idP3Table").getBinding("items").refresh();
+    },
+
+    //Agregar importes para cada p3
+    addImporteP3: function () {
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/ImporteP3", {});
+      const ordenes_compra = oModel.getProperty("/ordenes_compra");
+      const monedasOC = ordenes_compra.map(function (item) {return {ID: item.moneda}}); 
+      oModel.setProperty("/Combos/MonedasP3", monedasOC);
+      const p3s = oModel.getProperty("/p3s");
+      const codigosP3 = p3s.map(function (item) {return {codigo: item.codigo}});
+      oModel.setProperty("/P3s", codigosP3);
+      if (!this._oP3ImporteDialog) {
+        this._oP3ImporteDialog = Fragment.load({
+          id: this.getView().getId(),
+          controller: this,
+          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AgregarImporteP3"
+        }).then(oDialog => {
+          this.getView().addDependent(oDialog);
+          return oDialog;
+        });
+      }
+      this._oP3ImporteDialog.then(oDialog => {
+        oDialog.open();
+      });
+    },
+
+    closeImporteP3Dialog: function () {
+      this.byId("idAddImporteP3Dialog").close();
+    },
+
+    confirmAddImporteP3: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const ImporteP3 = oModel.getProperty("/ImporteP3");      
+      //const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
+      const importes_p3 = oModel.getProperty("/importes_p3");
+      importes_p3.push(ImporteP3);
+      oModel.setProperty("/importes_p3", importes_p3);
+      this.closeImporteP3Dialog();
+    },
+
+    deleteImporteP3: function (oEvent) {
+      const oModel = this.getModel("AppJsonModel");
+      const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
+      const idx = /[0-9]+$/.exec(path)[0];
+      const items = oModel.getProperty("/importes_p3");
+      items.splice(idx, 1);
+      this.byId("idImportesP3Table").getBinding("items").refresh();
+    },
+
+    onMonedaP3Select: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const aOrdenesCompra = oModel.getProperty("/ordenes_compra");
+      const selected = oModel.getProperty("/ImporteP3/moneda");
+      const ocData = aOrdenesCompra.filter(item => item.moneda === selected);
+      oModel.setProperty("/ImporteP3/tipo_cambio", ocData[0].tipo_cambio);
+      const importe = oModel.getProperty("/ImporteP3/importe");
+      const tipo_cambio = oModel.getProperty("/ImporteP3/tipo_cambio")
+      if (importe !== "") {
+        const importe_ars = Number(importe) * Number(tipo_cambio);
+        oModel.setProperty("/ImporteP3/importe_ars", importe_ars);
+      }
     },
 
     //Selección de contratista
@@ -668,20 +717,34 @@ sap.ui.define([
             BusyIndicator.show(0);
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
-            await this.calculatePercentages(oObraDetalle);
             const aAreas = oModel.getProperty("/Combos/Areas");
-            const pi = oObraDetalle.proyectos_inversion.map(item => {
+            const responsables = oModel.responsables.map(item => { //--- TO DO
               return {
-                p3: item.p3,
+                direccion_ID: item.direccion,
+                gerencia_ID: item.gerencia,
+                inspectores: null 
+              }
+            }) 
+            
+            const proyectos_inversion = oObraDetalle.proyectos_inversion.map(item => {
+              return {
                 tipo_pi_ID: item.tipo_pi,
                 monto: item.importe,
                 moneda_ID: item.moneda,
                 sistema_contratacion_ID: item.sistema_contratacion,
-                pi: item.pi
+                pi: item.pi,
+                responsables: responsables //--- TO DO
+              };
+            });            
+            const importes_p3 = oModel.importes_p3.map(item => {
+              return {
+                moneda_ID: item.moneda,
+                tipo_cambio: item.tipo_cambio,
+                importe: item.importe,
+                porcentaje_ponderacion: item.porcentaje_ponderacion,
+                importe_ars: item.importe_ars
               };
             });
-            let proyectos_inversion = [];
-            proyectos_inversion.push(pi);
             const p3 = oModel.p3s.map(item => {
               return {
                 codigo: item.codigo,
@@ -694,16 +757,15 @@ sap.ui.define([
                 acumar: item.acumar,
                 acopio_materiales: item.acopio_materiales,
                 anticipo_financiero: item.anticipo_financiero,
-                descuento_monto_contrato: null, //dudas con este campo
-                importes: null, //to do
+                importes: importes_p3,
                 pi: proyectos_inversion
               };
             });
             const contratista = oObraDetalle.map(item => {
               return {
                 contratista_ID: item.registro_proveedor,
-                vigencia_desde: "2023-12-15", //de donde saco estas fechas?
-                vigencia_hasta: "2024-02-08"
+                vigencia_desde: "2023-12-20", 
+                vigencia_hasta: "9999-12-31"
               };
             });
             const ordenes_compra = oObraDetalle.ordenes_compra.map(item => {
@@ -712,7 +774,7 @@ sap.ui.define([
                 tipo_cambio: item.tipo_cambio,
                 no_redetermina: item.no_redetermina,
                 nro_oc: item.nro_oc,
-                revision: null, //de donde saco este campo?
+                revision: null, 
                 fecha: item.fecha
               };
             });
@@ -739,8 +801,7 @@ sap.ui.define([
               nro_poliza: oObraDetalle.nro_poliza,
               extendida_por: oObraDetalle.extendida_por,
               porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
-              direccion_ID: oObraDetalle.direccion_ID,
-              gerencia_ID: oObraDetalle.gerencia_ID
+              descuento_monto_contrato: oObraDetalle.descuento_monto_contrato
             };
             if (oObraDetalle.ID) {
               await Services.updateObra(oObraDetalle.ID, oPayload);
@@ -773,26 +834,26 @@ sap.ui.define([
       });
     },
 
-    calculatePercentages: function (oObraDetalle) {
-      const oModel = this.getModel("AppJsonModel");
-      const monto_total = oModel.getProperty("/monto_total");
-      let porcentaje_local = 0;
-      let porcentaje_extr = 0;
-      oObraDetalle.p3.forEach(p3 => {
-        p3.importes.forEach(i => {
-          if (i.moneda_ID === "ARS") {
-            porcentaje_local = (i.importe / monto_total) * 100;
-          } else {
-            porcentaje_extr = (i.importe / monto_total) * 100;
-          }
-        });
-        p3.moneda_local = porcentaje_local.toString();
-        p3.moneda_extranjera = porcentaje_extr.toString();
-      });
-    },
+    // calculatePercentages: function (oObraDetalle) {
+    //   const oModel = this.getModel("AppJsonModel");
+    //   const monto_total = oModel.getProperty("/monto_total");
+    //   let porcentaje_local = 0;
+    //   let porcentaje_extr = 0;
+    //   oObraDetalle.p3.forEach(p3 => {
+    //     p3.importes.forEach(i => {
+    //       if (i.moneda_ID === "ARS") {
+    //         porcentaje_local = (i.importe / monto_total) * 100;
+    //       } else {
+    //         porcentaje_extr = (i.importe / monto_total) * 100;
+    //       }
+    //     });
+    //     p3.moneda_local = porcentaje_local.toString();
+    //     p3.moneda_extranjera = porcentaje_extr.toString();
+    //   });
+    // },
 
     //TO DO
-    validateFields: function (oObraDetalle) {
+    validateFields: function () {
       const idMultiInputJefes = this.byId("idMultiInputJefes");
       const idMultiInputInspectores = this.byId("idMultiInputInspectores");
       const idStep1P3 = this.byId("idStep1P3");

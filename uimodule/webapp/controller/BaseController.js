@@ -69,22 +69,6 @@ sap.ui.define(
         }
       },
 
-      getPITable: function (pi = []) {
-
-        return pi.map(item => ({
-          ...item,
-          state: "None",
-          setValueState: function (sState) {
-            this.state = sState
-          },
-          getValueState: function () {
-            return this.state
-          },
-          getValue: function () {
-            return this.tipo_pi_ID
-          }
-        }))
-      },
     });
   }
 );

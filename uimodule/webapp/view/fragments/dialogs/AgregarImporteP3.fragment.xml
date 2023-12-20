@@ -1,0 +1,32 @@
+<core:FragmentDefinition xmlns="sap.m"
+  xmlns:l="sap.ui.layout"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:u="sap.ui.unified"
+  xmlns:core="sap.ui.core">
+  <Dialog id="idAddImporteP3Dialog" title="{i18n>agregarimportep3}" draggable="true">
+    <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
+      <Label text="{i18n>p3}"/>
+      <ComboBox items="{AppJsonModel>/P3s}" selectedKey="{AppJsonModel>/ImporteP3/p3}">
+        <core:Item key="{AppJsonModel>codigo}" text="{AppJsonModel>codigo}" />
+      </ComboBox>
+      <Label text="{i18n>importe}"/>
+      <Input value="{AppJsonModel>/ImporteP3/importe}"/>
+      <Label text="{i18n>moneda}"/>
+      <ComboBox items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/ImporteP3/moneda}" change="onMonedaP3Select">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
+      </ComboBox>
+      <Label text="{i18n>tipocambio}"/>
+      <Input value="{AppJsonModel>/ImporteP3/tipo_cambio}" editable="false"/>
+      <Label text="{i18n>importears}"/>
+      <Input value="{AppJsonModel>/ImporteP3/importe_ars}" editable="false"/>
+      <Label text="{i18n>porcentajeponderacion}"/>
+      <StepInput value="{AppJsonModel>/ImporteP3/porcentaje_ponderacion}" min="0" max="100" description="%" fieldWidth="90%"/>
+    </FlexBox>
+    <beginButton>
+      <Button text="{i18n>dialogCloseButtonText}" press="closeImporteP3Dialog" type="Default" />
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>dialogAceptButtonText}" press="confirmAddImporteP3" type="Emphasized" />
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

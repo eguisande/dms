@@ -6,7 +6,7 @@
       <form:content>
         <Table id="idP3Table" items="{AppJsonModel>/p3s}" fixedLayout="false" width="100%">
           <headerToolbar>
-            <Toolbar>
+            <Toolbar>             
               <ToolbarSpacer/>
               <Button tooltip="{i18n>agregarp3}" icon="sap-icon://add" press="addP3" type="Ghost"/>
             </Toolbar>
@@ -17,7 +17,7 @@
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>nombrep3}" />
-            </Column>         
+            </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>tipocontrato}" />
             </Column>
@@ -39,7 +39,7 @@
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>acopio}" />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true" >
+            <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>anticipofinanciero}" />
             </Column>            
             <Column minScreenWidth="Tablet" demandPopin="true">
@@ -61,6 +61,57 @@
                 <Text text="{AppJsonModel>anticipo_financiero}%"/>                
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteP3"/>
+                </HBox>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+      </form:content>
+    </form:SimpleForm>
+    <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+      <form:content>
+        <Table id="idImportesP3Table" items="{AppJsonModel>/importes_p3}" fixedLayout="false" width="100%">
+          <headerToolbar>
+            <Toolbar>
+              <Title text="{i18n>importesp3}" titleStyle="H6"/>
+              <ToolbarSpacer/>
+              <Button tooltip="{i18n>agregarimportep3}" icon="sap-icon://add" press="addImporteP3" type="Ghost"/>
+            </Toolbar>
+          </headerToolbar>
+          <columns>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nrop3}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>importe}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>importears}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>tipocambio}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>moneda}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>porcentajeponderacion}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="Acciones" />
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem vAlign="Middle">
+              <cells>
+                <Text text="{AppJsonModel>p3}"/>
+                <Text text="{AppJsonModel>importe}"/>
+                <Text text="{AppJsonModel>importe_ars}"/>
+                <Text text="{AppJsonModel>tipo_cambio}"/>
+                <Text text="{AppJsonModel>moneda}"/>
+                <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>
+                <HBox>
+                  <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteImporteP3"/>
                 </HBox>
               </cells>
             </ColumnListItem>

@@ -3,7 +3,7 @@
   xmlns:f="sap.ui.layout.form"
   xmlns:u="sap.ui.unified"
   xmlns:core="sap.ui.core">
-  <Dialog id="idAddOCDialog" title="Agregar orden de compra" draggable="true">
+  <Dialog id="idAddOCDialog" title="{i18n>agregaroc}" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>nroordencompra}"/>
       <Input value="{AppJsonModel>/OrdenCompra/nro_oc}" editable="true"/>
@@ -11,7 +11,7 @@
       <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/OrdenCompra/fecha}"/>
       <Label text="{i18n>moneda}"/>
       <ComboBox items="{AppJsonModel>/Combos/Monedas}" editable="true" selectedKey="{AppJsonModel>/OrdenCompra/moneda}">
-        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
       <Label text="{i18n>tasa}"/>
       <Input value="{AppJsonModel>/OrdenCompra/tipo_cambio}" editable="true" type="Number"/>

@@ -3,30 +3,30 @@
   xmlns:f="sap.ui.layout.form"
   xmlns:u="sap.ui.unified"
   xmlns:core="sap.ui.core">
-  <Dialog id="idAddP3Dialog" title="Agregar P3" draggable="true">
+  <Dialog id="idAddP3Dialog" title="{i18n>agregarp3}" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>nrop3}"/>
-      <Input value="{AppJsonModel>/P3/codigo}" editable="true"/>   
+      <Input value="{AppJsonModel>/P3/codigo}"/>   
       <Label text="{i18n>nombrep3}"/>
-      <Input value="{AppJsonModel>/P3/nombre}" editable="true"/>      
+      <Input value="{AppJsonModel>/P3/nombre}"/>      
       <Label text="{i18n>tipocontrato}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_contrato}">
+      <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/P3/tipo_contrato}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tipofluido}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Fluidos}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_fluido}">
+      <ComboBox items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/P3/tipo_fluido}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tipoobra}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposObras}" editable="true" selectedKey="{AppJsonModel>/P3/tipo_obra}">
+      <ComboBox items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/P3/tipo_obra}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>partido}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Partidos}" editable="true" selectedKey="{AppJsonModel>/P3/partido}">
+      <ComboBox items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/P3/partido}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>sistema}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Sistemas}" editable="true" selectedKey="{AppJsonModel>/P3/sistema_cuenca}">
+      <ComboBox items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/P3/sistema_cuenca}">
         <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>acumar}"/>
@@ -34,7 +34,7 @@
       <Label text="{i18n>acopio}"/>
       <Switch state="{AppJsonModel>/P3/acopio}" customTextOn="Si" customTextOff="No"/>
       <Label text="{i18n>anticipofinanciero}"/>
-      <StepInput value="{AppJsonModel>/P3/anticipo_financiero}" min="0" max="100" editable="true" description="%" fieldWidth="90%"/>
+      <StepInput value="{AppJsonModel>/P3/anticipo_financiero}" min="0" max="100" description="%" fieldWidth="90%"/>     
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closeP3Dialog" type="Default" />

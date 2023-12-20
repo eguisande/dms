@@ -12,15 +12,15 @@
       <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}" textAlign="End"/>
       <Label text="{i18n>moneda}" required="true"/>
       <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/ObraDetalle/moneda_ID}">
-        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
       <Label text="{i18n>registroproveedor}" required="true"/>
       <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/ObraDetalle/registro_proveedor}" change="onChangeContratista">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
       </ComboBox>
-      <Label text="{i18n>razonsocial}" required="true"/>
+      <Label text="{i18n>razonsocial}"/>
       <Input value="{AppJsonModel>/ObraDetalle/razonsocial}" editable="false"/>
-      <Label text="{i18n>cuitcuilcdi}" required="true"/>
+      <Label text="{i18n>cuitcuilcdi}"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_documento}" editable="false"/>
       <!-- Responsables contratista -->
       <core:Title text="{i18n>respcontratista}" />
@@ -47,7 +47,7 @@
       <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" editable="false">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>plazomaxejecucion}" required="true"/>
+      <Label text="{i18n>plazomaxejecucion}"/>
       <Input value="{AppJsonModel>/ObraDetalle/maximo_plazo_extension}" type="Number" editable="false"/>
       <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_maximo_ID}" editable="false">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
@@ -58,6 +58,8 @@
       <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
+      <Label text="{i18n>descuentomonto}"/>
+      <StepInput value="{AppJsonModel>/ObraDetalle/descuento_monto_contrato}" min="0" max="100" description="%" fieldWidth="90%"/>
       <!-- Garantia por ejecucion de contrato -->
       <core:Title text="{i18n>garantiaejecucion}" />
       <Label text="{i18n>nropoliza}" required="true"/>
