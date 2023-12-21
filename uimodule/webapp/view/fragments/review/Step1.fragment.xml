@@ -13,7 +13,9 @@
         <Label text="{i18n>moneda}"/>
         <Input value="{AppJsonModel>/ObraDetalle/moneda_ID}" editable="false"/>
         <Label text="{i18n>registroproveedor}"/>
-        <Input value="{AppJsonModel>/ObraDetalle/registro_proveedor}" editable="false"/>        
+        <ComboBox items="{AppJsonModel>/Combos/Contratistas}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/contratista_ID}" >
+            <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
+        </ComboBox>
         <Label text="{i18n>razonsocial}"/>
         <Input value="{AppJsonModel>/ObraDetalle/razonsocial}" editable="false"/>
         <Label text="{i18n>cuitcuilcdi}"/>

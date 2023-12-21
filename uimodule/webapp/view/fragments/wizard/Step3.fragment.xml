@@ -6,7 +6,7 @@
       <form:content>
         <Table id="idP3Table" items="{AppJsonModel>/p3s}" fixedLayout="false" width="100%">
           <headerToolbar>
-            <Toolbar>             
+            <Toolbar>
               <ToolbarSpacer/>
               <Button tooltip="{i18n>agregarp3}" icon="sap-icon://add" press="addP3" type="Ghost"/>
             </Toolbar>
@@ -17,6 +17,12 @@
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>nombrep3}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nropi}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>montopi}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>tipocontrato}" />
@@ -41,7 +47,7 @@
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>anticipofinanciero}" />
-            </Column>            
+            </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="Acciones" />
             </Column>
@@ -51,14 +57,26 @@
               <cells>
                 <Text text="{AppJsonModel>codigo}" />
                 <Text text="{AppJsonModel>nombre}" />
-                <Text text="{AppJsonModel>tipo_contrato}" />
-                <Text text="{AppJsonModel>tipo_fluido}" />
-                <Text text="{AppJsonModel>tipo_obra}" />
-                <Text text="{AppJsonModel>partido}" />
-                <Text text="{AppJsonModel>sistema_cuenca}" />
+                <Text text="{AppJsonModel>nros_pi}" />
+                <Text text="{AppJsonModel>montos_pi}" />
+                <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" editable="false" selectedKey="{AppJsonModel>tipo_contrato_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <ComboBox items="{AppJsonModel>/Combos/Fluidos}" editable="false" selectedKey="{AppJsonModel>fluido_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <ComboBox items="{AppJsonModel>/Combos/TiposObras}" editable="false" selectedKey="{AppJsonModel>tipo_obra_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <ComboBox items="{AppJsonModel>/Combos/Partidos}" editable="false" selectedKey="{AppJsonModel>partido_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <ComboBox items="{AppJsonModel>/Combos/Sistemas}" editable="false" selectedKey="{AppJsonModel>sistema_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
                 <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
                 <Switch state="{AppJsonModel>acopio}" customTextOn="Si" customTextOff="No" enabled="false"/>
-                <Text text="{AppJsonModel>anticipo_financiero}%"/>                
+                <Text text="{AppJsonModel>anticipo_financiero}%"/>
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteP3"/>
                 </HBox>
@@ -104,11 +122,11 @@
           <items>
             <ColumnListItem vAlign="Middle">
               <cells>
-                <Text text="{AppJsonModel>p3}"/>
+                <Text text="{AppJsonModel>codigo}"/>
                 <Text text="{AppJsonModel>importe}"/>
                 <Text text="{AppJsonModel>importe_ars}"/>
                 <Text text="{AppJsonModel>tipo_cambio}"/>
-                <Text text="{AppJsonModel>moneda}"/>
+                <Text text="{AppJsonModel>moneda_ID}"/>
                 <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteImporteP3"/>

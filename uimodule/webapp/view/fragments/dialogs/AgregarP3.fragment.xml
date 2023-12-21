@@ -10,24 +10,24 @@
       <Label text="{i18n>nombrep3}"/>
       <Input value="{AppJsonModel>/P3/nombre}"/>      
       <Label text="{i18n>tipocontrato}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/P3/tipo_contrato}">
-        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/P3/tipo_contrato_ID}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tipofluido}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/P3/tipo_fluido}">
-        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      <ComboBox items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/P3/fluido_ID}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>tipoobra}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/P3/tipo_obra}">
-        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      <ComboBox items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/P3/tipo_obra_ID}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>partido}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/P3/partido}">
-        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      <ComboBox items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/P3/partido_ID}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>sistema}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/P3/sistema_cuenca}">
-        <core:Item key="{AppJsonModel>descripcion}" text="{AppJsonModel>descripcion}" />
+      <ComboBox items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/P3/sistema_ID}">
+        <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>acumar}"/>
       <Switch state="{AppJsonModel>/P3/acumar}" customTextOn="Si" customTextOff="No"/>

@@ -9,13 +9,13 @@
       <Label text="{i18n>nrocontrato}" required="true"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}"/>
       <Label text="{i18n>monto}" required="true"/>
-      <Input value="{AppJsonModel>/ObraDetalle/monto_contrato}" textAlign="End"/>
+      <Input value="{AppJsonModel>/monto_contrato}" textAlign="End"/>
       <Label text="{i18n>moneda}" required="true"/>
       <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" selectedKey="{AppJsonModel>/ObraDetalle/moneda_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
       <Label text="{i18n>registroproveedor}" required="true"/>
-      <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/ObraDetalle/registro_proveedor}" change="onChangeContratista">
+      <ComboBox id="idComboContratista" items="{AppJsonModel>/Combos/Contratistas}" selectedKey="{AppJsonModel>/ObraDetalle/contratista_ID}" change="onChangeContratista">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>registro_proveedor}" />
       </ComboBox>
       <Label text="{i18n>razonsocial}"/>
@@ -33,7 +33,7 @@
       <Label text="Representate Técnico Contratista"/>
       <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
       <Label text="Matrícula"/>
-      <Input value="{AppJsonModel>/ObraDetalle/matricula}" type="Number"/>
+      <Input value="{AppJsonModel>/ObraDetalle/nro_matricula}" type="Number"/>
       <Label text="{i18n>apoderado}"/>
       <Input value="{AppJsonModel>/ObraDetalle/apoderado}"/> 
       <!-- Datos financieros y cumplimientos       -->

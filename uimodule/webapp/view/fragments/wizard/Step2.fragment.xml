@@ -36,7 +36,7 @@
               <cells>
                 <Text text="{AppJsonModel>nro_oc}" />
                 <Text text="{path: 'AppJsonModel>fecha', formatter: '.formatter.formatDateTime'}" />
-                <Text text="{AppJsonModel>moneda}" />
+                <Text text="{AppJsonModel>moneda_ID}" />
                 <Text text="{AppJsonModel>tipo_cambio}" />
                 <Switch state="{AppJsonModel>no_redetermina}" customTextOn="Si" customTextOff="No" enabled="false"/>
                 <HBox>

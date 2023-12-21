@@ -10,6 +10,9 @@
             <Text text="{i18n>nrop3}" />
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>nombrep3}" />
+          </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nropi}" />
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
@@ -44,13 +47,24 @@
           <ColumnListItem vAlign="Middle">
             <cells>
               <Text text="{AppJsonModel>codigo}" />
+              <Text text="{AppJsonModel>nombre}" />
               <Text text="{AppJsonModel>nros_pi}" />
               <Text text="{AppJsonModel>montos_pi}" />
-              <Text text="{AppJsonModel>tipo_contrato/descripcion}" />
-              <Text text="{AppJsonModel>fluido/descripcion}" />
-              <Text text="{AppJsonModel>tipo_obra/descripcion}" />
-              <Text text="{AppJsonModel>partido/descripcion}" />
-              <Text text="{AppJsonModel>sistema/descripcion}" />
+              <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" editable="false" selectedKey="{AppJsonModel>tipo_contrato_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
+              <ComboBox items="{AppJsonModel>/Combos/Fluidos}" editable="false" selectedKey="{AppJsonModel>fluido_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
+              <ComboBox items="{AppJsonModel>/Combos/TiposObras}" editable="false" selectedKey="{AppJsonModel>tipo_obra_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
+              <ComboBox items="{AppJsonModel>/Combos/Partidos}" editable="false" selectedKey="{AppJsonModel>partido_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
+              <ComboBox items="{AppJsonModel>/Combos/Sistemas}" editable="false" selectedKey="{AppJsonModel>sistema_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
               <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
               <Switch state="{AppJsonModel>acopio}" customTextOn="Si" customTextOff="No" enabled="false"/>
               <Text text="{AppJsonModel>anticipo_financiero}%"/>
@@ -66,7 +80,7 @@
         <headerToolbar>
           <Toolbar>
             <Title text="{i18n>importesp3}" titleStyle="H6"/>
-            <ToolbarSpacer/>            
+            <ToolbarSpacer/>
           </Toolbar>
         </headerToolbar>
         <columns>
@@ -87,17 +101,17 @@
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>porcentajeponderacion}" />
-          </Column>          
+          </Column>
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
-              <Text text="{AppJsonModel>p3/codigo}"/>
+              <Text text="{AppJsonModel>codigo}"/>
               <Text text="{AppJsonModel>importe}"/>
               <Text text="{AppJsonModel>importe_ars}"/>
               <Text text="{AppJsonModel>tipo_cambio}"/>
               <Text text="{AppJsonModel>moneda_ID}"/>
-              <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>             
+              <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>
             </cells>
           </ColumnListItem>
         </items>

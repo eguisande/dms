@@ -4,7 +4,7 @@
   xmlns="sap.m">
   <form:SimpleForm title="{i18n>pi}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/proyectos_inversion}" fixedLayout="false" width="100%">        
+      <Table items="{AppJsonModel>/proyectos_inversion}" fixedLayout="false" width="100%">
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nrop3}" />
@@ -21,18 +21,22 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>importe}" />
             <footer >
-               <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'} ARS" />
+              <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'} ARS" />
             </footer>
-          </Column>          
+          </Column>
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
-              <Text text="{AppJsonModel>p3/codigo}" />
+              <Text text="{AppJsonModel>codigo}" />
               <Text text="{AppJsonModel>pi}" />
-              <Text text="{AppJsonModel>tipo_pi/descripcion}" />
-              <Text text="{AppJsonModel>sistema_contratacion/descripcion}" />
-              <Text text="{AppJsonModel>monto} {AppJsonModel>moneda_ID}" />             
+              <ComboBox items="{AppJsonModel>/Combos/TiposPI}" editable="false" selectedKey="{AppJsonModel>tipo_pi_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
+              <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" editable="false" selectedKey="{AppJsonModel>sistema_contratacion_ID}">
+                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+              </ComboBox>
+              <Text text="{AppJsonModel>monto} {AppJsonModel>moneda_ID}" />
             </cells>
           </ColumnListItem>
         </items>

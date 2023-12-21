@@ -38,11 +38,15 @@
           <items>
             <ColumnListItem vAlign="Middle">
               <cells>
-                <Text text="{AppJsonModel>p3}" />
+                <Text text="{AppJsonModel>codigo}" />
                 <Text text="{AppJsonModel>pi}" />
-                <Text text="{AppJsonModel>tipo_pi}" />
-                <Text text="{AppJsonModel>sistema_contratacion}" />
-                <Text text="{AppJsonModel>importe} {AppJsonModel>moneda_ID}" />
+                <ComboBox items="{AppJsonModel>/Combos/TiposPI}" editable="false" selectedKey="{AppJsonModel>tipo_pi_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" editable="false" selectedKey="{AppJsonModel>sistema_contratacion_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <Text text="{AppJsonModel>monto} {AppJsonModel>moneda_ID}" />
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deletePI"/>
                 </HBox>
@@ -51,6 +55,6 @@
           </items>
         </Table>
       </form:content>
-    </form:SimpleForm>    
+    </form:SimpleForm>
   </WizardStep>
 </core:FragmentDefinition>

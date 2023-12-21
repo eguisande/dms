@@ -157,7 +157,7 @@ sap.ui.define([
         //Lista de pi para tabla de proyectos de inversion
         await this.getPiList(oObra);
         //Obtengo los importes y tipos de cambio de cada p3
-        await this.getImportesP3(oObra);
+        await this.getP3Data(oObra);
         //Lista de responsables de cada pi - to do 
         //await this.getResponsables(oObra);        
         const oObraDetalle = {          
@@ -165,7 +165,7 @@ sap.ui.define([
           ...oObra,
           fecha_firma: this.formatter.formatDateInput(oObra.fecha_firma),
           monto_total: this.getMontoTotal(oObra),
-          registro_proveedor: oObra.contratista[0].contratista.registro_proveedor,
+          contratista_ID: oObra.contratista[0].contratista_ID,
           razonsocial: oObra.contratista[0].contratista.razonsocial,
           nro_documento: oObra.contratista[0].contratista.nro_documento,
           //responsables: responsables TO DO cuando tenga el expand
@@ -207,12 +207,16 @@ sap.ui.define([
     },
 
     //Obtengo los importes y tipos de cambio de cada p3
-    getImportesP3: function (oObra) {
-      //const importes = [];
-      const oModel = this.getModel("AppJsonModel");     
-      const importes = oObra.p3.map(function(i){return i.importes}) 
+    getP3Data: function (oObra) {
+      const oModel = this.getModel("AppJsonModel");           
+      const importes = oObra.p3.map(function(i){return i.importes}); 
+      let arr = []           
+      importes[0].forEach(item => {
+        item.codigo = item.p3.codigo
+        arr.push(item)
+      })
       oModel.setProperty("/p3s", oObra.p3);
-      oModel.setProperty("/importes_p3", importes[0]);
+      oModel.setProperty("/importes_p3", arr);
     },
 
     getPiList: function (oObra) {
@@ -222,6 +226,9 @@ sap.ui.define([
           piData.push(pi);
         });
       });
+      piData.forEach(item => {
+        item.codigo = item.p3.codigo
+      })
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/proyectos_inversion", piData);
     },    
@@ -290,6 +297,14 @@ sap.ui.define([
     addPI: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/PI", {});
+      //Combo de p3s
+      const p3s = oModel.getProperty("/p3s");
+      const codigosP3 = p3s.map(function (item) {return {codigo: item.codigo}});
+      oModel.setProperty("/P3s", codigosP3);
+      //Combo de monedas
+      const ordenes_compra = oModel.getProperty("/ordenes_compra");
+      const monedasOC = ordenes_compra.map(function (item) {return {ID: item.moneda_ID}}); 
+      oModel.setProperty("/Combos/MonedasP3", monedasOC);
       if (!this._oPIDialog) {
         this._oPIDialog = Fragment.load({
           id: this.getView().getId(),
@@ -331,16 +346,18 @@ sap.ui.define([
       this.byId("idProyectosInversionTable").getBinding("items").refresh();
     },
 
-    //Sumo los importes de cada pi
+    //Sumo los importes de cada pi - TO DO
     sumaImportes: function (importes) {
       const oModel = this.getModel("AppJsonModel");
+      const ordenes_compra = oModel.getProperty("/ordenes_compra");
       let suma = 0;
       importes.forEach(e => {
-        if (e.tipo_cambio !== 1) {
-          let montoArs = Number(e.importe) * Number(e.tipo_cambio);
+        if (e.moneda_ID !== "ARS") {
+          //const cambio = tipos_cambio.find(i=>i.moneda_ID)
+          let montoArs = Number(e.monto) * Number(e.tipo_cambio);
           suma = suma + montoArs;
         } else {
-          suma = suma + Number(e.importe);
+          suma = suma + Number(e.monto);
         }
       });
       oModel.setProperty("/monto_total", suma);
@@ -496,7 +513,6 @@ sap.ui.define([
     confirmAddP3: function () {
       const oModel = this.getModel("AppJsonModel");
       const P3 = oModel.getProperty("/P3");      
-      //const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
       const p3s = oModel.getProperty("/p3s");
       p3s.push(P3);
       oModel.setProperty("/p3s", p3s);
@@ -517,7 +533,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/ImporteP3", {});
       const ordenes_compra = oModel.getProperty("/ordenes_compra");
-      const monedasOC = ordenes_compra.map(function (item) {return {ID: item.moneda}}); 
+      const monedasOC = ordenes_compra.map(function (item) {return {ID: item.moneda_ID}}); 
       oModel.setProperty("/Combos/MonedasP3", monedasOC);
       const p3s = oModel.getProperty("/p3s");
       const codigosP3 = p3s.map(function (item) {return {codigo: item.codigo}});
@@ -578,7 +594,7 @@ sap.ui.define([
     onChangeContratista: function () {
       const oModel = this.getModel("AppJsonModel");
       const aContratistas = oModel.getProperty("/Combos/Contratistas");
-      const selected = oModel.getProperty("/ObraDetalle/registro_proveedor");
+      const selected = oModel.getProperty("/ObraDetalle/contratista_ID");
       const contratistaData = aContratistas.filter(item => item.ID === selected);
       oModel.setProperty("/ObraDetalle/razonsocial", contratistaData[0].razonsocial);
       oModel.setProperty("/ObraDetalle/nro_documento", contratistaData[0].nro_documento);
@@ -587,19 +603,6 @@ sap.ui.define([
     //TO DO
     getResponsables: function (oObra) {
 
-    },
-
-    //TO DO - validar campos obligatorios
-    wizardCompletedHandler: function () {
-      const oModel = this.getModel("AppJsonModel");
-      const oObraDetalle = oModel.getProperty("/ObraDetalle");
-      // if (this.validateFields(oObraDetalle) && !oModel.getProperty("/Detalle")) {
-      //   const message = this.getResourceBundle().getText("errorfields");
-      //   return MessageToast.show(message);
-      // }
-      const oNavPage = this.byId("wizardNavContainer");
-      const oPageReview = this.byId("wizardReviewPage");
-      oNavPage.to(oPageReview);
     },
 
     //Seteo las gerencias que corresponden a cada direccion en los combos del apartado de responsables
@@ -614,6 +617,19 @@ sap.ui.define([
         value1: sDireccion
       })];
       oBinding.filter(aFilter);
+    },
+
+     //TO DO - validar campos obligatorios
+     wizardCompletedHandler: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const oObraDetalle = oModel.getProperty("/ObraDetalle");
+      // if (this.validateFields(oObraDetalle) && !oModel.getProperty("/Detalle")) {
+      //   const message = this.getResourceBundle().getText("errorfields");
+      //   return MessageToast.show(message);
+      // }
+      const oNavPage = this.byId("wizardNavContainer");
+      const oPageReview = this.byId("wizardReviewPage");
+      oNavPage.to(oPageReview);
     },
 
     editStepOne: function () {
@@ -718,22 +734,22 @@ sap.ui.define([
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
             const aAreas = oModel.getProperty("/Combos/Areas");
-            const responsables = oModel.responsables.map(item => { //--- TO DO
-              return {
-                direccion_ID: item.direccion,
-                gerencia_ID: item.gerencia,
-                inspectores: null 
-              }
-            }) 
-            
-            const proyectos_inversion = oObraDetalle.proyectos_inversion.map(item => {
+            // const responsables = oModel.responsables.map(item => { //--- TO DO
+            //   return {
+            //     direccion_ID: item.direccion,
+            //     gerencia_ID: item.gerencia,
+            //     inspectores: null 
+            //   }
+            // })             
+            const proyectos_inversion = oModel.proyectos_inversion.map(item => {
               return {
                 tipo_pi_ID: item.tipo_pi,
                 monto: item.importe,
                 moneda_ID: item.moneda,
                 sistema_contratacion_ID: item.sistema_contratacion,
                 pi: item.pi,
-                responsables: responsables //--- TO DO
+                responsables: null
+                //responsables: responsables //--- TO DO
               };
             });            
             const importes_p3 = oModel.importes_p3.map(item => {
@@ -748,14 +764,13 @@ sap.ui.define([
             const p3 = oModel.p3s.map(item => {
               return {
                 codigo: item.codigo,
-                tipo_obra_ID: item.tipo_obra_ID,
-                tipo_contrato_ID: item.tipo_contrato_ID,
-                fluido_ID: item.fluido_ID,
-                partido_ID: item.partido_ID,
-                sistema_ID: item.sistema_ID,
-                obra_ID: item.obra_ID,
+                tipo_obra_ID: item.tipo_obra,
+                tipo_contrato_ID: item.tipo_contrato,
+                fluido_ID: item.fluido,
+                partido_ID: item.partido,
+                sistema_ID: item.sistema,
                 acumar: item.acumar,
-                acopio_materiales: item.acopio_materiales,
+                acopio_materiales: item.acopio,
                 anticipo_financiero: item.anticipo_financiero,
                 importes: importes_p3,
                 pi: proyectos_inversion
@@ -768,7 +783,7 @@ sap.ui.define([
                 vigencia_hasta: "9999-12-31"
               };
             });
-            const ordenes_compra = oObraDetalle.ordenes_compra.map(item => {
+            const ordenes_compra = oModel.ordenes_compra.map(item => {
               return {
                 moneda_ID: item.moneda_ID,
                 tipo_cambio: item.tipo_cambio,

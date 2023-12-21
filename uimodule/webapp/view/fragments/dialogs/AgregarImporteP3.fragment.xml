@@ -6,13 +6,13 @@
   <Dialog id="idAddImporteP3Dialog" title="{i18n>agregarimportep3}" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>p3}"/>
-      <ComboBox items="{AppJsonModel>/P3s}" selectedKey="{AppJsonModel>/ImporteP3/p3}">
+      <ComboBox items="{AppJsonModel>/P3s}" selectedKey="{AppJsonModel>/ImporteP3/codigo}">
         <core:Item key="{AppJsonModel>codigo}" text="{AppJsonModel>codigo}" />
       </ComboBox>
       <Label text="{i18n>importe}"/>
       <Input value="{AppJsonModel>/ImporteP3/importe}"/>
       <Label text="{i18n>moneda}"/>
-      <ComboBox items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/ImporteP3/moneda}" change="onMonedaP3Select">
+      <ComboBox items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/ImporteP3/moneda_ID}" change="onMonedaP3Select">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
       <Label text="{i18n>tipocambio}"/>
