@@ -5,36 +5,36 @@
   xmlns:core="sap.ui.core">
   <Dialog id="idAddP3Dialog" title="{i18n>agregarp3}" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
-      <Label text="{i18n>nrop3}"/>
-      <Input value="{AppJsonModel>/P3/codigo}"/>   
-      <Label text="{i18n>nombrep3}"/>
-      <Input value="{AppJsonModel>/P3/nombre}"/>      
-      <Label text="{i18n>tipocontrato}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/P3/tipo_contrato_ID}">
+      <Label text="{i18n>nrop3}" required="true"/>
+      <Input id="idInputCodigoP3" value="{AppJsonModel>/P3/codigo}"/>   
+      <Label text="{i18n>nombrep3}" required="true"/>
+      <Input id="idInputNombreP3" value="{AppJsonModel>/P3/nombre}"/>      
+      <Label text="{i18n>tipocontrato}" required="true"/>
+      <ComboBox id="idComboTipoContratoP3" items="{AppJsonModel>/Combos/TiposContratos}" selectedKey="{AppJsonModel>/P3/tipo_contrato_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>tipofluido}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/P3/fluido_ID}">
+      <Label text="{i18n>tipofluido}" required="true"/>
+      <ComboBox id="idComboFluidoP3" items="{AppJsonModel>/Combos/Fluidos}" selectedKey="{AppJsonModel>/P3/fluido_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>tipoobra}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/P3/tipo_obra_ID}">
+      <Label text="{i18n>tipoobra}" required="true"/>
+      <ComboBox id="idComboTipoObraP3" items="{AppJsonModel>/Combos/TiposObras}" selectedKey="{AppJsonModel>/P3/tipo_obra_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>partido}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/P3/partido_ID}">
+      <Label text="{i18n>partido}" required="true"/>
+      <ComboBox id="idComboPartidoP3" items="{AppJsonModel>/Combos/Partidos}" selectedKey="{AppJsonModel>/P3/partido_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>sistema}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/P3/sistema_ID}">
+      <Label text="{i18n>sistema}" required="true"/>
+      <ComboBox id="idComboSistemaP3" items="{AppJsonModel>/Combos/Sistemas}" selectedKey="{AppJsonModel>/P3/sistema_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>acumar}"/>
+      <Label text="{i18n>acumar}" required="true"/>
       <Switch state="{AppJsonModel>/P3/acumar}" customTextOn="Si" customTextOff="No"/>
-      <Label text="{i18n>acopio}"/>
+      <Label text="{i18n>acopio}" required="true"/>
       <Switch state="{AppJsonModel>/P3/acopio}" customTextOn="Si" customTextOff="No"/>
-      <Label text="{i18n>anticipofinanciero}"/>
-      <StepInput value="{AppJsonModel>/P3/anticipo_financiero}" min="0" max="100" description="%" fieldWidth="90%"/>     
+      <Label text="{i18n>anticipofinanciero}" required="true"/>
+      <StepInput id="idInputAnticipoP3" value="{AppJsonModel>/P3/anticipo_financiero}" min="0" max="100" description="%" fieldWidth="90%"/>     
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closeP3Dialog" type="Default" />

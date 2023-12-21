@@ -29,7 +29,7 @@
       <Label text="{i18n>telefono}"/>
       <Input value="{AppJsonModel>/ObraDetalle/telefono}" type="Number"/>
       <Label text="{i18n>correo}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/correo}" type="Email"/>
+      <Input value="{AppJsonModel>/ObraDetalle/correo}" type="Email" required="true"/>
       <Label text="Representate Técnico Contratista"/>
       <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
       <Label text="Matrícula"/>
@@ -58,7 +58,7 @@
       <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>descuentomonto}"/>
+      <Label text="{i18n>descuentomonto}" required="true"/>
       <StepInput value="{AppJsonModel>/ObraDetalle/descuento_monto_contrato}" min="0" max="100" description="%" fieldWidth="90%"/>
       <!-- Garantia por ejecucion de contrato -->
       <core:Title text="{i18n>garantiaejecucion}" />

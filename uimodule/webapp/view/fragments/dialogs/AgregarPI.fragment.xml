@@ -5,24 +5,24 @@
   xmlns:core="sap.ui.core">
   <Dialog id="idAddPIDialog" title="{i18n>agregarpi}" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
-      <Label text="{i18n>nrop3}"/>
-      <ComboBox items="{AppJsonModel>/P3s}" editable="true" selectedKey="{AppJsonModel>/PI/codigo}">
+      <Label text="{i18n>nrop3}" required="true"/>
+      <ComboBox id="idComboP3sPI" items="{AppJsonModel>/P3s}" editable="true" selectedKey="{AppJsonModel>/PI/codigo}">
         <core:Item key="{AppJsonModel>codigo}" text="{AppJsonModel>codigo}" />
       </ComboBox>
-      <Label text="{i18n>nropi}"/>
-      <Input value="{AppJsonModel>/PI/pi}" editable="true"/>
-      <Label text="{i18n>tipopi}"/>
-      <ComboBox items="{AppJsonModel>/Combos/TiposPI}" editable="true" selectedKey="{AppJsonModel>/PI/tipo_pi_ID}">
+      <Label text="{i18n>nropi}" required="true"/>
+      <Input id="idNroPI" value="{AppJsonModel>/PI/pi}" editable="true"/>
+      <Label text="{i18n>tipopi}" required="true"/>
+      <ComboBox id="idComboTiposPI" items="{AppJsonModel>/Combos/TiposPI}" editable="true" selectedKey="{AppJsonModel>/PI/tipo_pi_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>sistemacontratacion}"/>
-      <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" editable="true" selectedKey="{AppJsonModel>/PI/sistema_contratacion_ID}">
+      <Label text="{i18n>sistemacontratacion}" required="true"/>
+      <ComboBox id="idComboSistContrat" items="{AppJsonModel>/Combos/SistemasContratacion}" editable="true" selectedKey="{AppJsonModel>/PI/sistema_contratacion_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
-      <Label text="{i18n>importe}"/>
-      <Input value="{AppJsonModel>/PI/monto}" editable="true" type="Number"/>
-      <Label text="{i18n>moneda}"/>
-      <ComboBox items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/PI/moneda_ID}">
+      <Label text="{i18n>importe}" required="true"/>
+      <Input id="idMontoPI" value="{AppJsonModel>/PI/monto}" editable="true" type="Number"/>
+      <Label text="{i18n>moneda}" required="true"/>
+      <ComboBox id="idComboMonedasPI" items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/PI/moneda_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
     </FlexBox>

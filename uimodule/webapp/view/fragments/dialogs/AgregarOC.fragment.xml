@@ -9,13 +9,13 @@
       <Input value="{AppJsonModel>/OrdenCompra/nro_oc}" editable="true"/>
       <Label text="{i18n>fechaordencompra}"/>
       <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/OrdenCompra/fecha}"/>
-      <Label text="{i18n>moneda}"/>
-      <ComboBox items="{AppJsonModel>/Combos/Monedas}" editable="true" selectedKey="{AppJsonModel>/OrdenCompra/moneda_ID}">
+      <Label text="{i18n>moneda}" required="true"/>
+      <ComboBox id="idComboMonedasOC" items="{AppJsonModel>/Combos/Monedas}" editable="true" selectedKey="{AppJsonModel>/OrdenCompra/moneda_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
-      <Label text="{i18n>tasa}"/>
-      <Input value="{AppJsonModel>/OrdenCompra/tipo_cambio}" editable="true" type="Number"/>
-      <Label text="{i18n>noredetermina}"/>
+      <Label text="{i18n>tasa}" required="true"/>
+      <Input id="idInputTipoCambioOC" value="{AppJsonModel>/OrdenCompra/tipo_cambio}" editable="true" type="Number"/>
+      <Label text="{i18n>noredetermina}" required="true"/>
       <Switch state="{AppJsonModel>/OrdenCompra/no_redetermina}" customTextOn="Si" customTextOff="No"/>
     </FlexBox>
     <beginButton>

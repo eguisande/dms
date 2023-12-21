@@ -66,25 +66,25 @@ sap.ui.define([], function () {
 
     getObras: function () {
       return this.callGetService(
-        "Obras?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
+        "Obras?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
       );
     },
 
     getObrasJefeInspector: function (usuario, tipo_inspector) {
       return this.callGetService(
-        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
+        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObrasByContratista: function (usuario) {
       return this.callGetService(
-        `getObrasByContratista(usuario='${usuario}')?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
+        `getObrasByContratista(usuario='${usuario}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObra: function (ID) {
       return this.callGetService(
-        `Obras/${ID}?$expand=estado,financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)`
+        `Obras/${ID}?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)`
       );
     },
 
@@ -97,7 +97,7 @@ sap.ui.define([], function () {
     },
 
     getResponsables: function (ID) {
-      return this.callGetService("ResponsablesPI");
+      return this.callGetService("ResponsablesPI?$expand=pi,responsables($expand=inspectores)");
     },
 
     getDirecciones: function () {

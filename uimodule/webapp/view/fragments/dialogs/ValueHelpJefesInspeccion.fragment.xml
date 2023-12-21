@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m"
   xmlns:core="sap.ui.core">
-  <SelectDialog multiSelect="true" title="{i18n>agregarjefesinspeccion}" search="searchJefesInspeccion" confirm="closeJefesInspeccionDialog" cancel="closeJefesInspeccionDialog" showClearButton="true" 
-    items="{AppJsonModel>/Combos/JefeInspectores}">
-    <StandardListItem selected="{selected}" title="{AppJsonModel>nombre}" type="Active" />
+  <SelectDialog id="idSelectDialogJefes" multiSelect="true" title="{i18n>agregarjefesinspeccion}" liveChange="searchJefesInspeccion" cancel="closeJefesInspeccionDialog" 
+    showClearButton="true" items="{AppJsonModel>/Combos/JefeInspectores}" confirm="onValueHelpDialogJefesConfirm">
+    <StandardListItem selected="{AppJsonModel>selected}" title="{AppJsonModel>nombre}" type="Active" />
   </SelectDialog>
 </core:FragmentDefinition>

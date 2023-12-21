@@ -12,6 +12,9 @@
             </Toolbar>
           </headerToolbar>
           <columns>
+           <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>nropi}" />
+            </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>direccionaysa}" />
             </Column>
@@ -23,10 +26,7 @@
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>inspector}" />
-            </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>nropi}" />
-            </Column>
+            </Column>          
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="Acciones" />
             </Column>
@@ -34,11 +34,19 @@
           <items>
             <ColumnListItem vAlign="Middle">
               <cells>
-                <Text text="{AppJsonModel>direccion}" />
-                <Text text="{AppJsonModel>gerencia}" />
-                <Text text="{AppJsonModel>jefe_inspeccion}" />
-                <Text text="{AppJsonModel>inspector}" />
-                <Text text="{AppJsonModel>nro_pi}" />
+                <Text text="{AppJsonModel>pi}" />
+                <ComboBox items="{AppJsonModel>/Combos/Direcciones}" editable="false" selectedKey="{AppJsonModel>direccion_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <ComboBox items="{AppJsonModel>/Combos/Gerencias}" editable="false" selectedKey="{AppJsonModel>gerencia_ID}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+                </ComboBox>
+                <MultiInput suggestionItems="{AppJsonModel>/Combos/JefeInspectores}" showValueHelp="false" valueHelpOnly="false" editable="false">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
+                </MultiInput>
+                <MultiInput suggestionItems="{AppJsonModel>/Combos/Inspectores}" showValueHelp="false" valueHelpOnly="false" editable="false">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
+                </MultiInput>                
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteResponsable"/>
                 </HBox>
