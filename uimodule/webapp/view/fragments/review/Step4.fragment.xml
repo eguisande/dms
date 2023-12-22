@@ -36,7 +36,7 @@
               <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" editable="false" selectedKey="{AppJsonModel>sistema_contratacion_ID}">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
               </ComboBox>
-              <Text text="{AppJsonModel>monto} {AppJsonModel>moneda_ID}" />
+              <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'} {AppJsonModel>moneda_ID}" />
             </cells>
           </ColumnListItem>
         </items>

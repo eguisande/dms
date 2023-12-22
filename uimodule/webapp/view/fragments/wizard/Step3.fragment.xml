@@ -123,8 +123,8 @@
             <ColumnListItem vAlign="Middle">
               <cells>
                 <Text text="{AppJsonModel>codigo}"/>
-                <Text text="{AppJsonModel>importe}"/>
-                <Text text="{AppJsonModel>importe_ars}"/>
+                <Text text="{path: 'AppJsonModel>importe', formatter: '.formatter.formatQuantity'}"/>
+                <Text text="{path: 'AppJsonModel>importe_ars', formatter: '.formatter.formatQuantity'}"/>
                 <Text text="{AppJsonModel>tipo_cambio}"/>
                 <Text text="{AppJsonModel>moneda_ID}"/>
                 <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>

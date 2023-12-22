@@ -48,7 +48,7 @@
       </Link>
     </form:content>
   </form:SimpleForm>
-  <form:SimpleForm title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+  <form:SimpleForm visible="{AppJsonModel>/Visible}" title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
     <form:content>
       <Label text="{i18n>fechainiciocontractual}"/>
       <Input value="22/12/2023" editable="false"/>

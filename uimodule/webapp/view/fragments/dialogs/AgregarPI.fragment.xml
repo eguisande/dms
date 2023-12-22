@@ -22,9 +22,11 @@
       <Label text="{i18n>importe}" required="true"/>
       <Input id="idMontoPI" value="{AppJsonModel>/PI/monto}" editable="true" type="Number"/>
       <Label text="{i18n>moneda}" required="true"/>
-      <ComboBox id="idComboMonedasPI" items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/PI/moneda_ID}">
+      <ComboBox id="idComboMonedasPI" items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/PI/moneda_ID}" change="onMonedaPISelect">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
+      <Label text="{i18n>tipocambio}"/>
+      <Input value="{AppJsonModel>/PI/tipo_cambio}" editable="false"/>
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closePIDialog" type="Default" />
