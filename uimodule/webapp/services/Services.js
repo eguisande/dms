@@ -244,13 +244,13 @@ sap.ui.define([], function () {
         method: "POST",
         body: this.getFormDMS(`${idObra}_${proveedor}`),
       });
-      const respFolderP3 = await fetch(url, {
+      const respFolderP3 = await fetch(`${url}/${idObra}_${proveedor}`, {
         method: "POST",
-        body: this.getFormDMS(`${idObra}_${proveedor}/${p3}`),
+        body: this.getFormDMS(`${p3}`),
       });
-      const respFolderPI = await fetch(url, {
+      const respFolderPI = await fetch(`${url}/${idObra}_${proveedor}/${p3}`, {
         method: "POST",
-        body: this.getFormDMS(`${idObra}_${proveedor}/${p3}/${pi}`),
+        body: this.getFormDMS(`${pi}`),
       });
       const [
         respFolderOferta,
@@ -331,7 +331,7 @@ sap.ui.define([], function () {
         method: "POST",
         body: this.getFormDMS(`${idObra}_${proveedor}`),
       });
-      const respFolderUnificado = await fetch(url, {
+      const respFolderUnificado = await fetch(`${url}/${idObra}_${proveedor}`, {
         method: "POST",
         body: this.getFormDMS(`Unificado`),
       });
