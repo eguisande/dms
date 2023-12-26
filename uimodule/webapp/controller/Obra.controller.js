@@ -189,17 +189,17 @@ sap.ui.define([
               value1: sSearch
             }),
             new sap.ui.model.Filter({
-              path: 'tipo_contrato/descripcion',
+              path: 'tipo_contrato',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
             }),
             new sap.ui.model.Filter({
-              path: 'tipo_obra/descripcion',
+              path: 'tipo_obra',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
             }),
             new sap.ui.model.Filter({
-              path: 'fluido/descripcion',
+              path: 'tipo_fluido',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
             }),
@@ -209,7 +209,7 @@ sap.ui.define([
               value1: sSearch
             }),
             new sap.ui.model.Filter({
-              path: 'partido/descripcion',
+              path: 'partido',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
             }),
@@ -217,133 +217,13 @@ sap.ui.define([
               path: 'contratista/registro_proveedor',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
-            }),
-            new sap.ui.model.Filter({
-              path: 'direccion/descripcion',
-              operator: sap.ui.model.FilterOperator.Contains,
-              value1: sSearch
-            }),
+            })           
           ],
           and: false
         })
       ];
       oBinding.filter(aFilter);
     },
-
-    // openDialogAltaAsignacion: function () {
-    //   const oView = this.getView();
-    //   const oModel = this.getModel("AppJsonModel");
-    //   oModel.setProperty("/Alta", {});
-    //   // oModel.setProperty("/Alta", {
-    //   //   PI: "1960N06",
-    //   //   //nroProveedor: "9987"
-    //   // })
-    //   if (!this.pDialogAlta) {
-    //     this.pDialogAlta = Fragment.load({
-    //       id: oView.getId(),
-    //       controller: this,
-    //       name: "com.aysa.pgo.altaobras.view.fragments.dialogs.AltaAsignacion"
-    //     }).then(oDialog => {
-    //       oView.addDependent(oDialog);
-    //       return oDialog;
-    //     });
-    //   }
-    //   this.pDialogAlta.then(oDialog => {
-    //     oDialog.setModel(oModel);
-    //     oDialog.open();
-    //   });
-    // },
-
-    // onCloseDialogAltaAsignacion: function () {
-    //   this.byId("idAltaAsignacionDialog").close();
-    // },
-
-    // onCloseDialogContratista: function () {
-    //   this.byId("idSelectDialogContratista").close();
-    // },
-
-    // onSearchContratista: function (oEvent) {
-    //   const sSearch = oEvent.getParameter("value");
-    //   const aFilter = [
-    //     new sap.ui.model.Filter({
-    //       filters: [
-    //         new sap.ui.model.Filter({
-    //           path: 'registro_proveedor',
-    //           operator: sap.ui.model.FilterOperator.Contains,
-    //           value1: sSearch
-    //         }),
-    //         new sap.ui.model.Filter({
-    //           path: 'razonsocial',
-    //           operator: sap.ui.model.FilterOperator.Contains,
-    //           value1: sSearch
-    //         }),
-    //         new sap.ui.model.Filter({
-    //           path: 'tipo_documento/descripcion',
-    //           operator: sap.ui.model.FilterOperator.Contains,
-    //           value1: sSearch
-    //         }),
-    //         new sap.ui.model.Filter({
-    //           path: 'nro_documento',
-    //           operator: sap.ui.model.FilterOperator.Contains,
-    //           value1: sSearch
-    //         }),
-    //         new sap.ui.model.Filter({
-    //           path: 'domicilio_legal',
-    //           operator: sap.ui.model.FilterOperator.Contains,
-    //           value1: sSearch
-    //         }),
-    //         new sap.ui.model.Filter({
-    //           path: 'telefono',
-    //           operator: sap.ui.model.FilterOperator.Contains,
-    //           value1: sSearch
-    //         }),
-    //       ],
-    //       and: false
-    //     })
-    //   ];
-    //   const oBinding = oEvent.getSource().getBinding("items");
-    //   oBinding.filter(aFilter);
-    // },
-
-    // onSelectContratista: function (oEvent) {
-    //   const oModel = this.getModel("AppJsonModel");
-    //   const { registro_proveedor } = oEvent.getParameter("selectedItem").getBindingContext("AppJsonModel").getObject();
-    //   oModel.setProperty("/Alta/nroProveedor", registro_proveedor);
-    // },
-
-    // onAltaAsignacion: async function () {
-    //   const oModel = this.getModel("AppJsonModel");
-    //   const { PI, nroProveedor } = oModel.getProperty("/Alta");
-    //   const resourceBundle = this.getResourceBundle();
-    //   try {
-    //     this.byId("idInputPI").setValueState(PI ? "None" : "Error");
-    //     this.byId("idInputNroProveedor").setValueState(nroProveedor ? "None" : "Error");
-    //     if (!PI || !nroProveedor) {
-    //       return;
-    //     }
-    //     BusyIndicator.show(0);
-    //     const [oOrdenCompra, { value: quantity }, { value: OCQuantity }, oContratista] = await Promise.all([
-    //       Services.getValidatePIPorveedor(PI, nroProveedor),
-    //       Services.getQuantity(PI),
-    //       Services.getOCQuantity(PI),
-    //       Services.getContratista(nroProveedor),
-    //     ]);
-    //     if (oOrdenCompra.ID && oContratista.ID) {
-    //       oModel.setProperty("/ObraDetalle", oOrdenCompra);
-    //       oModel.setProperty("/ObraDetalle/quantity", quantity);
-    //       oModel.setProperty("/ObraDetalle/contratista", oContratista);
-    //       oModel.setProperty("/ObraDetalle/PI", this.getPITable(OCQuantity));
-    //       this.navTo("Detalle", {}, false);
-    //     } else {
-    //       MessageToast.show(resourceBundle.getText("errorpinroproveedor"));
-    //     }
-    //   } catch (error) {
-    //     const message = resourceBundle.getText("errorservice");
-    //     MessageToast.show(message);
-    //   } finally {
-    //     BusyIndicator.hide();
-    //   }
-    // },
 
     onViewObra: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
@@ -615,14 +495,12 @@ sap.ui.define([
                 proveedor: oObra.contratista.registro_proveedor,
                 nrop3: oObra.p3,
                 nombre: oObra.nombre,
-                fluido: oObra.fluido.descripcion,
-                partido: oObra.partido.descripcion,
-                sistema: oObra.sistema.descripcion,
-                direccion: oObra.direccion.descripcion,
-                gerencia: oObra.gerencia.descripcion,
+                fluido: oObra.tipo_fluido,
+                partido: oObra.partido,
+                sistema: oObra.sistema.descripcion,                
                 acumar: oObra.acumar ? "Si" : "No",
-                tipo_contrato: oObra.tipo_contrato.descripcion,
-                tipo_obra: oObra.tipo_obra.descripcion,
+                tipo_contrato: oObra.tipo_contrato,
+                tipo_obra: oObra.tipo_obra,
                 no_redetermina: oObra.no_redetermina ? "Si" : "No",
                 fecha_firma_contrato: oObra.fecha_firma,
                 jefe_inspeccion,
@@ -661,25 +539,6 @@ sap.ui.define([
       });
     },
 
-    onOpenDialogContratistas: function () {
-      const oView = this.getView();
-      const oModel = this.getModel("AppJsonModel");
-      if (!this._pValueHelpDialogInspectores) {
-        this._pValueHelpDialogInspectores = Fragment.load({
-          id: oView.getId(),
-          name: "com.aysa.pgo.altaobras.view.fragments.dialogs.ValueHelpDialogContratistas",
-          controller: this
-        }).then(oValueHelpDialog => {
-          oView.addDependent(oValueHelpDialog);
-          return oValueHelpDialog;
-        });
-      }
-      this._pValueHelpDialogInspectores.then(oValueHelpDialog => {
-        oValueHelpDialog.setModel(oModel);
-        oValueHelpDialog.open();
-      });
-    },
-
     createPdf: async function () {
       const oTable = this.byId("idTablaaltaobras");
       const oObras = oTable.getItems();
@@ -689,14 +548,13 @@ sap.ui.define([
         return {
           "nombre": item.nombre === null ? "" : item.nombre,
           "estado": item.estado === null ? "" : item.estado.descripcion,
-          "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato.descripcion,
+          "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato,
           "nrop3": item.p3 === null ? "" : item.p3,
           "registro_proveedor": item.contratista.registro_proveedor === null ? "" : item.contratista.registro_proveedor,
           "razonsocial": item.contratista.razonsocial === null ? "" : item.contratista.razonsocial,
-          "direccion": item.direccion === null ? "" : item.direccion.descripcion,
-          "fluido": item.fluido === null ? "" : item.fluido.descripcion,
-          "partido": item.partido === null ? "" : item.partido.descripcion,
-          "tipo_obra": item.tipo_obra === null ? "" : item.tipo_obra.descripcion
+          "fluido": item.tipo_fluido === null ? "" : item.tipo_fluido,
+          "partido": item.partido === null ? "" : item.partido,
+          "tipo_obra": item.tipo_obra === null ? "" : item.tipo_obra
         };
       });
       const oPayload = {

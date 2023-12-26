@@ -326,6 +326,7 @@ sap.ui.define([
       const contratistaData = aContratistas.filter(item => item.ID === selected);
       oModel.setProperty("/ObraDetalle/razonsocial", contratistaData[0].razonsocial);
       oModel.setProperty("/ObraDetalle/nro_documento", contratistaData[0].nro_documento);
+      oModel.setProperty("/ObraDetalle/registro_proveedor", contratistaData[0].registro_proveedor);
     },
 
     //Agregar ordenes de compra
@@ -739,15 +740,15 @@ sap.ui.define([
       this.byId("idImportesP3Table").getBinding("items").refresh();
     },
 
-    onMonedaP3Select: function () {
+    importeP3Change: function () {
       const oModel = this.getModel("AppJsonModel");
       const aOrdenesCompra = oModel.getProperty("/ordenes_compra");
       const selected = oModel.getProperty("/ImporteP3/moneda_ID");
-      const ocData = aOrdenesCompra.filter(item => item.moneda_ID === selected);
-      oModel.setProperty("/ImporteP3/tipo_cambio", ocData[0].tipo_cambio);
       const importe = oModel.getProperty("/ImporteP3/importe");
-      const tipo_cambio = oModel.getProperty("/ImporteP3/tipo_cambio");
-      if (importe !== "") {
+      if (importe !== "" && selected !== undefined) {
+        const ocData = aOrdenesCompra.filter(item => item.moneda_ID === selected);
+        oModel.setProperty("/ImporteP3/tipo_cambio", ocData[0].tipo_cambio);
+        const tipo_cambio = oModel.getProperty("/ImporteP3/tipo_cambio");
         const importe_ars = Number(importe) * Number(tipo_cambio);
         oModel.setProperty("/ImporteP3/importe_ars", importe_ars);
       }
@@ -770,7 +771,7 @@ sap.ui.define([
           const message = this.getResourceBundle().getText("errorfields");
           MessageToast.show(message);
         } else {
-          let suma = 0;
+          let suma = 0; //puedo resolver esto con un reduce? probar
           oModel.getData().importes_p3.forEach(i => {
             suma = suma + i.importe_ars;
           });
@@ -817,6 +818,7 @@ sap.ui.define([
       }, 200);
     },
 
+    //Boton cancelar
     handleWizardCancel: function () {
       const oModel = this.getModel("AppJsonModel");
       if (!oModel.getProperty("/Detalle")) {
@@ -836,6 +838,26 @@ sap.ui.define([
       }
     },
 
+    //Valido los campos a completar
+    validateFields: function (aInputs, aMultiInputs) {
+      if (!aMultiInputs) {
+        aMultiInputs = [];
+      }
+      aInputs.forEach(oInput => {
+        oInput.setValueState(oInput.getValue() ? "None" : "Error");
+        oInput.getType && oInput.getType() === "Email" && oInput.setValueState(this.mailRegex.test(oInput.getValue()) ? "None" : "Error");
+        if (oInput.mProperties?.max) {
+          oInput.setValueState(oInput.getValue() >= 0 && oInput.getValue() <= 100 ? "None" : "Error");
+        }
+      });
+      if (aMultiInputs.length !== 0) {
+        aMultiInputs.forEach(item => {
+          item.setValueState(item.getTokens().length ? "None" : "Error");
+        });
+      }
+      return [...aInputs, ...aMultiInputs].some(item => item.getValueState() === "Error");
+    },
+
     //TO DO completar
     handleWizardSubmit: async function () {
       let that = this;
@@ -851,15 +873,9 @@ sap.ui.define([
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
             const aAreas = oModel.getProperty("/Combos/Areas");
-            // const responsables = oModel.responsables.map(item => { //--- TO DO
-            //   return {
-            //     direccion_ID: item.direccion,
-            //     gerencia_ID: item.gerencia,
-            //     inspectores: null 
-            //   }
-            // })             
-            const proyectos_inversion = oModel.getData().proyectos_inversion.map(item => {
+            const piList = oModel.getData().proyectos_inversion.map(item => {
               return {
+                codigo: item.codigo,
                 tipo_pi_ID: item.tipo_pi_ID,
                 monto: item.monto,
                 moneda_ID: item.moneda_ID,
@@ -869,8 +885,9 @@ sap.ui.define([
                 //responsables: responsables //--- TO DO
               };
             });
-            const importes_p3 = oModel.getData().importes_p3.map(item => {
+            const importesList = oModel.getData().importes_p3.map(item => {
               return {
+                codigo: item.codigo,
                 moneda_ID: item.moneda_ID,
                 tipo_cambio: item.tipo_cambio,
                 importe: item.importe,
@@ -878,7 +895,7 @@ sap.ui.define([
                 importe_ars: item.importe_ars
               };
             });
-            const p3 = oModel.getData().p3s.map(item => {
+            const p3s = oModel.getData().p3s.map(item => {
               return {
                 codigo: item.codigo,
                 tipo_obra_ID: item.tipo_obra_ID,
@@ -889,17 +906,38 @@ sap.ui.define([
                 acumar: item.acumar,
                 acopio_materiales: item.acopio,
                 anticipo_financiero: item.anticipo_financiero,
-                importes: importes_p3,
-                pi: proyectos_inversion
+                importes: [],
+                pi: []
               };
             });
-            const contratista = oObraDetalle.map(item => {
-              return {
-                contratista_ID: item.contratista_ID,
-                vigencia_desde: "2023-12-20",
+            p3s.forEach(p3 => {
+              piList.forEach(pi => {
+                if (p3.codigo === pi.codigo) {
+                  delete pi.codigo;
+                  p3.pi.push(pi);
+                }
+              });
+              importesList.forEach(imp => {
+                if (p3.codigo === imp.codigo) {
+                  delete imp.codigo;
+                  p3.importes.push(imp);
+                }
+              });
+            });
+            // const responsables = oModel.responsables.map(item => { //--- TO DO
+            //   return {
+            //     direccion_ID: item.direccion,
+            //     gerencia_ID: item.gerencia,
+            //     inspectores: null 
+            //   }
+            // }) 
+            const contratista = [
+              {
+                contratista_ID: oObraDetalle.contratista_ID,
+                vigencia_desde: "2023-12-26",
                 vigencia_hasta: "9999-12-31"
-              };
-            });
+              }
+            ];
             const ordenes_compra = oModel.getData().ordenes_compra.map(item => {
               return {
                 moneda_ID: item.moneda_ID,
@@ -911,7 +949,7 @@ sap.ui.define([
               };
             });
             const oPayload = {
-              p3: p3,
+              p3: p3s,
               nombre: oObraDetalle.nombre,
               contratista: contratista,
               ordenes_compra: ordenes_compra,
@@ -939,15 +977,21 @@ sap.ui.define([
               await Services.updateObra(oObraDetalle.ID, oPayload);
             } else {
               const oPreconstruccion = await Services.createPreconstruccion();
-              await Promise.all([
-                Services.postObra({
-                  ...oPayload,
-                  estado_ID: "BO",
-                  estado_datos_contratista_ID: "AC",
-                  preconstruccion_ID: oPreconstruccion.ID
-                }),
-                Services.createFolderDMS(oObraDetalle.p3, oObraDetalle.nro_proveedor, aAreas)
-              ]);
+              const newObra = await Services.postObra({
+                ...oPayload,
+                estado_ID: "BO",
+                estado_datos_contratista_ID: "AC",
+                preconstruccion_ID: oPreconstruccion.ID
+              });
+              //Carpetas DMS
+              await Services.createFolderDMSUnificado(oObraDetalle.registro_proveedor, newObra.ID, aAreas) //carpeta unificada
+              const promises = [];
+              p3s.forEach(p3 => {
+                p3.pi.forEach(pi => {
+                  promises.push(Services.createFolderDMS(oObraDetalle.registro_proveedor, newObra.ID, p3.codigo, pi.pi, aAreas));
+                });
+              });
+              await Promise.all(promises);
             }
             const message = this.getResourceBundle().getText("cambiosguardados");
             MessageBox.success(message, {
@@ -964,26 +1008,6 @@ sap.ui.define([
           }
         }
       });
-    },
-
-    //Valido los campos a completar
-    validateFields: function (aInputs, aMultiInputs) {
-      if (!aMultiInputs) {
-        aMultiInputs = [];
-      }
-      aInputs.forEach(oInput => {
-        oInput.setValueState(oInput.getValue() ? "None" : "Error");
-        oInput.getType && oInput.getType() === "Email" && oInput.setValueState(this.mailRegex.test(oInput.getValue()) ? "None" : "Error");
-        if (oInput.mProperties?.max) {
-          oInput.setValueState(oInput.getValue() >= 0 && oInput.getValue() <= 100 ? "None" : "Error");
-        }
-      });
-      if (aMultiInputs.length !== 0) {
-        aMultiInputs.forEach(item => {
-          item.setValueState(item.getTokens().length ? "None" : "Error");
-        });
-      }
-      return [...aInputs, ...aMultiInputs].some(item => item.getValueState() === "Error");
     }
 
   });

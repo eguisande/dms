@@ -10,9 +10,9 @@
         <core:Item key="{AppJsonModel>codigo}" text="{AppJsonModel>codigo}" />
       </ComboBox>
       <Label text="{i18n>importe}" required="true"/>
-      <Input id="idImporteP3" value="{AppJsonModel>/ImporteP3/importe}"/>
+      <Input id="idImporteP3" value="{AppJsonModel>/ImporteP3/importe}" change="importeP3Change"/>
       <Label text="{i18n>moneda}" required="true"/>
-      <ComboBox id="idComboMonedaImporteP3" items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/ImporteP3/moneda_ID}" change="onMonedaP3Select">
+      <ComboBox id="idComboMonedaImporteP3" items="{AppJsonModel>/Combos/MonedasP3}" selectedKey="{AppJsonModel>/ImporteP3/moneda_ID}" change="importeP3Change">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
       </ComboBox>
       <Label text="{i18n>tipocambio}"/>

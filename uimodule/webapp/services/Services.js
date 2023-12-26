@@ -66,25 +66,25 @@ sap.ui.define([], function () {
 
     getObras: function () {
       return this.callGetService(
-        "Obras?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
+        "Obras?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
       );
     },
 
     getObrasJefeInspector: function (usuario, tipo_inspector) {
       return this.callGetService(
-        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
+        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObrasByContratista: function (usuario) {
       return this.callGetService(
-        `getObrasByContratista(usuario='${usuario}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
+        `getObrasByContratista(usuario='${usuario}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObra: function (ID) {
       return this.callGetService(
-        `Obras/${ID}?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),direccion,gerencia,p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)`
+        `Obras/${ID}?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes,fluido,tipo_obra,tipo_contrato,sistema,partido)`
       );
     },
 
@@ -162,37 +162,7 @@ sap.ui.define([], function () {
 
     updateObra: function (ID, oPayload) {
       return this.callUpdateService(`Obras/${ID}`, oPayload);
-    },
-
-     // getValidatePIPorveedor: function (proyecto_inversion, nro_proveedor) {
-    //   return this.callGetService(
-    //     `validatePIPorveedor(proyecto_inversion='${proyecto_inversion}',nro_proveedor='${nro_proveedor}')`
-    //   );
-    // },
-
-    // getQuantity: function (proyecto_inversion) {
-    //   return this.callGetService(
-    //     `getQuantity(proyecto_inversion='${proyecto_inversion}')`
-    //   );
-    // },
-
-    // getContratista: function (registro_proveedor) {
-    //   return this.callGetService(
-    //     `getContratista(registro_proveedor='${registro_proveedor}')`
-    //   );
-    // },
-
-    // getContratistas: function () {
-    //   return this.callGetService(
-    //     "Contratistas?$expand=tipo_documento,tipo_contratista"
-    //   );
-    // },
-
-    // getOCQuantity: function (proyecto_inversion) {
-    //   return this.callGetService(
-    //     `getOCQuantity(proyecto_inversion='${proyecto_inversion}')`
-    //   );
-    // },
+    },     
 
     getUser: async function () {
       try {
@@ -268,11 +238,19 @@ sap.ui.define([], function () {
       return this.callGetService("getUserRoles()");
     },
 
-    createFolderDMS: async function (folder, proveedor, aAreas = []) {
+    createFolderDMS: async function (proveedor, idObra, p3, pi, aAreas = []) {
       const url = `${this._urlDMS}/Obras`;
       const respFolderPrincipal = await fetch(url, {
         method: "POST",
-        body: this.getFormDMS(`${folder}_${proveedor}`),
+        body: this.getFormDMS(`${idObra}_${proveedor}`),
+      });
+      const respFolderP3 = await fetch(url, {
+        method: "POST",
+        body: this.getFormDMS(`${idObra}_${proveedor}/${p3}`),
+      });
+      const respFolderPI = await fetch(url, {
+        method: "POST",
+        body: this.getFormDMS(`${idObra}_${proveedor}/${p3}/${pi}`),
       });
       const [
         respFolderOferta,
@@ -285,47 +263,46 @@ sap.ui.define([], function () {
         respFolderPolizas,
         respFolderInterferencias,
       ] = await Promise.all([
-        //_${proveedor}
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Oferta`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Carga inicial`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Notas de pedido`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Órdenes de servicio`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Ingeniería`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Permisos`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Seguridad e Higiene`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Pólizas`),
         }),
-        fetch(`${url}/${folder}_${proveedor}`, {
+        fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}`, {
           method: "POST",
           body: this.getFormDMS(`Interferencias`),
         }),
       ]);
       const aAreasPromise = await Promise.all(
         aAreas.map((item) => {
-          return fetch(`${url}/${folder}_${proveedor}/Carga inicial`, {
+          return fetch(`${url}/${idObra}_${proveedor}/${p3}/${pi}/Carga inicial`, {
             method: "POST",
             body: this.getFormDMS(`${item.descripcion}`),
           });
@@ -333,6 +310,90 @@ sap.ui.define([], function () {
       );
       return await Promise.all([
         respFolderPrincipal.json(),
+        respFolderP3.json(),
+        respFolderPI.json(),
+        respFolderOferta.json(),
+        respFolderCargaInicial.json(),
+        respFolderNotasPedido.json(),
+        respFolderOrdenesServicio.json(),
+        respFolderIngenieria.json(),
+        respFolderPermisos.json(),
+        respFolderSegHigiene.json(),
+        respFolderPolizas.json(),
+        respFolderInterferencias.json(),
+        ...aAreasPromise.map((item) => item.json()),
+      ]);
+    },
+
+    createFolderDMSUnificado: async function (proveedor, idObra, aAreas = []) {
+      const url = `${this._urlDMS}/Obras`;
+      const respFolderPrincipal = await fetch(url, {
+        method: "POST",
+        body: this.getFormDMS(`${idObra}_${proveedor}`),
+      });
+      const respFolderUnificado = await fetch(url, {
+        method: "POST",
+        body: this.getFormDMS(`Unificado`),
+      });
+      const [
+        respFolderOferta,
+        respFolderCargaInicial,
+        respFolderNotasPedido,
+        respFolderOrdenesServicio,
+        respFolderIngenieria,
+        respFolderPermisos,
+        respFolderSegHigiene,
+        respFolderPolizas,
+        respFolderInterferencias,
+      ] = await Promise.all([
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Oferta`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Carga inicial`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Notas de pedido`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Órdenes de servicio`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Ingeniería`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Permisos`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Seguridad e Higiene`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Pólizas`),
+        }),
+        fetch(`${url}/${idObra}_${proveedor}/Unificado`, {
+          method: "POST",
+          body: this.getFormDMS(`Interferencias`),
+        }),
+      ]);
+      const aAreasPromise = await Promise.all(
+        aAreas.map((item) => {
+          return fetch(`${url}/${idObra}_${proveedor}/Unificado/Carga inicial`, {
+            method: "POST",
+            body: this.getFormDMS(`${item.descripcion}`),
+          });
+        })
+      );
+      return await Promise.all([
+        respFolderPrincipal.json(),
+        respFolderUnificado.json(),
         respFolderOferta.json(),
         respFolderCargaInicial.json(),
         respFolderNotasPedido.json(),
