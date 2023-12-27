@@ -12,10 +12,10 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nombrep3}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true">
+          <Column minScreenWidth="Tablet" demandPopin="true" visible="{AppJsonModel>/Visible}">
             <Text text="{i18n>nropi}" />
           </Column>
-          <Column minScreenWidth="Tablet" demandPopin="true">
+          <Column minScreenWidth="Tablet" demandPopin="true" visible="{AppJsonModel>/Visible}">
             <Text text="{i18n>montopi}" />
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
@@ -48,8 +48,8 @@
             <cells>
               <Text text="{AppJsonModel>codigo}" />
               <Text text="{AppJsonModel>nombre}" />
-              <Text text="{AppJsonModel>nros_pi}" />
-              <Text text="{AppJsonModel>montos_pi}" />
+              <Text text="{AppJsonModel>nros_pi}" visible="{AppJsonModel>/Visible}"/>
+              <Text text="{AppJsonModel>montos_pi}" visible="{AppJsonModel>/Visible}"/>
               <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" editable="false" selectedKey="{AppJsonModel>tipo_contrato_ID}">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
               </ComboBox>

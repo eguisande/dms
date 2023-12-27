@@ -2,34 +2,31 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <WizardStep id="idObraAltaStep4" validated="true" title="{i18n>pi}">
+  <WizardStep id="idObraAltaStep4" validated="true" title="{i18n>responsablesaysa}">
     <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
       <form:content>
-        <Table id="idProyectosInversionTable" items="{AppJsonModel>/proyectos_inversion}" fixedLayout="false" width="100%">
+        <Table id="idResponsablesTable" items="{AppJsonModel>/responsables}" fixedLayout="false" width="100%">
           <headerToolbar>
             <Toolbar>
               <ToolbarSpacer />
-              <Button tooltip="{i18n>agregarpi}" icon="sap-icon://add" press="addPI" type="Ghost"/>
+              <Button tooltip="{i18n>agregarresponsables}" icon="sap-icon://add" press="addResponsables" type="Ghost"/>
             </Toolbar>
           </headerToolbar>
           <columns>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>nrop3}" />
-            </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <!-- <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>nropi}" />
+            </Column> -->
+            <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>direccionaysa}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>tipopi}" />
+              <Text text="{i18n>gerenciaaysa}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>sistemaContratacion}" />
+              <Text text="{i18n>jefeinspeccion}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>importe}" />
-              <footer >
-                <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'} ARS" />
-              </footer>
+              <Text text="{i18n>inspector}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="Acciones" />
@@ -38,17 +35,23 @@
           <items>
             <ColumnListItem vAlign="Middle">
               <cells>
-                <Text text="{AppJsonModel>codigo}" />
-                <Text text="{AppJsonModel>pi}" />
-                <ComboBox items="{AppJsonModel>/Combos/TiposPI}" editable="false" selectedKey="{AppJsonModel>tipo_pi_ID}">
+                <!-- <MultiComboBox items="{AppJsonModel>/PIs}" editable="false" selectedKeys="{AppJsonModel>pi}">
+                  <core:Item key="{AppJsonModel>pi}" text="{AppJsonModel>pi}" />
+                </MultiComboBox> -->
+                <ComboBox items="{AppJsonModel>/Combos/Direcciones}" editable="false" selectedKey="{AppJsonModel>direccion_ID}">
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
-                <ComboBox items="{AppJsonModel>/Combos/SistemasContratacion}" editable="false" selectedKey="{AppJsonModel>sistema_contratacion_ID}">
+                <ComboBox items="{AppJsonModel>/Combos/Gerencias}" editable="false" selectedKey="{AppJsonModel>gerencia_ID}">
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
-                <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'} {AppJsonModel>moneda_ID}" />
+                <MultiComboBox items="{AppJsonModel>/Combos/JefeInspectores}" editable="false" selectedKeys="{AppJsonModel>jefes}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
+                </MultiComboBox>
+                <MultiComboBox items="{AppJsonModel>/Combos/Inspectores}" editable="false" selectedKeys="{AppJsonModel>inspectores}">
+                  <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
+                </MultiComboBox>
                 <HBox>
-                  <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deletePI"/>
+                  <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteResponsable"/>
                 </HBox>
               </cells>
             </ColumnListItem>

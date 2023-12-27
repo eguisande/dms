@@ -162,7 +162,12 @@ sap.ui.define([], function () {
 
     updateObra: function (ID, oPayload) {
       return this.callUpdateService(`Obras/${ID}`, oPayload);
-    },     
+    },  
+    
+    //REVISAR//
+    postResponsables: function (oPayload) {
+      return this.callPostService("Responsables", oPayload);
+    },
 
     getUser: async function () {
       try {

@@ -6,23 +6,23 @@
   <Dialog id="idAddResponsablesDialog" title="Agregar responsables Aysa" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>direccionaysa}" required="true"/>
-      <ComboBox id="idComboDirecciones" items="{AppJsonModel>/Combos/Direcciones}" change="onChangeDireccion" editable="true" selectedKey="{AppJsonModel>/GrupoResponsables/direccion_ID}">
+      <ComboBox id="idComboDirecciones" items="{AppJsonModel>/Combos/Direcciones}" change="onChangeDireccion" selectedKey="{AppJsonModel>/GrupoResponsables/direccion_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>gerenciaaysa}" required="true"/>
-      <ComboBox id="idComboGerencias" items="{AppJsonModel>/Combos/Gerencias}" editable="true" selectedKey="{AppJsonModel>/GrupoResponsables/gerencia_ID}">
+      <ComboBox id="idComboGerencias" items="{AppJsonModel>/Combos/Gerencias}" selectedKey="{AppJsonModel>/GrupoResponsables/gerencia_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
       </ComboBox>
       <Label text="{i18n>jefeinspeccion}" required="true"/>
-      <MultiInput id="idMultiInputJefes" suggestionItems="{AppJsonModel>/Combos/JefeInspectores}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="openJefeInspeccionDialog">
+      <MultiComboBox id="idComboJefes" change="setInspectoresDeUnJefe" items="{AppJsonModel>/Combos/JefeInspectores}" selectedKeys="{AppJsonModel>/GrupoResponsables/jefes}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-      </MultiInput>      
+      </MultiComboBox>      
       <Label text="{i18n>inspector}" required="true"/>
-      <MultiInput id="idMultiInputInspectores" suggestionItems="{AppJsonModel>/Combos/Inspectores}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="openInspectorDialog">
+      <MultiComboBox id="idComboInspectores" items="{AppJsonModel>/Combos/Inspectores}" selectedKeys="{AppJsonModel>/GrupoResponsables/inspectores}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-      </MultiInput>     
+      </MultiComboBox>     
       <Label text="{i18n>nropi}" required="true"/>
-      <MultiComboBox id="idComboPIResponsable" items="{AppJsonModel>/PIs}" editable="true" selectedKeys="{AppJsonModel>/GrupoResponsables/pi}">
+      <MultiComboBox id="idComboPIResponsable" items="{AppJsonModel>/PIs}" selectedKeys="{AppJsonModel>/GrupoResponsables/pi}">
         <core:Item key="{AppJsonModel>pi}" text="{AppJsonModel>pi}" />
       </MultiComboBox>
     </FlexBox>
