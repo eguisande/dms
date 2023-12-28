@@ -6,8 +6,11 @@ sap.ui.define([
   "sap/m/MessageToast",
   "sap/ui/core/BusyIndicator",
   "sap/ui/core/util/File",
-  "com/aysa/pgo/altaobras/model/formatter"
-], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, File, formatter) {
+  "com/aysa/pgo/altaobras/model/formatter",
+  "sap/ui/model/Sorter",
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, File, formatter, Sorter, Filter, FilterOperator) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Obra", {
@@ -75,7 +78,6 @@ sap.ui.define([
       const sOferta = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
       const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion");
       const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector");
-      const sContratista = aGroups.find(oGrupo => oGrupo === "PGO_Contratista");
       const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaGenero" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
@@ -104,7 +106,6 @@ sap.ui.define([
         detalle: !!sDetalle && true,
         jefe: !!sJefeInspector && true,
         inspector: !!sInspector && true,
-        contratista: !!sContratista && true,
         genero: !!sAreaGenero && true,
         carteleria: !!sAreaCarteleria && true,
         medioAmbiente: !!sAreaMedioambiente && true,
@@ -126,7 +127,7 @@ sap.ui.define([
 
     getObrasData: async function () {
       const oModel = this.getModel("AppJsonModel");
-      const { all, jefe, inspector, contratista, user } = oModel.getProperty("/Permisos");
+      const { all, jefe, inspector, user } = oModel.getProperty("/Permisos");
       if (all) {
         const { value } = await Services.getObras();
         return value;
@@ -139,10 +140,7 @@ sap.ui.define([
         const { value } = await Services.getObrasJefeInspector(user, "EM");
         return value;
       }
-      if (contratista) {
-        const { value } = await Services.getObrasByContratista();
-        return value;
-      }
+      
     },
 
     handleSortDialog: function () {
@@ -168,7 +166,7 @@ sap.ui.define([
       const oBinding = oTable.getBinding("items");
       const sPath = mParams.sortItem.getKey();
       const bDescending = mParams.sortDescending;
-      const aSorters = [new sap.ui.model.Sorter(sPath, bDescending)];
+      const aSorters = [new Sorter(sPath, bDescending)];
       oBinding.sort(aSorters);
     },
 
@@ -177,46 +175,46 @@ sap.ui.define([
       const oTable = this.byId("idTablaaltaobras");
       const oBinding = oTable.getBinding("items");
       const aFilter = [
-        new sap.ui.model.Filter({
+        new Filter({
           filters: [
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'nombre',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'estado/descripcion',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'tipo_contrato',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'tipo_obra',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'tipo_fluido',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'p3',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'partido',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             }),
-            new sap.ui.model.Filter({
+            new Filter({
               path: 'contratista/registro_proveedor',
-              operator: sap.ui.model.FilterOperator.Contains,
+              operator: FilterOperator.Contains,
               value1: sSearch
             })
           ],

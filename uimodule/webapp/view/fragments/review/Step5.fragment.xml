@@ -63,29 +63,29 @@
   <form:SimpleForm visible="{AppJsonModel>/Visible}" title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
     <form:content>
       <Label text="{i18n>fechainiciocontractual}"/>
-      <Input value="22/12/2023" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_inicio_contractual}" editable="false"/>
       <Label text="{i18n>fechainiciofisico}"/>
-      <Input value="10/01/2024" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_inicio_fisico}" editable="false"/>
       <Label text="{i18n>fechafincontractualoriginal}"/>
-      <Input value="23/09/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_fin_contractual_original}" editable="false"/>
       <Label text="{i18n>fechafincontractualvigente}"/>
-      <Input value="23/09/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_fin_contractual_vigente}" editable="false"/>
       <Label text="{i18n>fechafinobrafisico}"/>
-      <Input value="15/09/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_fin_obra_fisico}" editable="false"/>
       <Label text="{i18n>fecharecepcionprovisoria}"/>
-      <Input value="23/12/2023" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_recepcion_provisoria}" editable="false"/>
       <Label text="{i18n>fecharecepciondefinitiva}"/>
-      <Input value="06/01/2024" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_recepcion_definitiva}" editable="false"/>
       <Label text="{i18n>fechapuestaservicio}"/>
-      <Input value="12/10/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_puesta_servicio}" editable="false"/>
       <Label text="{i18n>fechacao}"/>
-      <Input value="16/11/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_cao_visita_cliente}" editable="false"/>
       <Label text="{i18n>fechatransferencia}"/>
-      <Input value="17/11/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_transferencia}" editable="false"/>
       <Label text="{i18n>fechahabilitacion}"/>
-      <Input value="02/12/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_habilitacion}" editable="false"/>
       <Label text="{i18n>fecharescision}"/>
-      <Input value="03/12/2025" editable="false"/>
+      <Input value="{AppJsonModel>/ObraDetalle/fecha_recision}" editable="false"/>
     </form:content>
   </form:SimpleForm>
 </core:FragmentDefinition>

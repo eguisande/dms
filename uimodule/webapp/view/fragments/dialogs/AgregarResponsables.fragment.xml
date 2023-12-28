@@ -21,10 +21,10 @@
       <MultiComboBox id="idComboInspectores" items="{AppJsonModel>/Combos/Inspectores}" selectedKeys="{AppJsonModel>/GrupoResponsables/inspectores}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
       </MultiComboBox>     
-      <Label text="{i18n>nropi}" required="true"/>
+      <!-- <Label text="{i18n>nropi}" required="true"/>
       <MultiComboBox id="idComboPIResponsable" items="{AppJsonModel>/PIs}" selectedKeys="{AppJsonModel>/GrupoResponsables/pi}">
         <core:Item key="{AppJsonModel>pi}" text="{AppJsonModel>pi}" />
-      </MultiComboBox>
+      </MultiComboBox> -->
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closeResponsablesDialog" type="Default" />

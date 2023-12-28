@@ -9,7 +9,7 @@
         <Label text="{i18n>nrocontrato}"/>
         <Input value="{AppJsonModel>/ObraDetalle/nro_contrato}" editable="false"/>
         <Label text="{i18n>monto}"/>
-        <Input value="{path: 'AppJsonModel>/monto_contrato', formatter: '.formatter.formatQuantity'}" editable="false"/>
+        <Input value="{path: 'AppJsonModel>/ObraDetalle/monto_original_contrato', formatter: '.formatter.formatQuantity'}" editable="false"/>
         <Label text="{i18n>moneda}"/>
         <Input value="{AppJsonModel>/ObraDetalle/moneda_ID}" editable="false"/>
         <Label text="{i18n>registroproveedor}"/>

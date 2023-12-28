@@ -76,12 +76,6 @@ sap.ui.define([], function () {
       );
     },
 
-    getObrasByContratista: function (usuario) {
-      return this.callGetService(
-        `getObrasByContratista(usuario='${usuario}')?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
-      );
-    },
-
     getObra: function (ID) {
       return this.callGetService(
         `Obras/${ID}?$expand=estado,responsables($expand=inspectores),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)`
@@ -96,7 +90,7 @@ sap.ui.define([], function () {
       return this.callGetService("Contratistas");
     },
 
-    getResponsables: function (ID) {
+    getResponsables: function () {
       return this.callGetService("ResponsablesPI?$expand=pi,responsables($expand=inspectores)");
     },
 
@@ -154,6 +148,10 @@ sap.ui.define([], function () {
 
     getFinanciamientos: function () {
       return this.callGetService("Financiamientos");
+    },
+
+    getUUID: function () {
+      return this.callGetService("getUUID()");
     },
 
     postObra: function (oPayload) {

@@ -9,7 +9,7 @@
       <Label text="{i18n>nrocontrato}" required="true"/>
       <Input id="idNroContrato" value="{AppJsonModel>/ObraDetalle/nro_contrato}"/>
       <Label text="{i18n>monto}" />
-      <Input id="idMontoContrato" value="{path: 'AppJsonModel>/monto_contrato', formatter: '.formatter.formatQuantity'}" editable="false"/>
+      <Input id="idMontoContrato" value="{path: 'AppJsonModel>/ObraDetalle/monto_original_contrato', formatter: '.formatter.formatQuantity'}" editable="false"/>
       <Label text="{i18n>moneda}"/>
       <ComboBox id="idComboMonedas" items="{AppJsonModel>/Combos/Monedas}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/moneda_ID}">
         <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>ID}" />
