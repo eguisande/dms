@@ -5,8 +5,9 @@ sap.ui.define([
   "sap/m/MessageBox",
   "sap/m/MessageToast",
   "sap/ui/core/BusyIndicator",
-  "sap/ui/core/util/File"
-], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, File) {
+  "sap/ui/core/util/File",
+  "com/aysa/pgo/altaobras/model/formatter"
+], function (Controller, Services, Fragment, MessageBox, MessageToast, BusyIndicator, File, formatter) {
   "use strict";
 
   return Controller.extend("com.aysa.pgo.altaobras.controller.Obra", {
@@ -29,33 +30,33 @@ sap.ui.define([
       try {
         BusyIndicator.show(0);
         const oModel = this.getModel("AppJsonModel");
-        oModel.setProperty("/Detalle", false);        
+        oModel.setProperty("/Detalle", false);
         const { email } = await Services.getUser();
         const oUserRoles = await Services.getUserRoles();
-        this.setUserData(oUserRoles.value, email);        
-        const aObras = await this.getObrasData()        
-        aObras.forEach(obra => {        
+        this.setUserData(oUserRoles.value, email);
+        const aObras = await this.getObrasData();
+        aObras.forEach(obra => {
           const data = obra.p3.map(function (p3) {
             return {
-              codigo: p3.codigo, 
-              tipo_contrato: p3.tipo_contrato.descripcion, 
-              tipo_obra: p3.tipo_obra.descripcion, 
-              tipo_fluido: p3.fluido.descripcion, 
-              partido: p3.partido.descripcion              
-            }
-          }); 
+              codigo: p3.codigo,
+              tipo_contrato: p3.tipo_contrato.descripcion,
+              tipo_obra: p3.tipo_obra.descripcion,
+              tipo_fluido: p3.fluido.descripcion,
+              partido: p3.partido.descripcion
+            };
+          });
           const tipos_fluidos = data.map(o => o.tipo_fluido).join(', ');
           const tipos_contratos = data.map(o => o.tipo_contrato).join(', ');
           const p3 = data.map(o => o.codigo).join(', ');
           const tipos_obras = data.map(o => o.tipo_obra).join(', ');
           const partidos = data.map(o => o.partido).join(', ');
           obra.tipo_fluido = tipos_fluidos;
-          obra.tipo_contrato = tipos_contratos; 
-          obra.p3 = p3
-          obra.tipo_obra = tipos_obras;   
+          obra.tipo_contrato = tipos_contratos;
+          obra.nro_p3 = p3;
+          obra.tipo_obra = tipos_obras;
           obra.partido = partidos;
           obra.contratista = obra.contratista[0].contratista;
-        });     
+        });
         oModel.setProperty("/altaobras", aObras);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
@@ -121,7 +122,7 @@ sap.ui.define([
         oferta: !!sOferta && true,
         notasMinutas: !!sNotasMinutas && true
       });
-    },    
+    },
 
     getObrasData: async function () {
       const oModel = this.getModel("AppJsonModel");
@@ -217,7 +218,7 @@ sap.ui.define([
               path: 'contratista/registro_proveedor',
               operator: sap.ui.model.FilterOperator.Contains,
               value1: sSearch
-            })           
+            })
           ],
           and: false
         })
@@ -227,17 +228,17 @@ sap.ui.define([
 
     onViewObra: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
-      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();      
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
       oModel.setProperty("/Detalle", true);
       this.navTo("Detalle", { ID }, false);
     },
 
     crearObra: function (oEvent) {
-      const oModel = this.getModel("AppJsonModel");      
+      const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/Detalle", false);
       this.navTo("Detalle", false);
     },
-    
+
     onDeleteObra: async function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
       BusyIndicator.show(0);
@@ -476,40 +477,119 @@ sap.ui.define([
           }
           try {
             BusyIndicator.show(0);
-            const jefe_inspeccion = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID === "JE")
-              .map(item => ({
-                usuario: item.inspector.usuario,
-                correo: item.inspector.correo
-              }));
-            const inspectores = oObra.inspectores.filter(item => item.inspector.tipo_inspector_ID !== "JE")
-              .map(item => ({
-                usuario: item.inspector.usuario,
-                correo: item.inspector.correo
-              }));
+            const ordenes_compra = oObra.ordenes_compra.map(item => {
+              return {
+                moneda: item.moneda_ID,
+                tipo_cambio: item.tipo_cambio,
+                no_redetermina: item.no_redetermina,
+                nro_oc: item.nro_oc,
+                fecha_oc: item.fecha instanceof Date ? formatter.formatDateToBack(item.fecha) : item.fecha
+              };
+            });
+            const p3 = oObra.p3.map(item => {
+              return {
+                codigo: item.codigo,
+                nombre: item.nombre,
+                tipo_contrato: item.tipo_contrato.descripcion,
+                tipo_fluido: item.fluido.descripcion,
+                tipo_obra: item.tipo_obra.descripcion,
+                partido: item.partido.descripcion,
+                sistema_cuenca: item.sistema.descripcion,
+                acumar: item.acumar,
+                acopio: item.acopio,
+                anticipo_financiero: item.anticipo_financiero
+              };
+            });
+            const temp_importes = [];
+            oObra.p3.forEach(p3 => {
+              p3.importes.forEach(imp => {
+                temp_importes.push(imp);
+              });
+            });
+            const importes = temp_importes.map(item => {
+              return {
+                codigo: item.p3.codigo,
+                importe: item.importe,
+                importe_ars: item.importe_ars,
+                tipo_cambio: item.tipo_cambio,
+                moneda: item.moneda_ID,
+                porcentaje_ponderacion: item.porcentaje_ponderacion
+              };
+            });
+            const temp_pi = [];
+            oObra.p3.forEach(p3 => {
+              p3.pi.forEach(pi => {
+                temp_pi.push(pi);
+              });
+            });
+            const proyectos_inversion = temp_pi.map(item => {
+              return {
+                p3: item.p3.codigo,
+                pi: item.pi,
+                tipo_pi: item.tipo_pi.descripcion,
+                sistema_contratacion: item.sistema_contratacion,
+                importe: item.monto,
+                moneda: item.moneda_ID
+              };
+            });
+            //TO DO
+            const responsables = [
+              {
+                direccion: "Dirección de redes",
+                gerencia: "Redes CABA",
+                jefe_inspeccion: "Juan Perez, Milton Casco",
+                inspector: "Pedro Gomez, Lautaro Martinez",
+                pi: "1960N06, 1960N07"
+              },
+              {
+                direccion: "Dirección de Civil y Electromecánica",
+                gerencia: "Estaciones de bombeo",
+                jefe_inspeccion: "Lionel Messi",
+                inspector: "Lionel Scaloni, Facundo Roncaglia",
+                pi: "1960N09, 1960N08"
+              }
+            ];
+            const aprobadores_usuario = [
+              "alfredo.montanes@datco.net",
+              "tobias.racedo@datco.com"
+            ];
+            const aprobadores_correo = [
+              "alfredo.montanes@datco.net",
+              "tobias.racedo@datco.com"
+            ];
             const oPayload = {
               definitionId: "pgo.wfaltaobra",
               context: {
                 id_obra: oObra.ID,
-                cuit: oObra.contratista.nro_documento,
-                razon_social: oObra.contratista.razonsocial,
-                proveedor: oObra.contratista.registro_proveedor,
-                nrop3: oObra.p3,
                 nombre: oObra.nombre,
-                fluido: oObra.tipo_fluido,
-                partido: oObra.partido,
-                sistema: oObra.sistema.descripcion,                
-                acumar: oObra.acumar ? "Si" : "No",
-                tipo_contrato: oObra.tipo_contrato,
-                tipo_obra: oObra.tipo_obra,
-                no_redetermina: oObra.no_redetermina ? "Si" : "No",
-                fecha_firma_contrato: oObra.fecha_firma,
-                jefe_inspeccion,
-                inspectores,
-                pi: oObra.pi.map(item => ({
-                  codigo: item.pi,
-                  tipo_obra: item.tipo_pi.descripcion,
-                  monto_original: item.quantity
-                }))
+                nro_contrato: oObra.nro_contrato,
+                monto_original_contrato: oObra.monto_contrato,
+                moneda: oObra.moneda_ID,
+                proveedor: oObra.contratista.registro_proveedor,
+                razon_social: oObra.contratista.razonsocial,
+                cuit: oObra.contratista.nro_documento,
+                representante: oObra.representante,
+                telefono: oObra.telefono,
+                correo: oObra.correo,
+                representante_tecnico: oObra.representante_tecnico,
+                nro_matricula: oObra.nro_matricula,
+                fecha_firma: oObra.fecha_firma,
+                incremento_maximo: oObra.incremento_maximo,
+                plazo_ejecucion: oObra.plazo_ejecucion,
+                maximo_plazo_extension: oObra.maximo_plazo_extension,
+                fondo_reparo: oObra.fondo_reparo,
+                financiamiento_obra: oObra.financiamiento_obra,
+                descuento_monto_contrato: oObra.descuento_monto_contrato,
+                nro_poliza: oObra.nro_poliza,
+                extendida_por: oObra.extendida_por,
+                porcentaje_cobertura: oObra.porcentaje_cobertura,
+                ordenes_compra: ordenes_compra,
+                p3: p3,
+                importes: importes,
+                proyectos_inversion: proyectos_inversion,
+                responsables: responsables,
+                aprobadores_usuario: aprobadores_usuario,
+                aprobadores_correo: aprobadores_correo
               }
             };
             const response = await Services.postWorkflow(oPayload);

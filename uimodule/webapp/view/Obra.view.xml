@@ -55,7 +55,7 @@
               <Text text="{AppJsonModel>nombre}" />
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
               <Text text="{AppJsonModel>tipo_contrato}" />
-              <Text text="{AppJsonModel>p3}" />
+              <Text text="{AppJsonModel>nro_p3}" />
               <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
               <Text text="{AppJsonModel>tipo_obra}" />
               <Text text="{AppJsonModel>tipo_fluido}" />

@@ -825,14 +825,15 @@ sap.ui.define([
             });
             const p3s = oModel.getData().p3s.map(item => {
               return {
+                nombre: item.nombre,
                 codigo: item.codigo,
                 tipo_obra_ID: item.tipo_obra_ID,
                 tipo_contrato_ID: item.tipo_contrato_ID,
                 fluido_ID: item.fluido_ID,
                 partido_ID: item.partido_ID,
                 sistema_ID: item.sistema_ID,
-                acumar: item.acumar,
-                acopio_materiales: item.acopio,
+                acumar: item.acumar === null ? false : true,
+                acopio_materiales: item.acopio === null ? false : true,
                 anticipo_financiero: item.anticipo_financiero,
                 importes: [],
                 pi: []
@@ -863,9 +864,8 @@ sap.ui.define([
               return {
                 moneda_ID: item.moneda_ID,
                 tipo_cambio: item.tipo_cambio,
-                no_redetermina: item.no_redetermina,
+                no_redetermina: item.no_redetermina === null ? false : true,
                 nro_oc: item.nro_oc,
-                revision: null,
                 fecha: item.fecha instanceof Date ? formatter.formatDateToBack(item.fecha) : item.fecha
               };
             });
