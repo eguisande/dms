@@ -6,9 +6,6 @@
     <form:content>
       <Table items="{AppJsonModel>/responsables}" fixedLayout="false" width="100%">
         <columns>
-          <!-- <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
-            <Text text="{i18n>nropi}" />
-          </Column> -->
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>direccionaysa}" />
           </Column>
@@ -25,24 +22,14 @@
         <items>
           <ColumnListItem vAlign="Middle">
             <cells>
-              <!-- <MultiComboBox items="{AppJsonModel>/PIs}" editable="false" selectedKeys="{AppJsonModel>pi}">
-                <core:Item key="{AppJsonModel>pi}" text="{AppJsonModel>pi}" />
-              </MultiComboBox> -->
               <ComboBox items="{AppJsonModel>/Combos/Direcciones}" editable="false" selectedKey="{AppJsonModel>direccion_ID}">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
               </ComboBox>
               <ComboBox items="{AppJsonModel>/Combos/Gerencias}" editable="false" selectedKey="{AppJsonModel>gerencia_ID}">
                 <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
               </ComboBox>
-              <MultiComboBox items="{AppJsonModel>/Combos/JefeInspectores}" editable="false" selectedKeys="{AppJsonModel>jefes}">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-              </MultiComboBox>
-              <MultiComboBox items="{AppJsonModel>/Combos/Inspectores}" editable="false" selectedKeys="{AppJsonModel>inspectores}">
-                <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-              </MultiComboBox>
-              <HBox>
-                <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteOC" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}"/>
-              </HBox>
+              <Text text="{AppJsonModel>jefes_nombres}"/>
+              <Text text="{AppJsonModel>inspectores_nombres}"/>          
             </cells>
           </ColumnListItem>
         </items>

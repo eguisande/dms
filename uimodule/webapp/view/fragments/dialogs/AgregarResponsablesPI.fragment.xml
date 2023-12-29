@@ -4,14 +4,11 @@
   xmlns:u="sap.ui.unified"
   xmlns:core="sap.ui.core">
   <Dialog id="idResponsablesPIDialog" title="{i18n>agregarresponsables}">
-    <Table class="sapUiResponsiveMargin" width="auto" items="{AppJsonModel>/ResponsablesPI}" id="idResponsablesPITable" noDataText="{i18n>nodatatext}">
+    <Table mode="SingleSelect" class="sapUiResponsiveMargin" width="auto" items="{AppJsonModel>/ResponsablesPI}" id="idResponsablesPITable" noDataText="{i18n>nodatatext}">
       <columns>
         <Column minScreenWidth="Tablet" demandPopin="true">
-          <Text text="{i18n>direccionaysa}" />
-        </Column>
-        <Column minScreenWidth="Tablet" demandPopin="true">
-          <Text text="{i18n>gerenciaaysa}" />
-        </Column>
+          <Text text="{i18n>direcciongerencia}" />
+        </Column>       
         <Column minScreenWidth="Tablet" demandPopin="true">
           <Text text="{i18n>jefeinspeccion}" />
         </Column>
@@ -20,24 +17,18 @@
         </Column>
       </columns>
       <items>
-        <ColumnListItem tooltip="seleccionar grupo de responsables" type="Navigation" press="selectResponsablesPI">
-          <cells>
-            <ComboBox items="{AppJsonModel>/Combos/Direcciones}" editable="false" selectedKey="{AppJsonModel>direccion_ID}">
-              <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-            </ComboBox>
-            <ComboBox items="{AppJsonModel>/Combos/Gerencias}" editable="false" selectedKey="{AppJsonModel>gerencia_ID}">
-              <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
-            </ComboBox>
-            <MultiComboBox items="{AppJsonModel>/Combos/JefeInspectores}" editable="false" selectedKeys="{AppJsonModel>jefes}">
-              <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-            </MultiComboBox>
-            <MultiComboBox items="{AppJsonModel>/Combos/Inspectores}" editable="false" selectedKeys="{AppJsonModel>inspectores}">
-              <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>nombre}" />
-            </MultiComboBox>
+        <ColumnListItem>
+          <cells>           
+            <Text text="{AppJsonModel>direccion_gerencia}"/>
+            <Text text="{AppJsonModel>jefes_nombres}"/>
+            <Text text="{AppJsonModel>inspectores_nombres}"/>
           </cells>
         </ColumnListItem>
       </items>
     </Table>
+    <beginButton>
+      <Button text="{i18n>seleccionar}" press="selectResponsablesPI"/>
+    </beginButton>
     <endButton>
       <Button text="{i18n>cancelar}" press="closeResponsablesPIDialog"/>
     </endButton>

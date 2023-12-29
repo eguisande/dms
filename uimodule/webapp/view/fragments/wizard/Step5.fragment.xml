@@ -55,11 +55,11 @@
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
                 <Text text="{AppJsonModel>direccion_gerencia}" />
-                <Text text="{AppJsonModel>jefes}" />
-                <Text text="{AppJsonModel>inspectores}" />
+                <Text text="{AppJsonModel>jefes_nombres}" />
+                <Text text="{AppJsonModel>inspectores_nombres}" />
                 <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'} {AppJsonModel>moneda_ID}" />
                 <HBox>
-                  <Button tooltip="{i18n>agregarresponsables}" press="addResponsablesPI" icon="sap-icon://add" type="Transparent"/>
+                  <Button class="sapUiTinyMargin" tooltip="{i18n>agregarresponsables}" press="addResponsablesPI" icon="sap-icon://add" type="Transparent"/>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deletePI"/>
                 </HBox>
               </cells>

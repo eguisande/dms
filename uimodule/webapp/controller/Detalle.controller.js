@@ -188,7 +188,7 @@ sap.ui.define([
       const grupoResponsables = oModel.getProperty("/GrupoResponsables");
       const aInspectores = await Services.getInspectores();
       let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && grupoResponsables.jefes.includes(item.jefe_inspeccion_ID));
-      oModel.setProperty("/Combos/Inspectores", Inspectores);
+      oModel.setProperty("/Inspectores", Inspectores);
     },
 
     //Obtengo la lista de ordenes de compra
@@ -241,6 +241,7 @@ sap.ui.define([
       });
       piData.forEach(item => {
         item.codigo = item.p3.codigo;
+        //item.direccion_gerencia = item.responsables
       });
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/proyectos_inversion", piData);
@@ -258,9 +259,9 @@ sap.ui.define([
       });
       pi = pi.filter(e => e.responsables != null);
       pi.forEach(item => {
-        item.responsables.pi = item.pi;
-        item.responsables.direccion_ID = item.responsables.responsables.direccion_ID;
-        item.responsables.gerencia_ID = item.responsables.responsables.gerencia_ID;
+        item.responsables.direccion_ID = item.responsables.direccion_ID;
+        item.responsables.gerencia_ID = item.responsables.gerencia_ID;
+        //item.responsables.jefes_nombres = item.responsables.responsables.inspectores.inspector.find(i=>i.tipo_inspector_ID === "JE");
       });
       pi.forEach(x => {
         responsables.push(x.responsables);
@@ -407,7 +408,6 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const PI = oModel.getProperty("/PI");
       const proyectos_inversion = oModel.getProperty("/proyectos_inversion");
-      //const responsables = oModel.getProperty("/responsables");
       const aInputs = [this.byId("idComboP3sPI"), this.byId("idNroPI"), this.byId("idComboTiposPI"), this.byId("idComboSistContrat"), this.byId("idMontoPI"),
       this.byId("idComboMonedasPI")];
       const invalidField = this.validateFields(aInputs);
@@ -419,16 +419,6 @@ sap.ui.define([
         oModel.setProperty("/PI/uuid", uuid.value);
         proyectos_inversion.push(PI);
         oModel.setProperty("/proyectos_inversion", proyectos_inversion);
-        // const data = responsables.map(function (item) {
-        //   return {
-        //     jefes: item.jefes,
-        //     inspectores: item.inspectores
-        //   };
-        // });
-        // const jefes = data.map(o => o.nro_pi).join(', ');
-        // const inspectores = data.map(o => o.monto).join(', ');
-        // p3.jefes = jefes;
-        // p3.montos_pi = montos_pi;
         //Sumos los importes de cada pi
         this.sumaImportes(proyectos_inversion);
         this.closePIDialog();
@@ -447,10 +437,13 @@ sap.ui.define([
     },
 
     //Asignar responsables a un PI
-    addResponsablesPI: function () {
+    addResponsablesPI: function (oEvent) {
       const oModel = this.getModel("AppJsonModel");
-      const responsables = oModel.getProperty("/responsables");     
-      oModel.setProperty("/ResponsablesPI", responsables);      
+      const responsables = oModel.getProperty("/responsables");
+      oModel.setProperty("/ResponsablesPI", responsables);
+      const oItem = oEvent.getSource();
+      const selectedPI = oItem.getBindingContext("AppJsonModel").getObject();
+      oModel.setProperty("/selectedPI", selectedPI);
       if (!this._oRespPIDialog) {
         this._oRespPIDialog = Fragment.load({
           id: this.getView().getId(),
@@ -466,13 +459,23 @@ sap.ui.define([
       });
     },
 
-    selectResponsablesPI: function (oEvent) {
-      const oItem = oEvent.getSource();
-      const oSelectedPartida = oItem.getBindingContext("AppJsonModel").getObject();
+    selectResponsablesPI: function () {
+      const selected = this.byId("idResponsablesPITable").getSelectedItem().getBindingContext("AppJsonModel").getObject();
+      const oModel = this.getModel("AppJsonModel");
+      const selectedPI = oModel.getProperty("/selectedPI");
+      selectedPI.jefes = selected.jefes;
+      selectedPI.inspectores = selected.inspectores;
+      selectedPI.jefes_nombres = selected.jefes_nombres;
+      selectedPI.inspectores_nombres = selected.inspectores_nombres;
+      selectedPI.direccion_gerencia = selected.direccion_gerencia;
+      selectedPI.responsables_ID = selected.uuid;
       this.closeResponsablesPIDialog();
     },
 
     closeResponsablesPIDialog: function () {
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/selectedPI", {});
+      this.byId("idResponsablesPITable").removeSelections();
       this.byId("idResponsablesPIDialog").close();
     },
 
@@ -507,10 +510,8 @@ sap.ui.define([
     addResponsables: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/GrupoResponsables", {});
-      //Combo de pi
-      const proyectos_inversion = oModel.getProperty("/proyectos_inversion");
-      const nrosPi = proyectos_inversion.map(function (item) { return { pi: item.pi }; });
-      oModel.setProperty("/PIs", nrosPi);
+      const jefes = oModel.getProperty("/Combos/JefeInspectores");
+      oModel.setProperty("/Jefes", jefes);
       if (!this._oResponsablesDialog) {
         this._oResponsablesDialog = Fragment.load({
           id: this.getView().getId(),
@@ -540,9 +541,19 @@ sap.ui.define([
       if (invalidField) {
         const message = this.getResourceBundle().getText("errorfields");
         MessageToast.show(message);
-      } else {   
+      } else {
         const uuid = await Services.getUUID();
-        oModel.setProperty("/GrupoResponsables/uuid", uuid.value);     
+        oModel.setProperty("/GrupoResponsables/uuid", uuid.value);
+        const direccion = this.byId("idComboDirecciones").getSelectedItem().mProperties.text;
+        const gerencia = this.byId("idComboGerencias").getSelectedItem().mProperties.text;
+        const direccion_gerencia = direccion + " / " + gerencia;
+        oModel.setProperty("/GrupoResponsables/direccion_gerencia", direccion_gerencia);
+        const jefesArray = this.byId("idComboJefes").getSelectedItems().map(i => i.mProperties);
+        const nombresJefes = jefesArray.map(o => o.text).join(', ');
+        oModel.setProperty("/GrupoResponsables/jefes_nombres", nombresJefes);
+        const inspectoresArray = this.byId("idComboInspectores").getSelectedItems().map(i => i.mProperties);
+        const nombresInspectores = inspectoresArray.map(o => o.text).join(', ');
+        oModel.setProperty("/GrupoResponsables/inspectores_nombres", nombresInspectores);
         responsables.push(grupoResponsables);
         oModel.setProperty("/responsables", responsables);
         this.closeResponsablesDialog();
@@ -707,20 +718,27 @@ sap.ui.define([
         const invalidField = this.validateFields(aInputs);
         if (invalidField) {
           const message = this.getResourceBundle().getText("errorfields");
-          MessageToast.show(message);
+          MessageBox.error(message);
         } else {
-          let suma = 0; //puedo resolver esto con un reduce? probar
-          oModel.getData().importes_p3.forEach(i => {
-            suma = suma + i.importe_ars;
-          });
-          //El total de la suma de los importes pi debe ser igual al total de los importes de los p3
-          if (oModel.getProperty("/monto_total") !== suma) {
-            const errorMessage = this.getResourceBundle().getText("errormontostotales");
-            MessageBox.error(errorMessage);
+          //Se debe asignar responsables a todos los pi
+          const piRespVacio = oModel.getData().proyectos_inversion.find(i=>!i.hasOwnProperty("inspectores"));
+          if (piRespVacio) {
+            const messagePi = this.getResourceBundle().getText("errorresppi");
+            MessageBox.error(messagePi);
           } else {
-            const oNavPage = this.byId("wizardNavContainer");
-            const oPageReview = this.byId("wizardReviewPage");
-            oNavPage.to(oPageReview);
+            let suma = 0; //puedo resolver esto con un reduce? probar
+            oModel.getData().importes_p3.forEach(i => {
+              suma = suma + i.importe_ars;
+            });
+            //El total de la suma de los importes pi debe ser igual al total de los importes de los p3
+            if (oModel.getProperty("/monto_total") !== suma) {
+              const errorMessage = this.getResourceBundle().getText("errormontostotales");
+              MessageBox.error(errorMessage);
+            } else {
+              const oNavPage = this.byId("wizardNavContainer");
+              const oPageReview = this.byId("wizardReviewPage");
+              oNavPage.to(oPageReview);
+            }
           }
         }
       }
@@ -809,21 +827,21 @@ sap.ui.define([
             BusyIndicator.show(0);
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
-            const aAreas = oModel.getProperty("/Combos/Areas");              
+            const aAreas = oModel.getProperty("/Combos/Areas");
             const responsables = oModel.getData().responsables.map(item => {
               const jefesIDs = item.jefes || [];
               const inspectoresIDs = item.inspectores || [];
               const inspectorIDs = [...jefesIDs, ...inspectoresIDs];
-              const inspectores = inspectorIDs.map (elem => {
+              const inspectores = inspectorIDs.map(elem => {
                 return {
                   inspector_ID: elem
-                }
-              })
-              return { 
+                };
+              });
+              return {
                 ID: item.uuid,
                 direccion_ID: item.direccion_ID,
                 gerencia_ID: item.gerencia_ID,
-                inspectores: inspectores 
+                inspectores: inspectores
               };
             });
             const piList = oModel.getData().proyectos_inversion.map(item => {
@@ -834,10 +852,9 @@ sap.ui.define([
                 monto: item.monto,
                 moneda_ID: item.moneda_ID,
                 sistema_contratacion_ID: item.sistema_contratacion_ID,
-                pi: item.pi,
-                responsables: []
+                pi: item.pi
               };
-            });            
+            });
             const importesList = oModel.getData().importes_p3.map(item => {
               return {
                 codigo: item.codigo,
@@ -877,7 +894,7 @@ sap.ui.define([
                   p3.importes.push(imp);
                 }
               });
-            });            
+            });
             const contratista = [
               {
                 contratista_ID: oObraDetalle.contratista_ID,
@@ -898,7 +915,6 @@ sap.ui.define([
               p3: p3s,
               nombre: oObraDetalle.nombre,
               contratista: contratista,
-              responsables: responsables,
               ordenes_compra: ordenes_compra,
               nro_contrato: oObraDetalle.nro_contrato,
               representante: oObraDetalle.representante,
@@ -932,17 +948,22 @@ sap.ui.define([
                 preconstruccion_ID: oPreconstruccion.ID
               });
               //Responsables --- REVISAR ///
-              // const promisesResponsables = [];
-              // responsables.forEach(resp => {
-              //   promisesResponsables.push(Services.postResponsables({...resp, obra_ID: newObra.ID}));
-              // })
-              // await Promise.all(promisesResponsables); 
-              // const promisesResponsablesPI = [];
-              // responsables.forEach(resp => {
-              //   promisesResponsablesPI.push(Services.postResponsables({...resp, obra_ID: newObra.ID}));
-              // })
-              // await Promise.all(promisesResponsablesPI);             
-              //post a reponsablespi con el id de responsables
+              const promisesResponsables = [];
+              responsables.forEach(resp => {
+                promisesResponsables.push(Services.postResponsables({ ...resp, obra_ID: newObra.ID }));
+              });
+              await Promise.all(promisesResponsables);
+              const promisesResponsablesPI = [];
+              const proy_inv = oModel.getData().proyectos_inversion.map(item => { 
+                return {
+                  pi_ID: item.uuid,
+                  responsables_ID: item.responsables_ID
+                } 
+              });
+              proy_inv.forEach(pi => {
+                promisesResponsablesPI.push(Services.postResponsablesPI({ ...pi }));
+              });
+              await Promise.all(promisesResponsablesPI);
               //Carpetas DMS
               await Services.createFolderDMSUnificado(oObraDetalle.registro_proveedor, newObra.ID, aAreas); //carpeta unificada
               const promisesDms = [];
