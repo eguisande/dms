@@ -7,8 +7,11 @@
     <Table mode="SingleSelect" class="sapUiResponsiveMargin" width="auto" items="{AppJsonModel>/ResponsablesPI}" id="idResponsablesPITable" noDataText="{i18n>nodatatext}">
       <columns>
         <Column minScreenWidth="Tablet" demandPopin="true">
-          <Text text="{i18n>direcciongerencia}" />
-        </Column>       
+          <Text text="{i18n>direccionaysa}" />
+        </Column>
+        <Column minScreenWidth="Tablet" demandPopin="true">
+          <Text text="{i18n>gerenciaaysa}" />
+        </Column>
         <Column minScreenWidth="Tablet" demandPopin="true">
           <Text text="{i18n>jefeinspeccion}" />
         </Column>
@@ -18,8 +21,13 @@
       </columns>
       <items>
         <ColumnListItem>
-          <cells>           
-            <Text text="{AppJsonModel>direccion_gerencia}"/>
+          <cells>
+            <ComboBox items="{AppJsonModel>/Combos/Direcciones}" editable="false" selectedKey="{AppJsonModel>direccion_ID}">
+              <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
+            <ComboBox items="{AppJsonModel>/Combos/Gerencias}" editable="false" selectedKey="{AppJsonModel>gerencia_ID}">
+              <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
+            </ComboBox>
             <Text text="{AppJsonModel>jefes_nombres}"/>
             <Text text="{AppJsonModel>inspectores_nombres}"/>
           </cells>

@@ -55,6 +55,7 @@ sap.ui.define([
         });
       } else {
         oModel.setProperty("/ObraDetalle", []);
+        oModel.setProperty("/GrupoResponsables", []);
         oModel.setProperty("/ObraDetalle/ID", null);
         oModel.setProperty("/Visible", false);
         oModel.setProperty("/ordenes_compra", []);
@@ -185,6 +186,9 @@ sap.ui.define([
     //Combos inspectores y jefes de inspección
     setInspectoresDeUnJefe: async function () {
       const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/Inspectores", []);
+      oModel.setProperty("/GrupoResponsables/inspectores", []);
+      this.byId("idComboInspectores").setSelectedKeys([]);
       const grupoResponsables = oModel.getProperty("/GrupoResponsables");
       const aInspectores = await Services.getInspectores();
       let Inspectores = aInspectores.value.filter(item => item.tipo_inspector_ID === 'EM' && grupoResponsables.jefes.includes(item.jefe_inspeccion_ID));
@@ -240,8 +244,21 @@ sap.ui.define([
         });
       });
       piData.forEach(item => {
+        let inspectores = item.responsables.responsables.inspectores.map(e => {
+          return {
+            nombre: e.inspector.nombre,
+            tipo_inspector_ID: e.inspector.tipo_inspector_ID
+          }
+        })
+        let jefes = inspectores.filter(e => e.tipo_inspector_ID === "JE")
+        const jefes_nombres = jefes.map(o => o.nombre).join(', ');
+        let inspect = inspectores.filter(e => e.tipo_inspector_ID === "EM")
+        const inspectores_nombres = inspect.map(o => o.nombre).join(', ');
+        item.jefes_nombres = jefes_nombres;
+        item.inspectores_nombres = inspectores_nombres;
         item.codigo = item.p3.codigo;
-        //item.direccion_gerencia = item.responsables
+        item.direccion_ID = item.responsables.responsables.direccion_ID,
+        item.gerencia_ID = item.responsables.responsables.gerencia_ID
       });
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/proyectos_inversion", piData);
@@ -251,21 +268,35 @@ sap.ui.define([
     getResponsables: async function (oObra) {
       const oModel = this.getModel("AppJsonModel");
       let pi = [];
-      let responsables = [];
       oObra.p3.forEach(p3 => {
         p3.pi.forEach(item => {
           pi.push(item);
         });
       });
       pi = pi.filter(e => e.responsables != null);
-      pi.forEach(item => {
-        item.responsables.direccion_ID = item.responsables.direccion_ID;
-        item.responsables.gerencia_ID = item.responsables.gerencia_ID;
-        //item.responsables.jefes_nombres = item.responsables.responsables.inspectores.inspector.find(i=>i.tipo_inspector_ID === "JE");
-      });
-      pi.forEach(x => {
-        responsables.push(x.responsables);
-      });
+      const responsables = pi.map(item => {
+        let inspectores = item.responsables.responsables.inspectores.map(e => {
+          return {
+            nombre: e.inspector.nombre,
+            tipo_inspector_ID: e.inspector.tipo_inspector_ID
+          }
+        })
+        return {
+          direccion_ID: item.responsables.responsables.direccion_ID,
+          gerencia_ID: item.responsables.responsables.gerencia_ID,
+          inspectores: inspectores,
+          jefes_nombres: "",
+          inspectores_nombres: ""
+        };
+      });      
+      responsables.forEach(item => {
+        let jefes = item.inspectores.filter(e => e.tipo_inspector_ID === "JE")
+        const jefes_nombres = jefes.map(o => o.nombre).join(', ');
+        let inspectores = item.inspectores.filter(e => e.tipo_inspector_ID === "EM")
+        const inspectores_nombres = inspectores.map(o => o.nombre).join(', ');
+        item.jefes_nombres = jefes_nombres;
+        item.inspectores_nombres = inspectores_nombres;
+      });              
       oModel.setProperty("/responsables", responsables);
     },
 
@@ -467,7 +498,8 @@ sap.ui.define([
       selectedPI.inspectores = selected.inspectores;
       selectedPI.jefes_nombres = selected.jefes_nombres;
       selectedPI.inspectores_nombres = selected.inspectores_nombres;
-      selectedPI.direccion_gerencia = selected.direccion_gerencia;
+      selectedPI.direccion_ID = selected.direccion_ID;
+      selectedPI.gerencia_ID = selected.gerencia_ID;
       selectedPI.responsables_ID = selected.uuid;
       this.closeResponsablesPIDialog();
     },
@@ -486,8 +518,8 @@ sap.ui.define([
       let suma = 0;
       proyectos_inversion.forEach(e => {
         if (e.moneda_ID !== "ARS") {
-          //const cambio = tipos_cambio.find(i=>i.moneda_ID)
-          let montoArs = Number(e.monto) * Number(e.tipo_cambio);
+          const cambio = ordenes_compra.find(i => i.moneda_ID === e.moneda_ID)
+          let montoArs = Number(e.monto) * cambio.tipo_cambio;
           suma = suma + montoArs;
         } else {
           suma = suma + Number(e.monto);
@@ -510,8 +542,8 @@ sap.ui.define([
     addResponsables: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/GrupoResponsables", {});
-      const jefes = oModel.getProperty("/Combos/JefeInspectores");
-      oModel.setProperty("/Jefes", jefes);
+      // const jefes = oModel.getProperty("/Combos/JefeInspectores");
+      // oModel.setProperty("/Jefes", jefes);
       if (!this._oResponsablesDialog) {
         this._oResponsablesDialog = Fragment.load({
           id: this.getView().getId(),
@@ -544,10 +576,10 @@ sap.ui.define([
       } else {
         const uuid = await Services.getUUID();
         oModel.setProperty("/GrupoResponsables/uuid", uuid.value);
-        const direccion = this.byId("idComboDirecciones").getSelectedItem().mProperties.text;
-        const gerencia = this.byId("idComboGerencias").getSelectedItem().mProperties.text;
-        const direccion_gerencia = direccion + " / " + gerencia;
-        oModel.setProperty("/GrupoResponsables/direccion_gerencia", direccion_gerencia);
+        const direccion = this.byId("idComboDirecciones").getSelectedItem().mProperties.key;
+        const gerencia = this.byId("idComboGerencias").getSelectedItem().mProperties.key;       
+        oModel.setProperty("/GrupoResponsables/direccion_ID", direccion);
+        oModel.setProperty("/GrupoResponsables/gerencia_ID", gerencia);
         const jefesArray = this.byId("idComboJefes").getSelectedItems().map(i => i.mProperties);
         const nombresJefes = jefesArray.map(o => o.text).join(', ');
         oModel.setProperty("/GrupoResponsables/jefes_nombres", nombresJefes);
@@ -572,6 +604,11 @@ sap.ui.define([
     //Seteo las gerencias que corresponden a cada direccion en los combos del apartado de responsables
     onChangeDireccion: async function () {
       const oModel = this.getModel("AppJsonModel");
+      this.byId("idComboGerencias").setSelectedKey("");
+      oModel.setProperty("/Jefes", []);
+      oModel.setProperty("/Inspectores", []);
+      oModel.setProperty("/GrupoResponsables/jefes", [])
+      oModel.setProperty("/GrupoResponsables/inspectores", []);
       const sDireccion = oModel.getProperty("/GrupoResponsables/direccion_ID");
       const oCombo = this.byId("idComboGerencias", sDireccion);
       const oBinding = oCombo.getBinding("items");
@@ -583,7 +620,7 @@ sap.ui.define([
       oBinding.filter(aFilter);
       const aInspectores = await Services.getInspectores();
       let Jefes = aInspectores.value.filter(item => item.tipo_inspector_ID === 'JE' && item.direccion_ID === sDireccion);
-      oModel.setProperty("/Combos/JefeInspectores", Jefes);
+      oModel.setProperty("/Jefes", Jefes);
     },
 
     //Agregar P3
@@ -721,7 +758,7 @@ sap.ui.define([
           MessageBox.error(message);
         } else {
           //Se debe asignar responsables a todos los pi
-          const piRespVacio = oModel.getData().proyectos_inversion.find(i=>!i.hasOwnProperty("inspectores"));
+          const piRespVacio = oModel.getData().proyectos_inversion.find(i => !i.hasOwnProperty("inspectores_nombres"));
           if (piRespVacio) {
             const messagePi = this.getResourceBundle().getText("errorresppi");
             MessageBox.error(messagePi);
@@ -767,6 +804,8 @@ sap.ui.define([
 
     navigationToStep: function (nStep) {
       this.byId("wizardNavContainer").back();
+      const oModel = this.getModel("AppJsonModel");
+      oModel.setProperty("/Detalle", false)
       const oWizard = this.byId("CreateObraWizard");
       const oStep = oWizard.getSteps().at(nStep);
       setTimeout(() => {
@@ -947,18 +986,17 @@ sap.ui.define([
                 estado_datos_contratista_ID: "AC",
                 preconstruccion_ID: oPreconstruccion.ID
               });
-              //Responsables --- REVISAR ///
               const promisesResponsables = [];
               responsables.forEach(resp => {
                 promisesResponsables.push(Services.postResponsables({ ...resp, obra_ID: newObra.ID }));
               });
               await Promise.all(promisesResponsables);
               const promisesResponsablesPI = [];
-              const proy_inv = oModel.getData().proyectos_inversion.map(item => { 
+              const proy_inv = oModel.getData().proyectos_inversion.map(item => {
                 return {
                   pi_ID: item.uuid,
                   responsables_ID: item.responsables_ID
-                } 
+                };
               });
               proy_inv.forEach(pi => {
                 promisesResponsablesPI.push(Services.postResponsablesPI({ ...pi }));
