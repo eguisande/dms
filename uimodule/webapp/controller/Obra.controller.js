@@ -532,8 +532,8 @@ sap.ui.define([
             });
             const responsables = await this.getResponsables(oObra);  
             const infoResponsables = await this.getCorreosResponsables(oObra);          
-            const aprobadores_usuario = infoResponsables[0];
-            const aprobadores_correo = infoResponsables[1];
+            const aprobadores_correo = infoResponsables[0];
+            const aprobadores_usuario = infoResponsables[1];
             const oPayload = {
               definitionId: "pgo.wfaltaobra",
               context: {
