@@ -140,7 +140,7 @@ sap.ui.define([
         const { value } = await Services.getObrasJefeInspector(user, "EM");
         return value;
       }
-      
+
     },
 
     handleSortDialog: function () {
@@ -525,43 +525,22 @@ sap.ui.define([
                 p3: item.p3.codigo,
                 pi: item.pi,
                 tipo_pi: item.tipo_pi.descripcion,
-                sistema_contratacion: item.sistema_contratacion,
+                sistema_contratacion: item.sistema_contratacion.descripcion,
                 importe: item.monto,
                 moneda: item.moneda_ID
               };
             });
-            //TO DO
-            const responsables = [
-              {
-                direccion: "Dirección de redes",
-                gerencia: "Redes CABA",
-                jefe_inspeccion: "Juan Perez, Milton Casco",
-                inspector: "Pedro Gomez, Lautaro Martinez",
-                pi: "1960N06, 1960N07"
-              },
-              {
-                direccion: "Dirección de Civil y Electromecánica",
-                gerencia: "Estaciones de bombeo",
-                jefe_inspeccion: "Lionel Messi",
-                inspector: "Lionel Scaloni, Facundo Roncaglia",
-                pi: "1960N09, 1960N08"
-              }
-            ];
-            const aprobadores_usuario = [
-              "alfredo.montanes@datco.net",
-              "tobias.racedo@datco.com"
-            ];
-            const aprobadores_correo = [
-              "alfredo.montanes@datco.net",
-              "tobias.racedo@datco.com"
-            ];
+            const responsables = await this.getResponsables(oObra);  
+            const infoResponsables = await this.getCorreosResponsables(oObra);          
+            const aprobadores_usuario = infoResponsables[0];
+            const aprobadores_correo = infoResponsables[1];
             const oPayload = {
               definitionId: "pgo.wfaltaobra",
               context: {
                 id_obra: oObra.ID,
                 nombre: oObra.nombre,
                 nro_contrato: oObra.nro_contrato,
-                monto_original_contrato: oObra.monto_contrato,
+                monto_original_contrato: oObra.monto_original_contrato,
                 moneda: oObra.moneda_ID,
                 proveedor: oObra.contratista.registro_proveedor,
                 razon_social: oObra.contratista.razonsocial,
@@ -575,8 +554,8 @@ sap.ui.define([
                 incremento_maximo: oObra.incremento_maximo,
                 plazo_ejecucion: oObra.plazo_ejecucion,
                 maximo_plazo_extension: oObra.maximo_plazo_extension,
-                fondo_reparo: oObra.fondo_reparo,
-                financiamiento_obra: oObra.financiamiento_obra,
+                fondo_reparo: oObra.fondo_reparo === null ? 0 : oObra.fondo_reparo,
+                financiamiento_obra: oObra.financiamiento_obra.descripcion,
                 descuento_monto_contrato: oObra.descuento_monto_contrato,
                 nro_poliza: oObra.nro_poliza,
                 extendida_por: oObra.extendida_por,
@@ -615,6 +594,51 @@ sap.ui.define([
           }
         }
       });
+    },
+
+    //Obtengo los responsables de cada pi
+    getResponsables: async function (oObra) {
+      let pi = [];
+      oObra.p3.forEach(p3 => {
+        p3.pi.forEach(item => {
+          pi.push(item);
+        });
+      });
+      pi = pi.filter(e => e.responsables != null);
+      const pi_cod = pi.map(o => o.pi).join(', ')
+      const responsables = pi.map(item => {        
+        let jefes = item.responsables.responsables.inspectores.filter(e => e.inspector.tipo_inspector_ID === "JE");
+        const jefes_nombres = jefes.map(o => o.inspector.nombre).join(', ');
+        let inspectores = item.responsables.responsables.inspectores.filter(e => e.inspector.tipo_inspector_ID === "EM")
+        const inspectores_nombres = inspectores.map(o => o.inspector.nombre).join(', ');
+        return {
+          direccion: item.responsables.responsables.direccion.descripcion,
+          gerencia: item.responsables.responsables.gerencia.descripcion,
+          jefe_inspeccion: jefes_nombres,
+          inspector: inspectores_nombres, 
+          pi: pi_cod
+        };
+      });      
+      return responsables;
+    },
+
+    getCorreosResponsables: function (oObra) {
+      let pi = [];
+      oObra.p3.forEach(p3 => {
+        p3.pi.forEach(item => {
+          pi.push(item);
+        });
+      });
+      pi = pi.filter(e => e.responsables != null); 
+      let correos = []
+      let usuarios = []     
+      pi.forEach(item => {        
+        correos.push(item.responsables.responsables.inspectores.map(o => o.inspector.correo))
+        usuarios.push(item.responsables.responsables.inspectores.map(o => o.inspector.usuario))             
+      }); 
+      correos = correos.flat();
+      usuarios = usuarios.flat();    
+      return [correos, usuarios];
     },
 
     createPdf: async function () {

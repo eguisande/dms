@@ -66,19 +66,19 @@ sap.ui.define([], function () {
 
     getObras: function () {
       return this.callGetService(
-        "Obras?$expand=estado,responsables($expand=inspectores,gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
+        "Obras?$expand=estado,responsables($expand=inspectores,gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=direccion,gerencia,inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre"
       );
     },
 
     getObrasJefeInspector: function (usuario, tipo_inspector) {
       return this.callGetService(
-        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,responsables($expand=inspectores,gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
+        `getObrasByInspector(usuario='${usuario}',tipo_inspector='${tipo_inspector}')?$expand=estado,responsables($expand=inspectores,gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=direccion,gerencia,inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)&$orderby=nombre`
       );
     },
 
     getObra: function (ID) {
       return this.callGetService(
-        `Obras/${ID}?$expand=estado,responsables($expand=inspectores,gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)`
+        `Obras/${ID}?$expand=estado,responsables($expand=inspectores,gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=direccion,gerencia,inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)`
       );
     },
 

@@ -973,6 +973,7 @@ sap.ui.define([
               nro_poliza: oObraDetalle.nro_poliza,
               extendida_por: oObraDetalle.extendida_por,
               porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
+              fondo_reparo: oObraDetalle.fondo_reparo,
               descuento_monto_contrato: oObraDetalle.descuento_monto_contrato,
               monto_original_contrato: oObraDetalle.monto_contrato
             };
