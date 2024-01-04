@@ -597,6 +597,7 @@ sap.ui.define([
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/responsables");
+      //agregar logica si esta editando
       items.splice(idx, 1);
       this.byId("idResponsablesTable").getBinding("items").refresh();
     },

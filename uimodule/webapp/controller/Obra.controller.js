@@ -636,8 +636,8 @@ sap.ui.define([
         correos.push(item.responsables.responsables.inspectores.map(o => o.inspector.correo))
         usuarios.push(item.responsables.responsables.inspectores.map(o => o.inspector.usuario))             
       }); 
-      correos = correos.flat();
-      usuarios = usuarios.flat();    
+      correos = correos.flat().filter(i => i !== null);
+      usuarios = usuarios.flat().filter(i => i !== null);  
       return [correos, usuarios];
     },
 
