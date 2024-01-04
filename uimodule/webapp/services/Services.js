@@ -90,8 +90,12 @@ sap.ui.define([], function () {
       return this.callGetService("Contratistas");
     },
 
-    getResponsables: function () {
+    getResponsablesPI: function () {
       return this.callGetService("ResponsablesPI?$expand=pi,responsables($expand=inspectores)");
+    },
+
+    getResponsables: function () {
+      return this.callGetService("Responsables");
     },
 
     getDirecciones: function () {
@@ -168,6 +172,14 @@ sap.ui.define([], function () {
 
     postResponsablesPI: function (oPayload) {
       return this.callPostService("ResponsablesPI", oPayload);
+    },
+
+    deleteResponsables: function (ID) {
+      return this.callDeleteService(`Responsables/${ID}`);
+    },
+
+    deleteResponsablesPI: function (ID) {
+      return this.callDeleteService(`ResponsablesPI/${ID}`);
     },
 
     getUser: async function () {

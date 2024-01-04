@@ -4,7 +4,7 @@
   xmlns="sap.m">
   <form:SimpleForm title="{i18n>pi}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/proyectos_inversion}" fixedLayout="false" width="100%">
+      <Table id="idPiTable" items="{AppJsonModel>/proyectos_inversion}" fixedLayout="false" width="100%">
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nrop3}" />

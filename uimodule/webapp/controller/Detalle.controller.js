@@ -248,17 +248,17 @@ sap.ui.define([
           return {
             nombre: e.inspector.nombre,
             tipo_inspector_ID: e.inspector.tipo_inspector_ID
-          }
-        })
-        let jefes = inspectores.filter(e => e.tipo_inspector_ID === "JE")
+          };
+        });
+        let jefes = inspectores.filter(e => e.tipo_inspector_ID === "JE");
         const jefes_nombres = jefes.map(o => o.nombre).join(', ');
-        let inspect = inspectores.filter(e => e.tipo_inspector_ID === "EM")
+        let inspect = inspectores.filter(e => e.tipo_inspector_ID === "EM");
         const inspectores_nombres = inspect.map(o => o.nombre).join(', ');
         item.jefes_nombres = jefes_nombres;
         item.inspectores_nombres = inspectores_nombres;
         item.codigo = item.p3.codigo;
         item.direccion_ID = item.responsables.responsables.direccion_ID,
-        item.gerencia_ID = item.responsables.responsables.gerencia_ID
+          item.gerencia_ID = item.responsables.responsables.gerencia_ID;
       });
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/proyectos_inversion", piData);
@@ -279,24 +279,25 @@ sap.ui.define([
           return {
             nombre: e.inspector.nombre,
             tipo_inspector_ID: e.inspector.tipo_inspector_ID
-          }
-        })
+          };
+        });
         return {
+          ID: item.responsables.responsables_ID,
           direccion_ID: item.responsables.responsables.direccion_ID,
           gerencia_ID: item.responsables.responsables.gerencia_ID,
           inspectores: inspectores,
           jefes_nombres: "",
           inspectores_nombres: ""
         };
-      });      
+      });
       responsables.forEach(item => {
-        let jefes = item.inspectores.filter(e => e.tipo_inspector_ID === "JE")
+        let jefes = item.inspectores.filter(e => e.tipo_inspector_ID === "JE");
         const jefes_nombres = jefes.map(o => o.nombre).join(', ');
-        let inspectores = item.inspectores.filter(e => e.tipo_inspector_ID === "EM")
+        let inspectores = item.inspectores.filter(e => e.tipo_inspector_ID === "EM");
         const inspectores_nombres = inspectores.map(o => o.nombre).join(', ');
         item.jefes_nombres = jefes_nombres;
         item.inspectores_nombres = inspectores_nombres;
-      });              
+      });
       oModel.setProperty("/responsables", responsables);
     },
 
@@ -395,7 +396,8 @@ sap.ui.define([
       }
     },
 
-    deleteOC: function (oEvent) {
+    deleteOC: async function (oEvent) {
+      await this.showMessageConfirm("deleteconfirm");
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
@@ -456,7 +458,8 @@ sap.ui.define([
       }
     },
 
-    deletePI: function (oEvent) {
+    deletePI: async function (oEvent) {
+      await this.showMessageConfirm("deleteconfirm");
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
@@ -518,7 +521,7 @@ sap.ui.define([
       let suma = 0;
       proyectos_inversion.forEach(e => {
         if (e.moneda_ID !== "ARS") {
-          const cambio = ordenes_compra.find(i => i.moneda_ID === e.moneda_ID)
+          const cambio = ordenes_compra.find(i => i.moneda_ID === e.moneda_ID);
           let montoArs = Number(e.monto) * cambio.tipo_cambio;
           suma = suma + montoArs;
         } else {
@@ -542,8 +545,6 @@ sap.ui.define([
     addResponsables: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/GrupoResponsables", {});
-      // const jefes = oModel.getProperty("/Combos/JefeInspectores");
-      // oModel.setProperty("/Jefes", jefes);
       if (!this._oResponsablesDialog) {
         this._oResponsablesDialog = Fragment.load({
           id: this.getView().getId(),
@@ -577,7 +578,7 @@ sap.ui.define([
         const uuid = await Services.getUUID();
         oModel.setProperty("/GrupoResponsables/uuid", uuid.value);
         const direccion = this.byId("idComboDirecciones").getSelectedItem().mProperties.key;
-        const gerencia = this.byId("idComboGerencias").getSelectedItem().mProperties.key;       
+        const gerencia = this.byId("idComboGerencias").getSelectedItem().mProperties.key;
         oModel.setProperty("/GrupoResponsables/direccion_ID", direccion);
         oModel.setProperty("/GrupoResponsables/gerencia_ID", gerencia);
         const jefesArray = this.byId("idComboJefes").getSelectedItems().map(i => i.mProperties);
@@ -588,16 +589,69 @@ sap.ui.define([
         oModel.setProperty("/GrupoResponsables/inspectores_nombres", nombresInspectores);
         responsables.push(grupoResponsables);
         oModel.setProperty("/responsables", responsables);
+        //Si está editando hago el post del nuevo responsable a la bd
+        if (oModel.getProperty("/ObraDetalle/ID")) {
+          try {
+            const jefesIDs = grupoResponsables.jefes || [];
+            const inspectoresIDs = grupoResponsables.inspectores || [];
+            const inspectorIDs = [...jefesIDs, ...inspectoresIDs];
+            const inspectores = inspectorIDs.map(elem => {
+              return {
+                inspector_ID: elem
+              };
+            });
+            const nuevosResponsables = {
+              ID: grupoResponsables.uuid,
+              direccion_ID: grupoResponsables.direccion_ID,
+              gerencia_ID: grupoResponsables.gerencia_ID,
+              inspectores: inspectores
+            };
+            await Services.postResponsables({ ...nuevosResponsables, obra_ID: oModel.getProperty("/ObraDetalle/ID") });
+          } catch (error) {
+            const message = this.getResourceBundle().getText("errorresponsables");
+            MessageToast.show(message);
+          }
+        }
         this.closeResponsablesDialog();
       }
     },
 
-    deleteResponsable: function (oEvent) {
+    deleteResponsable: async function (oEvent) {
+      await this.showMessageConfirm("deleteconfirm");
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/responsables");
-      //agregar logica si esta editando
+      let selectedpi = {};
+      let ID = "";
+      if (oEvent.getSource().getBindingContext("AppJsonModel").getObject().ID) { //si esta editando lo borro de la bd
+        try {
+          BusyIndicator.show(0);
+          ID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().ID;
+          selectedpi = oModel.getData().proyectos_inversion.find(i => i.responsables.responsables_ID === ID);
+          const resp = await Services.getResponsablesPI();
+          const selectedResp = resp.value.find(i => i.responsables_ID === ID);
+          await Services.deleteResponsablesPI(selectedResp.ID);
+          await Services.deleteResponsables(ID);
+        } catch (error) {
+          const message = this.getResourceBundle().getText("errordelete");
+          MessageToast.show(message);
+        } finally {
+          BusyIndicator.hide();
+        }
+      } else {
+        ID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().uuid;
+        selectedpi = oModel.getData().proyectos_inversion.find(i => i.responsables_ID === ID);
+      }
+      if (oModel.getData().proyectos_inversion) {
+        selectedpi.responsables = {};
+        delete selectedpi.inspectores_nombres;
+        delete selectedpi.jefes_nombres;
+        delete selectedpi.gerencia_ID;
+        delete selectedpi.direccion_ID;
+        this.byId("idPiTable").getBinding("items").refresh();
+        oModel.refresh(true);
+      }
       items.splice(idx, 1);
       this.byId("idResponsablesTable").getBinding("items").refresh();
     },
@@ -608,7 +662,7 @@ sap.ui.define([
       this.byId("idComboGerencias").setSelectedKey("");
       oModel.setProperty("/Jefes", []);
       oModel.setProperty("/Inspectores", []);
-      oModel.setProperty("/GrupoResponsables/jefes", [])
+      oModel.setProperty("/GrupoResponsables/jefes", []);
       oModel.setProperty("/GrupoResponsables/inspectores", []);
       const sDireccion = oModel.getProperty("/GrupoResponsables/direccion_ID");
       const oCombo = this.byId("idComboGerencias", sDireccion);
@@ -664,7 +718,8 @@ sap.ui.define([
       }
     },
 
-    deleteP3: function (oEvent) {
+    deleteP3: async function (oEvent) {
+      await this.showMessageConfirm("deleteconfirm");
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
@@ -718,7 +773,8 @@ sap.ui.define([
       }
     },
 
-    deleteImporteP3: function (oEvent) {
+    deleteImporteP3: async function (oEvent) {
+      await this.showMessageConfirm("deleteconfirm");
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
@@ -739,6 +795,17 @@ sap.ui.define([
         const importe_ars = Number(importe) * Number(tipo_cambio);
         oModel.setProperty("/ImporteP3/importe_ars", importe_ars);
       }
+    },
+
+    //Pregunta confirma borrado
+    showMessageConfirm: function (sText) {
+      return new Promise((res, rej) => {
+        MessageBox.confirm(this.getResourceBundle().getText(sText), {
+          actions: [MessageBox.Action.CANCEL, "Aceptar"],
+          emphasizedAction: "Aceptar",
+          onClose: sAction => sAction === "Aceptar" ? res() : rej(false)
+        });
+      });
     },
 
     //Accion del boton "revisar"
@@ -806,7 +873,7 @@ sap.ui.define([
     navigationToStep: function (nStep) {
       this.byId("wizardNavContainer").back();
       const oModel = this.getModel("AppJsonModel");
-      oModel.setProperty("/Detalle", false)
+      oModel.setProperty("/Detalle", false);
       const oWizard = this.byId("CreateObraWizard");
       const oStep = oWizard.getSteps().at(nStep);
       setTimeout(() => {
@@ -988,22 +1055,8 @@ sap.ui.define([
                 estado_datos_contratista_ID: "AC",
                 preconstruccion_ID: oPreconstruccion.ID
               });
-              const promisesResponsables = [];
-              responsables.forEach(resp => {
-                promisesResponsables.push(Services.postResponsables({ ...resp, obra_ID: newObra.ID }));
-              });
-              await Promise.all(promisesResponsables);
-              const promisesResponsablesPI = [];
-              const proy_inv = oModel.getData().proyectos_inversion.map(item => {
-                return {
-                  pi_ID: item.uuid,
-                  responsables_ID: item.responsables_ID
-                };
-              });
-              proy_inv.forEach(pi => {
-                promisesResponsablesPI.push(Services.postResponsablesPI({ ...pi }));
-              });
-              await Promise.all(promisesResponsablesPI);
+              //Responsables
+              await this.postResponsables(responsables, newObra.ID);
               //Carpetas DMS
               await Services.createFolderDMSUnificado(oObraDetalle.registro_proveedor, newObra.ID, aAreas); //carpeta unificada
               const promisesDms = [];
@@ -1029,6 +1082,31 @@ sap.ui.define([
           }
         }
       });
+    },
+
+    postResponsables: async function (responsables, newObraID) {
+      try {
+        const oModel = this.getModel("AppJsonModel");
+        const promisesResponsables = [];
+        responsables.forEach(resp => {
+          promisesResponsables.push(Services.postResponsables({ ...resp, obra_ID: newObraID }));
+        });
+        await Promise.all(promisesResponsables);
+        const promisesResponsablesPI = [];
+        const proy_inv = oModel.getData().proyectos_inversion.map(item => {
+          return {
+            pi_ID: item.uuid,
+            responsables_ID: item.responsables_ID
+          };
+        });
+        proy_inv.forEach(pi => {
+          promisesResponsablesPI.push(Services.postResponsablesPI({ ...pi }));
+        });
+        await Promise.all(promisesResponsablesPI);
+      } catch (error) {
+        const message = this.getResourceBundle().getText("errorresponsables");
+        MessageToast.show(message);
+      }
     }
 
   });
