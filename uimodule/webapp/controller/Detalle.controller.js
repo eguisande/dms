@@ -493,7 +493,7 @@ sap.ui.define([
       });
     },
 
-    selectResponsablesPI: function () {
+    selectResponsablesPI: async function () {
       const selected = this.byId("idResponsablesPITable").getSelectedItem().getBindingContext("AppJsonModel").getObject();
       const oModel = this.getModel("AppJsonModel");
       const selectedPI = oModel.getProperty("/selectedPI");
@@ -504,6 +504,19 @@ sap.ui.define([
       selectedPI.direccion_ID = selected.direccion_ID;
       selectedPI.gerencia_ID = selected.gerencia_ID;
       selectedPI.responsables_ID = selected.uuid;
+      //agregar responsable edicion
+      if (oModel.getProperty("/ObraDetalle/ID")) {
+        try {
+          const piResp = {
+            pi_ID: selectedPI.ID,
+            responsables_ID: selectedPI.responsables_ID
+          }
+          await Services.postResponsablesPI({ ...piResp })
+        } catch (error) {
+          const message = this.getResourceBundle().getText("errorresponsables");
+          MessageToast.show(message);
+        }        
+      }
       this.closeResponsablesPIDialog();
     },
 
