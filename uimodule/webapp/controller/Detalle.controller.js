@@ -237,12 +237,13 @@ sap.ui.define([
 
     //lista de pi
     getPiList: function (oObra) {
-      const piData = [];
+      let piData = [];
       oObra.p3.forEach(p3 => {
         p3.pi.forEach(pi => {
           piData.push(pi);
         });
       });
+      piData = piData.filter(e => e.responsables != null);
       piData.forEach(item => {
         let inspectores = item.responsables.responsables.inspectores.map(e => {
           return {
@@ -642,8 +643,8 @@ sap.ui.define([
           BusyIndicator.show(0);
           ID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().ID;
           selectedpi = oModel.getData().proyectos_inversion.find(i => i.responsables.responsables_ID === ID);
-          const resp = await Services.getResponsablesPI();
-          const selectedResp = resp.value.find(i => i.responsables_ID === ID);
+          const resp = await Services.getResponsablesPI(ID);
+          const selectedResp = resp.value[0];
           await Services.deleteResponsablesPI(selectedResp.ID);
           await Services.deleteResponsables(ID);
         } catch (error) {
@@ -656,7 +657,7 @@ sap.ui.define([
         ID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().uuid;
         selectedpi = oModel.getData().proyectos_inversion.find(i => i.responsables_ID === ID);
       }
-      if (oModel.getData().proyectos_inversion) {
+      if (selectedpi !== undefined) { //limpio los campos del grupo de responsables asignado al pi
         selectedpi.responsables = {};
         delete selectedpi.inspectores_nombres;
         delete selectedpi.jefes_nombres;

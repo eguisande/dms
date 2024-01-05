@@ -90,8 +90,8 @@ sap.ui.define([], function () {
       return this.callGetService("Contratistas");
     },
 
-    getResponsablesPI: function () {
-      return this.callGetService("ResponsablesPI?$expand=pi,responsables($expand=inspectores)");
+    getResponsablesPI: function (respID) {
+      return this.callGetService(`ResponsablesPI?$filter=responsables_ID eq ${respID}`);
     },
 
     getResponsables: function () {
