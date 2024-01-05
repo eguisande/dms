@@ -542,7 +542,7 @@ sap.ui.define([
         }
       });
       oModel.setProperty("/monto_total", suma);
-      oModel.setProperty("/ObraDetalle/monto_contrato", suma);
+      oModel.setProperty("/ObraDetalle/monto_original_contrato", suma);
     },
 
     //Cambio de seleccion de moneda de pi
@@ -1056,7 +1056,7 @@ sap.ui.define([
               porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
               fondo_reparo: oObraDetalle.fondo_reparo,
               descuento_monto_contrato: oObraDetalle.descuento_monto_contrato,
-              monto_original_contrato: oObraDetalle.monto_contrato
+              monto_original_contrato: oObraDetalle.monto_original_contrato
             };
             if (oObraDetalle.ID) {
               await Services.updateObra(oObraDetalle.ID, oPayload);
