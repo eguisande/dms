@@ -275,7 +275,7 @@ sap.ui.define([
         });
       });
       pi = pi.filter(e => e.responsables != null);
-      const responsables = pi.map(item => {
+      let responsables = pi.map(item => {
         let inspectores = item.responsables.responsables.inspectores.map(e => {
           return {
             nombre: e.inspector.nombre,
@@ -291,6 +291,8 @@ sap.ui.define([
           inspectores_nombres: ""
         };
       });
+      //elimino ids duplicados
+      responsables = responsables.filter((v,i,a) => a.findIndex(v2 => (v2.ID === v.ID)) === i);
       responsables.forEach(item => {
         let jefes = item.inspectores.filter(e => e.tipo_inspector_ID === "JE");
         const jefes_nombres = jefes.map(o => o.nombre).join(', ');
@@ -536,10 +538,10 @@ sap.ui.define([
       proyectos_inversion.forEach(e => {
         if (e.moneda_ID !== "ARS") {
           const cambio = ordenes_compra.find(i => i.moneda_ID === e.moneda_ID);
-          let montoArs = Number(e.monto) * cambio.tipo_cambio;
+          let montoArs = parseFloat(e.monto) * cambio.tipo_cambio;
           suma = suma + montoArs;
         } else {
-          suma = suma + Number(e.monto);
+          suma = suma + parseFloat(e.monto);
         }
       });
       oModel.setProperty("/monto_total", suma);
@@ -801,13 +803,25 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const aOrdenesCompra = oModel.getProperty("/ordenes_compra");
       const selected = oModel.getProperty("/ImporteP3/moneda_ID");
-      const importe = oModel.getProperty("/ImporteP3/importe");
+      let importe = oModel.getProperty("/ImporteP3/importe");
       if (importe !== "" && selected !== undefined) {
+        importe = parseFloat(importe.replace(",", "."));
         const ocData = aOrdenesCompra.filter(item => item.moneda_ID === selected);
         oModel.setProperty("/ImporteP3/tipo_cambio", ocData[0].tipo_cambio);
-        const tipo_cambio = oModel.getProperty("/ImporteP3/tipo_cambio");
-        const importe_ars = Number(importe) * Number(tipo_cambio);
+        const tipo_cambio = Number(oModel.getProperty("/ImporteP3/tipo_cambio"));
+        let importe_ars = importe * tipo_cambio;
         oModel.setProperty("/ImporteP3/importe_ars", importe_ars);
+      }
+    },
+
+    onAcopioChange: function () {
+      const oModel = this.getModel("AppJsonModel");
+      const acopio = oModel.getProperty("/P3/acopio");
+      if (acopio) {
+        this.byId("idInputAnticipoP3").setEnabled(false);
+        oModel.setProperty("/P3/anticipo_financiero", 0);
+      } else {
+        this.byId("idInputAnticipoP3").setEnabled(true);
       }
     },
 

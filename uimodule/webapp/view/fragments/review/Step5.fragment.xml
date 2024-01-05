@@ -33,7 +33,7 @@
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>importe}" />
             <footer >
-              <ObjectStatus text="{path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'} ARS" />
+              <ObjectStatus text="Total ARS: {path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'}" />
             </footer>
           </Column>
         </columns>
@@ -56,7 +56,7 @@
               </ComboBox>
               <Text text="{AppJsonModel>jefes_nombres}" />
               <Text text="{AppJsonModel>inspectores_nombres}" />
-              <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'} {AppJsonModel>moneda_ID}" />
+              <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'}" />
             </cells>
           </ColumnListItem>
         </items>
@@ -71,29 +71,29 @@
   <form:SimpleForm visible="{AppJsonModel>/Visible}" title="{i18n>fechas}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
     <form:content>
       <Label text="{i18n>fechainiciocontractual}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_inicio_contractual}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_inicio_contractual', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechainiciofisico}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_inicio_fisico}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_inicio_fisico', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechafincontractualoriginal}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_fin_contractual_original}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_fin_contractual_original', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechafincontractualvigente}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_fin_contractual_vigente}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_fin_contractual_original_vigente', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechafinobrafisico}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_fin_obra_fisico}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_fin_obra_fisico', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fecharecepcionprovisoria}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_recepcion_provisoria}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_recepcion_provisoria', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fecharecepciondefinitiva}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_recepcion_definitiva}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_recepcion_definitiva', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechapuestaservicio}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_puesta_servicio}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_puesta_servicio', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechacao}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_cao_visita_cliente}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_cao_visita_cliente', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechatransferencia}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_transferencia}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_transferencia', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fechahabilitacion}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_habilitacion}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_habilitacion', formatter: '.formatter.formatDate'}" editable="false"/>
       <Label text="{i18n>fecharescision}"/>
-      <Input value="{AppJsonModel>/ObraDetalle/fecha_recision}" editable="false"/>
+      <Input value="{path: 'AppJsonModel>/ObraDetalle/fecha_recision', formatter: '.formatter.formatDate'}" editable="false"/>
     </form:content>
   </form:SimpleForm>
 </core:FragmentDefinition>
