@@ -231,7 +231,7 @@ sap.ui.define([
       this.navTo("Detalle", { ID }, false);
     },
 
-    crearObra: function (oEvent) {
+    crearObra: function () {
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/Detalle", false);
       this.navTo("Detalle", false);

@@ -36,6 +36,9 @@
               <ObjectStatus text="Total ARS: {path: 'AppJsonModel>/monto_total', formatter: '.formatter.formatQuantity'}" />
             </footer>
           </Column>
+          <Column minScreenWidth="Tablet" demandPopin="true">
+            <Text text="{i18n>moneda}" />
+          </Column>
         </columns>
         <items>
           <ColumnListItem vAlign="Middle">
@@ -57,6 +60,7 @@
               <Text text="{AppJsonModel>jefes_nombres}" />
               <Text text="{AppJsonModel>inspectores_nombres}" />
               <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'}" />
+              <Text text="{AppJsonModel>moneda_ID}" />
             </cells>
           </ColumnListItem>
         </items>

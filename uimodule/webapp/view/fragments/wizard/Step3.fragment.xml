@@ -58,7 +58,7 @@
                 <Text text="{AppJsonModel>codigo}" />
                 <Text text="{AppJsonModel>nombre}" />
                 <Text text="{AppJsonModel>nros_pi}" visible="{AppJsonModel>/Visible}"/>
-                <Text text="{AppJsonModel>montos_pi}" visible="{AppJsonModel>/Visible}"/>
+                <Text text="{path: 'AppJsonModel>montos_pi', formatter: '.formatter.formatQuantity'} ARS" visible="{AppJsonModel>/Visible}"/>
                 <ComboBox items="{AppJsonModel>/Combos/TiposContratos}" editable="false" selectedKey="{AppJsonModel>tipo_contrato_ID}">
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
@@ -104,13 +104,13 @@
               <Text text="{i18n>importe}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>moneda}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>importears}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>tipocambio}" />
-            </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-              <Text text="{i18n>moneda}" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="{i18n>porcentajeponderacion}" />
@@ -124,9 +124,9 @@
               <cells>
                 <Text text="{AppJsonModel>codigo}"/>
                 <Text text="{path: 'AppJsonModel>importe', formatter: '.formatter.formatQuantity'}"/>
-                <Text text="{path: 'AppJsonModel>importe_ars', formatter: '.formatter.formatQuantity'}"/>
-                <Text text="{AppJsonModel>tipo_cambio}"/>
                 <Text text="{AppJsonModel>moneda_ID}"/>
+                <Text text="{path: 'AppJsonModel>importe_ars', formatter: '.formatter.formatQuantity'}"/>
+                <Text text="{AppJsonModel>tipo_cambio}"/>          
                 <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteImporteP3"/>

@@ -43,6 +43,9 @@
               </footer>
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
+              <Text text="{i18n>moneda}" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
               <Text text="Acciones" />
             </Column>
           </columns>
@@ -66,6 +69,7 @@
                 <Text text="{AppJsonModel>jefes_nombres}" />
                 <Text text="{AppJsonModel>inspectores_nombres}" />
                 <Text text="{path: 'AppJsonModel>monto', formatter: '.formatter.formatQuantity'}" />
+                <Text text="{AppJsonModel>moneda_ID}" />
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>agregarresponsables}" press="addResponsablesPI" icon="sap-icon://add" type="Transparent"/>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deletePI"/>

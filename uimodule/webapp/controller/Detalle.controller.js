@@ -49,6 +49,7 @@ sap.ui.define([
       if (ID) {
         oNavPage.to(oPageReview);
         await this.setDataToView(oModel, ID);
+        oModel.setProperty("/Visible", true);
         const aSteps = oWizard.getSteps();
         aSteps.forEach(oStep => {
           oWizard.nextStep();
@@ -207,17 +208,32 @@ sap.ui.define([
 
     //Obtengo los pi que pertenecen a cada p3
     getPiData: function (oObra) {
+      const oModel = this.getModel("AppJsonModel");
+      const ordenes_compra = oModel.getProperty("/ordenes_compra");
       oObra.p3.forEach(p3 => {
+        let suma = 0;
         const data = p3.pi.map(function (item) {
           return {
             nro_pi: item.pi,
-            monto: item.monto
+            monto: item.monto,
+            moneda_ID: item.moneda_ID
           };
         });
         const nros_pi = data.map(o => o.nro_pi).join(', ');
-        const montos_pi = data.map(o => o.monto).join(', ');
         p3.nros_pi = nros_pi;
-        p3.montos_pi = montos_pi;
+        data.forEach(e => {
+          if (e.moneda_ID !== "ARS") {
+            const cambio = ordenes_compra.find(i => i.moneda_ID === e.moneda_ID);
+            let montoArs = parseFloat(e.monto) * cambio.tipo_cambio;
+            suma = suma + montoArs;
+          } else {
+            suma = suma + parseFloat(e.monto);
+          }
+        });
+        p3.montos_pi = suma;
+        // const sum = data.reduce((accumulator, object) => {
+        //   return accumulator + object.monto;
+        // }, 0);       
       });
     },
 
@@ -292,7 +308,7 @@ sap.ui.define([
         };
       });
       //elimino ids duplicados
-      responsables = responsables.filter((v,i,a) => a.findIndex(v2 => (v2.ID === v.ID)) === i);
+      responsables = responsables.filter((v, i, a) => a.findIndex(v2 => (v2.ID === v.ID)) === i);
       responsables.forEach(item => {
         let jefes = item.inspectores.filter(e => e.tipo_inspector_ID === "JE");
         const jefes_nombres = jefes.map(o => o.nombre).join(', ');
@@ -303,21 +319,6 @@ sap.ui.define([
       });
       oModel.setProperty("/responsables", responsables);
     },
-
-    //Sumo los importes de cada pi
-    // getMontoTotal: function (oObra) {
-    //   const oModel = this.getModel("AppJsonModel");
-    //   let suma = 0;
-    //   oObra.p3.forEach(e => {
-    //     e.importes.forEach(i => {
-    //       let montoArs = i.importe * i.tipo_cambio;
-    //       suma = suma + montoArs;
-    //     });
-    //     return suma;
-    //   });
-    //   oModel.setProperty("/monto_total", suma);
-    //   oModel.setProperty("/ObraDetalle/monto_contrato", suma);
-    // },
 
     //Datos financieros y cumplimientos: seteo maximo plazo de extension
     setMaximoPlazo: function () {
@@ -393,6 +394,7 @@ sap.ui.define([
         const message = this.getResourceBundle().getText("errorfields");
         MessageToast.show(message);
       } else {
+        OC.no_redetermina === undefined ? OC.no_redetermina = false : OC.no_redetermina;
         ordenes_compra.push(OC);
         oModel.setProperty("/ordenes_compra", ordenes_compra);
         this.closeOCDialog();
@@ -500,25 +502,25 @@ sap.ui.define([
       const selected = this.byId("idResponsablesPITable").getSelectedItem().getBindingContext("AppJsonModel").getObject();
       const oModel = this.getModel("AppJsonModel");
       const selectedPI = oModel.getProperty("/selectedPI");
-      selectedPI.jefes = selected.jefes;
-      selectedPI.inspectores = selected.inspectores;
-      selectedPI.jefes_nombres = selected.jefes_nombres;
-      selectedPI.inspectores_nombres = selected.inspectores_nombres;
-      selectedPI.direccion_ID = selected.direccion_ID;
-      selectedPI.gerencia_ID = selected.gerencia_ID;
-      selectedPI.responsables_ID = selected.uuid;
       //agregar responsable edicion
       if (oModel.getProperty("/ObraDetalle/ID")) {
         try {
           const piResp = {
-            pi_ID: selectedPI.ID,
-            responsables_ID: selectedPI.responsables_ID
-          }
-          await Services.postResponsablesPI({ ...piResp })
+            responsables_ID: selected.ID
+          };
+          await Services.updateResponsablesPI(selectedPI.responsables.ID, piResp);
         } catch (error) {
           const message = this.getResourceBundle().getText("errorresponsables");
           MessageToast.show(message);
-        }        
+        }
+      } else {
+        selectedPI.jefes = selected.jefes;
+        selectedPI.inspectores = selected.inspectores;
+        selectedPI.jefes_nombres = selected.jefes_nombres;
+        selectedPI.inspectores_nombres = selected.inspectores_nombres;
+        selectedPI.direccion_ID = selected.direccion_ID;
+        selectedPI.gerencia_ID = selected.gerencia_ID;
+        selectedPI.responsables_ID = selected.uuid;
       }
       this.closeResponsablesPIDialog();
     },
@@ -709,6 +711,7 @@ sap.ui.define([
         });
       }
       this._oP3Dialog.then(oDialog => {
+        this.byId("idInputAnticipoP3").setEnabled(true);
         oDialog.open();
       });
     },
@@ -728,6 +731,9 @@ sap.ui.define([
         const message = this.getResourceBundle().getText("errorfields");
         MessageToast.show(message);
       } else {
+        P3.acopio === undefined ? P3.acopio = false : P3.acopio;
+        P3.acumar === undefined ? P3.acumar = false : P3.acumar;
+        P3.anticipo_financiero === undefined ? P3.anticipo_financiero = 0 : P3.anticipo_financiero;
         p3s.push(P3);
         oModel.setProperty("/p3s", p3s);
         this.closeP3Dialog();
@@ -783,8 +789,20 @@ sap.ui.define([
         const message = this.getResourceBundle().getText("errorfields");
         MessageToast.show(message);
       } else {
+        ImporteP3.porcentaje_ponderacion === undefined ? ImporteP3.porcentaje_ponderacion = 0 : ImporteP3.porcentaje_ponderacion;
+        ImporteP3.importe = parseFloat(ImporteP3.importe);
         importes_p3.push(ImporteP3);
-        oModel.setProperty("/importes_p3", importes_p3);
+        let importesTemp = importes_p3.filter(e => e.codigo === ImporteP3.codigo);
+        const sum = importesTemp.reduce((accumulator, object) => {
+          return accumulator + object.porcentaje_ponderacion;
+        }, 0);
+        if (sum > 100) {
+          importes_p3.pop();
+          const message = this.getResourceBundle().getText("errorporcponderacion");
+          MessageBox.error(message);
+        } else {
+          oModel.setProperty("/importes_p3", importes_p3);
+        }
         this.closeImporteP3Dialog();
       }
     },
@@ -817,7 +835,7 @@ sap.ui.define([
     onAcopioChange: function () {
       const oModel = this.getModel("AppJsonModel");
       const acopio = oModel.getProperty("/P3/acopio");
-      if (acopio) {
+      if (acopio === true) {
         this.byId("idInputAnticipoP3").setEnabled(false);
         oModel.setProperty("/P3/anticipo_financiero", 0);
       } else {
@@ -859,10 +877,7 @@ sap.ui.define([
             const messagePi = this.getResourceBundle().getText("errorresppi");
             MessageBox.error(messagePi);
           } else {
-            let suma = 0; //puedo resolver esto con un reduce? probar
-            oModel.getData().importes_p3.forEach(i => {
-              suma = suma + i.importe_ars;
-            });
+            const suma = oModel.getData().importes_p3.reduce((total, i) => total + i.importe_ars, 0);
             //El total de la suma de los importes pi debe ser igual al total de los importes de los p3
             if (oModel.getProperty("/monto_total") !== suma) {
               const errorMessage = this.getResourceBundle().getText("errormontostotales");
@@ -1009,8 +1024,8 @@ sap.ui.define([
                 fluido_ID: item.fluido_ID,
                 partido_ID: item.partido_ID,
                 sistema_ID: item.sistema_ID,
-                acumar: item.acumar === null ? false : true,
-                acopio_materiales: item.acopio === null ? false : true,
+                acumar: item.acumar,
+                acopio_materiales: item.acopio,
                 anticipo_financiero: item.anticipo_financiero,
                 importes: [],
                 pi: []
@@ -1041,7 +1056,7 @@ sap.ui.define([
               return {
                 moneda_ID: item.moneda_ID,
                 tipo_cambio: item.tipo_cambio,
-                no_redetermina: item.no_redetermina === null ? false : true,
+                no_redetermina: item.no_redetermina,
                 nro_oc: item.nro_oc,
                 fecha: item.fecha instanceof Date ? formatter.formatDateToBack(item.fecha) : item.fecha
               };
@@ -1059,7 +1074,7 @@ sap.ui.define([
               representante_tecnico: oObraDetalle.representante_tecnico,
               nro_matricula: oObraDetalle.nro_matricula,
               apoderado: oObraDetalle.apoderado,
-              incremento_maximo: Number(oObraDetalle.incremento_maximo),
+              incremento_maximo: oObraDetalle.incremento_maximo === undefined ? oObraDetalle.incremento_maximo = 0 : Number(oObraDetalle.incremento_maximo),
               moneda_ID: oObraDetalle.moneda_ID,
               plazo_ejecucion: Number(oObraDetalle.plazo_ejecucion),
               um_plazo_ID: oObraDetalle.um_plazo_ID,
@@ -1068,9 +1083,9 @@ sap.ui.define([
               financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
               nro_poliza: oObraDetalle.nro_poliza,
               extendida_por: oObraDetalle.extendida_por,
-              porcentaje_cobertura: oObraDetalle.porcentaje_cobertura,
+              porcentaje_cobertura: oObraDetalle.porcentaje_cobertura === undefined ? oObraDetalle.porcentaje_cobertura = 0 : Number(oObraDetalle.porcentaje_cobertura),
               fondo_reparo: oObraDetalle.fondo_reparo,
-              descuento_monto_contrato: oObraDetalle.descuento_monto_contrato,
+              descuento_monto_contrato: oObraDetalle.descuento_monto_contrato === undefined ? oObraDetalle.descuento_monto_contrato = 0 : Number(oObraDetalle.descuento_monto_contrato),
               monto_original_contrato: oObraDetalle.monto_original_contrato
             };
             if (oObraDetalle.ID) {

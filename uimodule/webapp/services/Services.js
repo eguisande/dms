@@ -182,6 +182,10 @@ sap.ui.define([], function () {
       return this.callDeleteService(`ResponsablesPI/${ID}`);
     },
 
+    updateResponsablesPI: function (ID, oPayload) {
+      return this.callUpdateService(`ResponsablesPI/${ID}`, oPayload);
+    },
+
     getUser: async function () {
       try {
         if (window.location.hostname === "localhost") {
