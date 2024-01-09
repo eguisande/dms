@@ -75,7 +75,7 @@
                   <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
                 </ComboBox>
                 <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
-                <Switch state="{AppJsonModel>acopio}" customTextOn="Si" customTextOff="No" enabled="false"/>
+                <Switch state="{AppJsonModel>acopio_materiales}" customTextOn="Si" customTextOff="No" enabled="false"/>
                 <Text text="{AppJsonModel>anticipo_financiero}%"/>
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteP3"/>

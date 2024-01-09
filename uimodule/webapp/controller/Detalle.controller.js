@@ -231,9 +231,6 @@ sap.ui.define([
           }
         });
         p3.montos_pi = suma;
-        // const sum = data.reduce((accumulator, object) => {
-        //   return accumulator + object.monto;
-        // }, 0);       
       });
     },
 
@@ -259,23 +256,24 @@ sap.ui.define([
           piData.push(pi);
         });
       });
-      piData = piData.filter(e => e.responsables != null);
       piData.forEach(item => {
-        let inspectores = item.responsables.responsables.inspectores.map(e => {
-          return {
-            nombre: e.inspector.nombre,
-            tipo_inspector_ID: e.inspector.tipo_inspector_ID
-          };
-        });
-        let jefes = inspectores.filter(e => e.tipo_inspector_ID === "JE");
-        const jefes_nombres = jefes.map(o => o.nombre).join(', ');
-        let inspect = inspectores.filter(e => e.tipo_inspector_ID === "EM");
-        const inspectores_nombres = inspect.map(o => o.nombre).join(', ');
-        item.jefes_nombres = jefes_nombres;
-        item.inspectores_nombres = inspectores_nombres;
-        item.codigo = item.p3.codigo;
-        item.direccion_ID = item.responsables.responsables.direccion_ID,
+        if (item.responsables) {
+          let inspectores = item.responsables.responsables.inspectores.map(e => {
+            return {
+              nombre: e.inspector.nombre,
+              tipo_inspector_ID: e.inspector.tipo_inspector_ID
+            };
+          });
+          let jefes = inspectores.filter(e => e.tipo_inspector_ID === "JE");
+          const jefes_nombres = jefes.map(o => o.nombre).join(', ');
+          let inspect = inspectores.filter(e => e.tipo_inspector_ID === "EM");
+          const inspectores_nombres = inspect.map(o => o.nombre).join(', ');
+          item.jefes_nombres = jefes_nombres;
+          item.inspectores_nombres = inspectores_nombres;
+          item.codigo = item.p3.codigo;
+          item.direccion_ID = item.responsables.responsables.direccion_ID;
           item.gerencia_ID = item.responsables.responsables.gerencia_ID;
+        }
       });
       const oModel = this.getModel("AppJsonModel");
       oModel.setProperty("/proyectos_inversion", piData);
@@ -284,24 +282,17 @@ sap.ui.define([
     //Obtengo los responsables de cada pi
     getResponsables: async function (oObra) {
       const oModel = this.getModel("AppJsonModel");
-      let pi = [];
-      oObra.p3.forEach(p3 => {
-        p3.pi.forEach(item => {
-          pi.push(item);
-        });
-      });
-      pi = pi.filter(e => e.responsables != null);
-      let responsables = pi.map(item => {
-        let inspectores = item.responsables.responsables.inspectores.map(e => {
+      let responsables = oObra.responsables.map(item => {
+        let inspectores = item.inspectores.map(e => {
           return {
             nombre: e.inspector.nombre,
             tipo_inspector_ID: e.inspector.tipo_inspector_ID
           };
         });
         return {
-          ID: item.responsables.responsables_ID,
-          direccion_ID: item.responsables.responsables.direccion_ID,
-          gerencia_ID: item.responsables.responsables.gerencia_ID,
+          ID: item.ID,
+          direccion_ID: item.direccion_ID,
+          gerencia_ID: item.gerencia_ID,
           inspectores: inspectores,
           jefes_nombres: "",
           inspectores_nombres: ""
@@ -499,29 +490,28 @@ sap.ui.define([
     },
 
     selectResponsablesPI: async function () {
-      const selected = this.byId("idResponsablesPITable").getSelectedItem().getBindingContext("AppJsonModel").getObject();
+      const selectedResponsables = this.byId("idResponsablesPITable").getSelectedItem().getBindingContext("AppJsonModel").getObject();
       const oModel = this.getModel("AppJsonModel");
       const selectedPI = oModel.getProperty("/selectedPI");
       //agregar responsable edicion
       if (oModel.getProperty("/ObraDetalle/ID")) {
         try {
           const piResp = {
-            responsables_ID: selected.ID
+            pi_ID: selectedPI.ID ? selectedPI.ID : selectedPI.uuid,
+            responsables_ID: selectedResponsables.ID ? selectedResponsables.ID : selectedResponsables.uuid
           };
           await Services.updateResponsablesPI(selectedPI.responsables.ID, piResp);
         } catch (error) {
           const message = this.getResourceBundle().getText("errorresponsables");
           MessageToast.show(message);
         }
-      } else {
-        selectedPI.jefes = selected.jefes;
-        selectedPI.inspectores = selected.inspectores;
-        selectedPI.jefes_nombres = selected.jefes_nombres;
-        selectedPI.inspectores_nombres = selected.inspectores_nombres;
-        selectedPI.direccion_ID = selected.direccion_ID;
-        selectedPI.gerencia_ID = selected.gerencia_ID;
-        selectedPI.responsables_ID = selected.uuid;
       }
+      selectedPI.inspectores = selectedResponsables.inspectores;
+      selectedPI.jefes_nombres = selectedResponsables.jefes_nombres;
+      selectedPI.inspectores_nombres = selectedResponsables.inspectores_nombres;
+      selectedPI.direccion_ID = selectedResponsables.direccion_ID;
+      selectedPI.gerencia_ID = selectedResponsables.gerencia_ID;
+      selectedPI.responsables_ID = selectedResponsables.ID ? selectedResponsables.ID : selectedResponsables.uuid;
       this.closeResponsablesPIDialog();
     },
 
@@ -530,6 +520,7 @@ sap.ui.define([
       oModel.setProperty("/selectedPI", {});
       this.byId("idResponsablesPITable").removeSelections();
       this.byId("idResponsablesPIDialog").close();
+      oModel.refresh(true);
     },
 
     //Sumo los importes de cada pi
@@ -731,7 +722,7 @@ sap.ui.define([
         const message = this.getResourceBundle().getText("errorfields");
         MessageToast.show(message);
       } else {
-        P3.acopio === undefined ? P3.acopio = false : P3.acopio;
+        P3.acopio_materiales === undefined ? P3.acopio_materiales = false : P3.acopio_materiales;
         P3.acumar === undefined ? P3.acumar = false : P3.acumar;
         P3.anticipo_financiero === undefined ? P3.anticipo_financiero = 0 : P3.anticipo_financiero;
         p3s.push(P3);
@@ -741,7 +732,7 @@ sap.ui.define([
     },
 
     deleteP3: async function (oEvent) {
-      await this.showMessageConfirm("deleteconfirm");
+      await this.showMessageConfirm("deletep3confirm");
       const oModel = this.getModel("AppJsonModel");
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
@@ -834,7 +825,7 @@ sap.ui.define([
 
     onAcopioChange: function () {
       const oModel = this.getModel("AppJsonModel");
-      const acopio = oModel.getProperty("/P3/acopio");
+      const acopio = oModel.getProperty("/P3/acopio_materiales");
       if (acopio === true) {
         this.byId("idInputAnticipoP3").setEnabled(false);
         oModel.setProperty("/P3/anticipo_financiero", 0);
@@ -978,119 +969,119 @@ sap.ui.define([
             const oModel = this.getModel("AppJsonModel");
             const oObraDetalle = oModel.getProperty("/ObraDetalle");
             const aAreas = oModel.getProperty("/Combos/Areas");
-            const responsables = oModel.getData().responsables.map(item => {
-              const jefesIDs = item.jefes || [];
-              const inspectoresIDs = item.inspectores || [];
-              const inspectorIDs = [...jefesIDs, ...inspectoresIDs];
-              const inspectores = inspectorIDs.map(elem => {
+            if (oObraDetalle.ID) {
+              await this.updateObra(oObraDetalle);
+            } else {
+              const responsables = oModel.getData().responsables.map(item => {
+                const jefesIDs = item.jefes || [];
+                const inspectoresIDs = item.inspectores || [];
+                const inspectorIDs = [...jefesIDs, ...inspectoresIDs];
+                const inspectores = inspectorIDs.map(elem => {
+                  return {
+                    inspector_ID: elem
+                  };
+                });
                 return {
-                  inspector_ID: elem
+                  ID: item.ID ? item.ID : item.uuid,
+                  direccion_ID: item.direccion_ID,
+                  gerencia_ID: item.gerencia_ID,
+                  inspectores: inspectores
                 };
               });
-              return {
-                ID: item.uuid,
-                direccion_ID: item.direccion_ID,
-                gerencia_ID: item.gerencia_ID,
-                inspectores: inspectores
-              };
-            });
-            const piList = oModel.getData().proyectos_inversion.map(item => {
-              return {
-                ID: item.uuid,
-                codigo: item.codigo,
-                tipo_pi_ID: item.tipo_pi_ID,
-                monto: item.monto,
-                moneda_ID: item.moneda_ID,
-                sistema_contratacion_ID: item.sistema_contratacion_ID,
-                pi: item.pi
-              };
-            });
-            const importesList = oModel.getData().importes_p3.map(item => {
-              return {
-                codigo: item.codigo,
-                moneda_ID: item.moneda_ID,
-                tipo_cambio: item.tipo_cambio,
-                importe: item.importe,
-                porcentaje_ponderacion: item.porcentaje_ponderacion,
-                importe_ars: item.importe_ars
-              };
-            });
-            const p3s = oModel.getData().p3s.map(item => {
-              return {
-                nombre: item.nombre,
-                codigo: item.codigo,
-                tipo_obra_ID: item.tipo_obra_ID,
-                tipo_contrato_ID: item.tipo_contrato_ID,
-                fluido_ID: item.fluido_ID,
-                partido_ID: item.partido_ID,
-                sistema_ID: item.sistema_ID,
-                acumar: item.acumar,
-                acopio_materiales: item.acopio,
-                anticipo_financiero: item.anticipo_financiero,
-                importes: [],
-                pi: []
-              };
-            });
-            p3s.forEach(p3 => {
-              piList.forEach(pi => {
-                if (p3.codigo === pi.codigo) {
-                  delete pi.codigo;
-                  p3.pi.push(pi);
-                }
+              const piList = oModel.getData().proyectos_inversion.map(item => {
+                return {
+                  ID: item.ID ? item.ID : item.uuid,
+                  codigo: item.codigo,
+                  tipo_pi_ID: item.tipo_pi_ID,
+                  monto: item.monto,
+                  moneda_ID: item.moneda_ID,
+                  sistema_contratacion_ID: item.sistema_contratacion_ID,
+                  pi: item.pi
+                };
               });
-              importesList.forEach(imp => {
-                if (p3.codigo === imp.codigo) {
-                  delete imp.codigo;
-                  p3.importes.push(imp);
-                }
+              const importesList = oModel.getData().importes_p3.map(item => {
+                return {
+                  codigo: item.codigo,
+                  moneda_ID: item.moneda_ID,
+                  tipo_cambio: item.tipo_cambio,
+                  importe: item.importe,
+                  porcentaje_ponderacion: item.porcentaje_ponderacion,
+                  importe_ars: item.importe_ars
+                };
               });
-            });
-            const contratista = [
-              {
-                contratista_ID: oObraDetalle.contratista_ID,
-                vigencia_desde: "2023-12-26",
-                vigencia_hasta: "9999-12-31"
-              }
-            ];
-            const ordenes_compra = oModel.getData().ordenes_compra.map(item => {
-              return {
-                moneda_ID: item.moneda_ID,
-                tipo_cambio: item.tipo_cambio,
-                no_redetermina: item.no_redetermina,
-                nro_oc: item.nro_oc,
-                fecha: item.fecha instanceof Date ? formatter.formatDateToBack(item.fecha) : item.fecha
+              const p3s = oModel.getData().p3s.map(item => {
+                return {
+                  nombre: item.nombre,
+                  codigo: item.codigo,
+                  tipo_obra_ID: item.tipo_obra_ID,
+                  tipo_contrato_ID: item.tipo_contrato_ID,
+                  fluido_ID: item.fluido_ID,
+                  partido_ID: item.partido_ID,
+                  sistema_ID: item.sistema_ID,
+                  acumar: item.acumar,
+                  acopio_materiales: item.acopio_materiales,
+                  anticipo_financiero: item.anticipo_financiero,
+                  importes: [],
+                  pi: []
+                };
+              });
+              p3s.forEach(p3 => {
+                piList.forEach(pi => {
+                  if (p3.codigo === pi.codigo) {
+                    delete pi.codigo;
+                    p3.pi.push(pi);
+                  }
+                });
+                importesList.forEach(imp => {
+                  if (p3.codigo === imp.codigo) {
+                    delete imp.codigo;
+                    p3.importes.push(imp);
+                  }
+                });
+              });
+              const contratista = [
+                {
+                  contratista_ID: oObraDetalle.contratista_ID,
+                  vigencia_desde: "2023-12-26",
+                  vigencia_hasta: "9999-12-31"
+                }
+              ];
+              const ordenes_compra = oModel.getData().ordenes_compra.map(item => {
+                return {
+                  moneda_ID: item.moneda_ID,
+                  tipo_cambio: item.tipo_cambio,
+                  no_redetermina: item.no_redetermina,
+                  nro_oc: item.nro_oc,
+                  fecha: item.fecha instanceof Date ? formatter.formatDateToBack(item.fecha) : item.fecha
+                };
+              });
+              const oPayload = {
+                p3: p3s,
+                nombre: oObraDetalle.nombre,
+                contratista: contratista,
+                ordenes_compra: ordenes_compra,
+                nro_contrato: oObraDetalle.nro_contrato,
+                representante: oObraDetalle.representante,
+                telefono: oObraDetalle.telefono,
+                correo: oObraDetalle.correo,
+                fecha_firma: oObraDetalle.fecha_firma instanceof Date ? formatter.formatDateToBack(oObraDetalle.fecha_firma) : oObraDetalle.fecha_firma,
+                representante_tecnico: oObraDetalle.representante_tecnico,
+                nro_matricula: oObraDetalle.nro_matricula,
+                apoderado: oObraDetalle.apoderado,
+                incremento_maximo: oObraDetalle.incremento_maximo === undefined ? oObraDetalle.incremento_maximo = 0 : Number(oObraDetalle.incremento_maximo),
+                moneda_ID: oObraDetalle.moneda_ID,
+                plazo_ejecucion: Number(oObraDetalle.plazo_ejecucion),
+                um_plazo_ID: oObraDetalle.um_plazo_ID,
+                maximo_plazo_extension: Number(oObraDetalle.maximo_plazo_extension),
+                um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,
+                financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
+                nro_poliza: oObraDetalle.nro_poliza,
+                extendida_por: oObraDetalle.extendida_por,
+                porcentaje_cobertura: oObraDetalle.porcentaje_cobertura === undefined ? oObraDetalle.porcentaje_cobertura = 0 : Number(oObraDetalle.porcentaje_cobertura),
+                fondo_reparo: oObraDetalle.fondo_reparo,
+                descuento_monto_contrato: oObraDetalle.descuento_monto_contrato === undefined ? oObraDetalle.descuento_monto_contrato = 0 : Number(oObraDetalle.descuento_monto_contrato),
+                monto_original_contrato: oObraDetalle.monto_original_contrato
               };
-            });
-            const oPayload = {
-              p3: p3s,
-              nombre: oObraDetalle.nombre,
-              contratista: contratista,
-              ordenes_compra: ordenes_compra,
-              nro_contrato: oObraDetalle.nro_contrato,
-              representante: oObraDetalle.representante,
-              telefono: oObraDetalle.telefono,
-              correo: oObraDetalle.correo,
-              fecha_firma: oObraDetalle.fecha_firma instanceof Date ? formatter.formatDateToBack(oObraDetalle.fecha_firma) : oObraDetalle.fecha_firma,
-              representante_tecnico: oObraDetalle.representante_tecnico,
-              nro_matricula: oObraDetalle.nro_matricula,
-              apoderado: oObraDetalle.apoderado,
-              incremento_maximo: oObraDetalle.incremento_maximo === undefined ? oObraDetalle.incremento_maximo = 0 : Number(oObraDetalle.incremento_maximo),
-              moneda_ID: oObraDetalle.moneda_ID,
-              plazo_ejecucion: Number(oObraDetalle.plazo_ejecucion),
-              um_plazo_ID: oObraDetalle.um_plazo_ID,
-              maximo_plazo_extension: Number(oObraDetalle.maximo_plazo_extension),
-              um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,
-              financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
-              nro_poliza: oObraDetalle.nro_poliza,
-              extendida_por: oObraDetalle.extendida_por,
-              porcentaje_cobertura: oObraDetalle.porcentaje_cobertura === undefined ? oObraDetalle.porcentaje_cobertura = 0 : Number(oObraDetalle.porcentaje_cobertura),
-              fondo_reparo: oObraDetalle.fondo_reparo,
-              descuento_monto_contrato: oObraDetalle.descuento_monto_contrato === undefined ? oObraDetalle.descuento_monto_contrato = 0 : Number(oObraDetalle.descuento_monto_contrato),
-              monto_original_contrato: oObraDetalle.monto_original_contrato
-            };
-            if (oObraDetalle.ID) {
-              await Services.updateObra(oObraDetalle.ID, oPayload);
-            } else {
               const oPreconstruccion = await Services.createPreconstruccion();
               const newObra = await Services.postObra({
                 ...oPayload,
@@ -1150,6 +1141,115 @@ sap.ui.define([
         const message = this.getResourceBundle().getText("errorresponsables");
         MessageToast.show(message);
       }
+    },
+
+    updateObra: async function (oObraDetalle) {
+      const oModel = this.getModel("AppJsonModel");
+      const piList = oModel.getData().proyectos_inversion.map(item => {
+        return {
+          ID: item.ID ? item.ID : item.uuid,
+          codigo: item.codigo,
+          tipo_pi_ID: item.tipo_pi_ID,
+          monto: item.monto,
+          moneda_ID: item.moneda_ID,
+          sistema_contratacion_ID: item.sistema_contratacion_ID,
+          pi: item.pi,
+          responsables: {
+            ID: item.responsables.ID,
+            pi_ID: item.responsables.pi_ID,
+            responsables_ID: item.responsables_ID
+          }
+        };
+      });
+      const importesList = oModel.getData().importes_p3.map(item => {
+        return {
+          codigo: item.codigo,
+          moneda_ID: item.moneda_ID,
+          tipo_cambio: item.tipo_cambio,
+          importe: item.importe,
+          porcentaje_ponderacion: item.porcentaje_ponderacion,
+          importe_ars: item.importe_ars
+        };
+      });
+      const p3s = oModel.getData().p3s.map(item => {
+        return {
+          nombre: item.nombre,
+          codigo: item.codigo,
+          tipo_obra_ID: item.tipo_obra_ID,
+          tipo_contrato_ID: item.tipo_contrato_ID,
+          fluido_ID: item.fluido_ID,
+          partido_ID: item.partido_ID,
+          sistema_ID: item.sistema_ID,
+          acumar: item.acumar,
+          acopio_materiales: item.acopio_materiales,
+          anticipo_financiero: item.anticipo_financiero,
+          importes: [],
+          pi: []
+        };
+      });
+      p3s.forEach(p3 => {
+        piList.forEach(pi => {
+          if (p3.codigo === pi.codigo) {
+            delete pi.codigo;
+            p3.pi.push(pi);
+          }
+        });
+        importesList.forEach(imp => {
+          if (p3.codigo === imp.codigo) {
+            delete imp.codigo;
+            p3.importes.push(imp);
+          }
+        });
+      });
+      const contratista = [
+        {
+          contratista_ID: oObraDetalle.contratista_ID,
+          vigencia_desde: "2023-12-26",
+          vigencia_hasta: "9999-12-31"
+        }
+      ];
+      const ordenes_compra = oModel.getData().ordenes_compra.map(item => {
+        return {
+          moneda_ID: item.moneda_ID,
+          tipo_cambio: item.tipo_cambio,
+          no_redetermina: item.no_redetermina,
+          nro_oc: item.nro_oc,
+          fecha: item.fecha instanceof Date ? formatter.formatDateToBack(item.fecha) : item.fecha
+        };
+      });
+      const oPayload = {
+        p3: p3s,
+        nombre: oObraDetalle.nombre,
+        contratista: contratista,
+        ordenes_compra: ordenes_compra,
+        nro_contrato: oObraDetalle.nro_contrato,
+        representante: oObraDetalle.representante,
+        telefono: oObraDetalle.telefono,
+        correo: oObraDetalle.correo,
+        fecha_firma: oObraDetalle.fecha_firma instanceof Date ? formatter.formatDateToBack(oObraDetalle.fecha_firma) : oObraDetalle.fecha_firma,
+        representante_tecnico: oObraDetalle.representante_tecnico,
+        nro_matricula: oObraDetalle.nro_matricula,
+        apoderado: oObraDetalle.apoderado,
+        incremento_maximo: oObraDetalle.incremento_maximo === undefined ? oObraDetalle.incremento_maximo = 0 : Number(oObraDetalle.incremento_maximo),
+        moneda_ID: oObraDetalle.moneda_ID,
+        plazo_ejecucion: Number(oObraDetalle.plazo_ejecucion),
+        um_plazo_ID: oObraDetalle.um_plazo_ID,
+        maximo_plazo_extension: Number(oObraDetalle.maximo_plazo_extension),
+        um_plazo_maximo_ID: oObraDetalle.um_plazo_maximo_ID,
+        financiamiento_obra_ID: oObraDetalle.financiamiento_obra_ID,
+        nro_poliza: oObraDetalle.nro_poliza,
+        extendida_por: oObraDetalle.extendida_por,
+        porcentaje_cobertura: oObraDetalle.porcentaje_cobertura === undefined ? oObraDetalle.porcentaje_cobertura = 0 : Number(oObraDetalle.porcentaje_cobertura),
+        fondo_reparo: oObraDetalle.fondo_reparo,
+        descuento_monto_contrato: oObraDetalle.descuento_monto_contrato === undefined ? oObraDetalle.descuento_monto_contrato = 0 : Number(oObraDetalle.descuento_monto_contrato),
+        monto_original_contrato: oObraDetalle.monto_original_contrato
+      };
+      try {
+        await Services.updateObra(oObraDetalle.ID, oPayload);
+      } catch (error) {
+        const message = this.getResourceBundle().getText("errorupdate");
+        MessageToast.show(message);
+      }     
     }
 
   });

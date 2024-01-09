@@ -24,9 +24,9 @@ sap.ui.define([
       const urlPdfApi = oManifest.resolveUri("generatePDF");
       Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi);
       this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
-      Services.getContratistas().then(data => {
-        oModel.setProperty("/Contratistas", data.value);
-      });
+      // Services.getContratistas().then(data => {
+      //   oModel.setProperty("/Contratistas", data.value);
+      // });
     },
 
     _onObjectMatched: async function () {
@@ -494,7 +494,7 @@ sap.ui.define([
                 partido: item.partido.descripcion,
                 sistema_cuenca: item.sistema.descripcion,
                 acumar: item.acumar,
-                acopio: item.acopio,
+                acopio: item.acopio_materiales,
                 anticipo_financiero: item.anticipo_financiero
               };
             });
