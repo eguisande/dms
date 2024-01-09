@@ -494,7 +494,7 @@ sap.ui.define([
       const oModel = this.getModel("AppJsonModel");
       const selectedPI = oModel.getProperty("/selectedPI");
       //agregar responsable edicion
-      if (oModel.getProperty("/ObraDetalle/ID")) {
+      if (oModel.getProperty("/ObraDetalle/ID") && selectedPI.responsables) {
         try {
           const piResp = {
             pi_ID: selectedPI.ID ? selectedPI.ID : selectedPI.uuid,
@@ -631,17 +631,23 @@ sap.ui.define([
       const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
       const idx = /[0-9]+$/.exec(path)[0];
       const items = oModel.getProperty("/responsables");
-      let selectedpi = {};
-      let ID = "";
+      let selectedpi = [];
+      let respID = "";
       if (oEvent.getSource().getBindingContext("AppJsonModel").getObject().ID) { //si esta editando lo borro de la bd
         try {
           BusyIndicator.show(0);
-          ID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().ID;
-          selectedpi = oModel.getData().proyectos_inversion.find(i => i.responsables.responsables_ID === ID);
-          const resp = await Services.getResponsablesPI(ID);
+          respID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().ID;
+          selectedpi = oModel.getData().proyectos_inversion.filter(function (e) {
+            if (e.responsables) {
+              return e.responsables.responsables_ID === respID;
+            } else {
+              return e.responsables_ID === respID;
+            }
+          });
+          const resp = await Services.getResponsablesPI(respID);
           const selectedResp = resp.value[0];
           await Services.deleteResponsablesPI(selectedResp.ID);
-          await Services.deleteResponsables(ID);
+          await Services.deleteResponsables(respID);
         } catch (error) {
           const message = this.getResourceBundle().getText("errordelete");
           MessageToast.show(message);
@@ -649,15 +655,23 @@ sap.ui.define([
           BusyIndicator.hide();
         }
       } else {
-        ID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().uuid;
-        selectedpi = oModel.getData().proyectos_inversion.find(i => i.responsables_ID === ID);
+        respID = oEvent.getSource().getBindingContext("AppJsonModel").getObject().uuid;
+        selectedpi = oModel.getData().proyectos_inversion.filter(function (e) {
+          if (e.responsables) {
+            return e.responsables.responsables_ID === respID;
+          } else {
+            return e.responsables_ID === respID;
+          }
+        });
       }
       if (selectedpi !== undefined) { //limpio los campos del grupo de responsables asignado al pi
-        selectedpi.responsables = {};
-        delete selectedpi.inspectores_nombres;
-        delete selectedpi.jefes_nombres;
-        delete selectedpi.gerencia_ID;
-        delete selectedpi.direccion_ID;
+        selectedpi.forEach(pi => {
+          delete pi.responsables;
+          delete pi.inspectores_nombres;
+          delete pi.jefes_nombres;
+          delete pi.gerencia_ID;
+          delete pi.direccion_ID;
+        });
         this.byId("idPiTable").getBinding("items").refresh();
         oModel.refresh(true);
       }
@@ -733,12 +747,35 @@ sap.ui.define([
 
     deleteP3: async function (oEvent) {
       await this.showMessageConfirm("deletep3confirm");
-      const oModel = this.getModel("AppJsonModel");
-      const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
-      const idx = /[0-9]+$/.exec(path)[0];
-      const items = oModel.getProperty("/p3s");
-      items.splice(idx, 1);
-      this.byId("idP3Table").getBinding("items").refresh();
+      try {
+        const oModel = this.getModel("AppJsonModel");
+        const path = oEvent.getSource().getBindingContext("AppJsonModel").getPath();
+        const selectedP3 = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+        await Services.deleteP3(selectedP3.ID);
+        const idx = /[0-9]+$/.exec(path)[0];
+        const items = oModel.getProperty("/p3s");
+        items.splice(idx, 1);
+        this.byId("idP3Table").getBinding("items").refresh();
+        let importesP3 = oModel.getData().importes_p3.filter(function (e) {
+          return e.codigo !== selectedP3.codigo;
+        });
+        if (importesP3 === undefined) {
+          importesP3 = [];
+        }
+        oModel.setProperty("/importes_p3", importesP3);
+        let pi = oModel.getData().proyectos_inversion.filter(function (e) {
+          return e.codigo !== selectedP3.codigo;
+        });
+        if (pi === undefined) {
+          pi = [];
+        }
+        oModel.setProperty("/proyectos_inversion", pi);
+        await this.sumaImportes(oModel.getProperty("/proyectos_inversion"));
+        oModel.refresh(true);
+      } catch (error) {
+        const message = this.getResourceBundle().getText("errordeletep3");
+        MessageToast.show(message);
+      }
     },
 
     //Agregar importes para cada p3
@@ -1146,6 +1183,19 @@ sap.ui.define([
     updateObra: async function (oObraDetalle) {
       const oModel = this.getModel("AppJsonModel");
       const piList = oModel.getData().proyectos_inversion.map(item => {
+        let responsables = {};
+        if (item.responsables) {
+          responsables = {
+            ID: item.responsables.ID,
+            pi_ID: item.responsables.pi_ID,
+            responsables_ID: item.responsables.responsables_ID
+          };
+        } else {
+          responsables = {
+            pi_ID: item.ID ? item.ID : item.uuid,
+            responsables_ID: item.responsables_ID
+          };
+        }
         return {
           ID: item.ID ? item.ID : item.uuid,
           codigo: item.codigo,
@@ -1154,11 +1204,7 @@ sap.ui.define([
           moneda_ID: item.moneda_ID,
           sistema_contratacion_ID: item.sistema_contratacion_ID,
           pi: item.pi,
-          responsables: {
-            ID: item.responsables.ID,
-            pi_ID: item.responsables.pi_ID,
-            responsables_ID: item.responsables_ID
-          }
+          responsables: responsables
         };
       });
       const importesList = oModel.getData().importes_p3.map(item => {
@@ -1249,7 +1295,7 @@ sap.ui.define([
       } catch (error) {
         const message = this.getResourceBundle().getText("errorupdate");
         MessageToast.show(message);
-      }     
+      }
     }
 
   });

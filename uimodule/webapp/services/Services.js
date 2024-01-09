@@ -82,10 +82,6 @@ sap.ui.define([], function () {
       );
     },
 
-    deleteObra: function (ID) {
-      return this.callDeleteService(`Obras/${ID}`);
-    },
-
     getContratistas: function () {
       return this.callGetService("Contratistas");
     },
@@ -94,20 +90,16 @@ sap.ui.define([], function () {
       return this.callGetService(`ResponsablesPI?$filter=responsables_ID eq ${respID}`);
     },
 
-    getResponsables: function () {
-      return this.callGetService("Responsables");
-    },
-
     getDirecciones: function () {
       return this.callGetService("Direcciones");
     },
 
-    getInspectores: function () {
-      return this.callGetService("Inspectores?$expand=tipo_inspector&$orderby=nombre");
-    },
-
     getGerencias: function () {
       return this.callGetService("Gerencias");
+    },
+
+    getInspectores: function () {
+      return this.callGetService("Inspectores?$expand=tipo_inspector&$orderby=nombre");
     },
 
     getTiposContratos: function () {
@@ -165,6 +157,10 @@ sap.ui.define([], function () {
     updateObra: function (ID, oPayload) {
       return this.callUpdateService(`Obras/${ID}`, oPayload);
     },  
+
+    deleteObra: function (ID) {
+      return this.callDeleteService(`Obras/${ID}`);
+    },
     
     postResponsables: function (oPayload) {
       return this.callPostService("Responsables", oPayload);
@@ -184,6 +180,10 @@ sap.ui.define([], function () {
 
     updateResponsablesPI: function (ID, oPayload) {
       return this.callUpdateService(`ResponsablesPI/${ID}`, oPayload);
+    },
+
+    deleteP3: function (ID) {
+      return this.callDeleteService(`P3/${ID}`);
     },
 
     getUser: async function () {
