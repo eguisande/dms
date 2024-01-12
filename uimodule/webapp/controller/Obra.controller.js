@@ -642,6 +642,7 @@ sap.ui.define([
     },
 
     createPdf: async function () {
+      BusyIndicator.show(0);
       const oTable = this.byId("idTablaaltaobras");
       const oObras = oTable.getItems();
       const { firstname, lastname } = await Services.getUser();
@@ -651,7 +652,7 @@ sap.ui.define([
           "nombre": item.nombre === null ? "" : item.nombre,
           "estado": item.estado === null ? "" : item.estado.descripcion,
           "tipo_contrato": item.tipo_contrato === null ? "" : item.tipo_contrato,
-          "nrop3": item.p3 === null ? "" : item.p3,
+          "nrop3": item.nro_p3 === null ? "" : item.nro_p3,
           "registro_proveedor": item.contratista.registro_proveedor === null ? "" : item.contratista.registro_proveedor,
           "razonsocial": item.contratista.razonsocial === null ? "" : item.contratista.razonsocial,
           "fluido": item.tipo_fluido === null ? "" : item.tipo_fluido,
@@ -672,6 +673,7 @@ sap.ui.define([
       const sMimeType = "pdf";
       let aBuffer = this.base64ToArrayBuffer(oBinary.data);
       File.save(aBuffer, sFileName, sMimeType);
+      BusyIndicator.hide();
     },
 
     base64ToArrayBuffer: function (sBinLine) {
