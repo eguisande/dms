@@ -41,7 +41,7 @@
       <Label text="{i18n>fechafirma}" required="true"/>
       <DatePicker id="idFechaFirma" displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}"/>
       <Label text="{i18n>incrementomaximo}" required="true"/>
-      <StepInput id="idIncrementoMax" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" description="%" fieldWidth="90%"/>
+      <StepInput id="idIncrementoMax" value="{AppJsonModel>/ObraDetalle/incremento_maximo}" change=".setMaximoPlazo" min="0" max="30" description="%" fieldWidth="90%"/>
       <Label text="{i18n>plazoejecucion}" required="true"/>
       <Input id="idPlazoEjecucion" value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" change=".setMaximoPlazo" type="Number"/>
       <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}" editable="false">
