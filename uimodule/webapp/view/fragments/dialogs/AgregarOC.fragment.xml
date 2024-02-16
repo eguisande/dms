@@ -6,7 +6,7 @@
   <Dialog id="idAddOCDialog" title="{i18n>agregaroc}" draggable="true">
     <FlexBox direction="Column" alignItems="Start" class="sapUiSmallMargin">
       <Label text="{i18n>nroordencompra}"/>
-      <Input value="{AppJsonModel>/OrdenCompra/nro_oc}" editable="true"/>
+      <Input value="{AppJsonModel>/OrdenCompra/nro_oc}" editable="true" type="Number"/>
       <Label text="{i18n>fechaordencompra}"/>
       <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/OrdenCompra/fecha}"/>
       <Label text="{i18n>moneda}" required="true"/>

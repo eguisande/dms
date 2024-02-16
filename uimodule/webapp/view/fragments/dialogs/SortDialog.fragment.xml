@@ -4,10 +4,14 @@
 	<ViewSettingsDialog
 		confirm="handleSortDialogConfirm">
 		<sortItems>
+			<ViewSettingsItem text="{i18n>nombreobra}" key="nombre" selected="true" />
 			<ViewSettingsItem text="{i18n>estado}" key="estado/descripcion" selected="true" />
-			<ViewSettingsItem text="{i18n>tipocontrato}" key="tipo_contrato/descripcion" />
-			<ViewSettingsItem text="{i18n>tipoobra}" key="tipo_obra/descripcion" />
-			<ViewSettingsItem text="{i18n>tipofluido}" key="fluido/descripcion" />
+			<ViewSettingsItem text="{i18n>tipocontrato}" key="tipo_contrato" />
+			<ViewSettingsItem text="{i18n>nrop3}" key="nro_p3" />
+			<ViewSettingsItem text="{i18n>codproveedor}" key="contratista/registro_proveedor" />
+			<ViewSettingsItem text="{i18n>tipoobra}" key="tipo_obra" />
+			<ViewSettingsItem text="{i18n>tipofluido}" key="tipo_fluido" />
+			<ViewSettingsItem text="{i18n>partido}" key="partido" />
 		</sortItems>
 	</ViewSettingsDialog>
 </core:FragmentDefinition>

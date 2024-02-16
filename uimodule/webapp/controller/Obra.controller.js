@@ -203,7 +203,7 @@ sap.ui.define([
               value1: sSearch
             }),
             new Filter({
-              path: 'p3',
+              path: 'nro_p3',
               operator: FilterOperator.Contains,
               value1: sSearch
             }),
@@ -214,6 +214,11 @@ sap.ui.define([
             }),
             new Filter({
               path: 'contratista/registro_proveedor',
+              operator: FilterOperator.Contains,
+              value1: sSearch
+            }),
+            new Filter({
+              path: 'contratista/razonsocial',
               operator: FilterOperator.Contains,
               value1: sSearch
             })
