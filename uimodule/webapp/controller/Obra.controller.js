@@ -61,6 +61,9 @@ sap.ui.define([
           obra.contratista = obra.contratista[0].contratista;
         });
         oModel.setProperty("/altaobras", aObras);
+        oModel.getProperty("/altaobras").forEach(item => {
+          item.contratista.registro_proveedor = Number(item.contratista.registro_proveedor)
+        })
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
         MessageToast.show(message);
