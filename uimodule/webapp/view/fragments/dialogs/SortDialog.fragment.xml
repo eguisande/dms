@@ -9,6 +9,7 @@
 			<ViewSettingsItem text="{i18n>tipocontrato}" key="tipo_contrato" />
 			<ViewSettingsItem text="{i18n>nrop3}" key="nro_p3" />
 			<ViewSettingsItem text="{i18n>codproveedor}" key="contratista/registro_proveedor" />
+			<ViewSettingsItem text="{i18n>nombreproveedor}" key="contratista/razonsocial" />
 			<ViewSettingsItem text="{i18n>tipoobra}" key="tipo_obra" />
 			<ViewSettingsItem text="{i18n>tipofluido}" key="tipo_fluido" />
 			<ViewSettingsItem text="{i18n>partido}" key="partido" />

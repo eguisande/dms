@@ -35,6 +35,9 @@
           </Column>
           <Column >
             <Text text="{i18n>codproveedor}" />
+          </Column>
+          <Column >
+            <Text text="{i18n>nombreproveedor}" />
           </Column>          
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipoobra}" />
@@ -56,7 +59,8 @@
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
               <Text text="{AppJsonModel>tipo_contrato}" />
               <Text text="{AppJsonModel>nro_p3}" />
-              <ObjectIdentifier title="{AppJsonModel>contratista/registro_proveedor}" text="{AppJsonModel>contratista/razonsocial}" />
+              <Text text="{AppJsonModel>contratista/registro_proveedor}" />
+              <Text text="{AppJsonModel>contratista/razonsocial}" />
               <Text text="{AppJsonModel>tipo_obra}" />
               <Text text="{AppJsonModel>tipo_fluido}" />
               <Text text="{AppJsonModel>partido}" />
