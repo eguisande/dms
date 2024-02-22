@@ -19,7 +19,13 @@
     </f:header>
     <!-- DynamicPage Content -->
     <f:content>
-      <Table id="idTablaaltaobras" items="{AppJsonModel>/altaobras}" fixedLayout="false">
+      <Table id="idTablaaltaobras" items="{AppJsonModel>/altaobras}" fixedLayout="false" growing="true" growingThreshold="10" growingScrollToLoad="false">
+        <headerToolbar>
+          <OverflowToolbar visible="{AppJsonModel>/Permisos/load}">
+            <Title text="{= ${AppJsonModel>/altaobras}.length} {i18n>registros}" level="H1"/>
+            <ToolbarSpacer/>
+          </OverflowToolbar>
+        </headerToolbar>
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nombreobra}" />
@@ -38,7 +44,7 @@
           </Column>
           <Column >
             <Text text="{i18n>nombreproveedor}" />
-          </Column>          
+          </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipoobra}" />
           </Column>
