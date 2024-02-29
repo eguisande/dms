@@ -550,7 +550,7 @@ sap.ui.define([
                 nro_contrato: oObra.nro_contrato,
                 monto_original_contrato: oObra.monto_original_contrato,
                 moneda: oObra.moneda_ID,
-                proveedor: oObra.contratista.registro_proveedor,
+                proveedor: oObra.contratista.registro_proveedor.toString(),
                 razon_social: oObra.contratista.razonsocial,
                 cuit: oObra.contratista.nro_documento,
                 representante: oObra.representante,
