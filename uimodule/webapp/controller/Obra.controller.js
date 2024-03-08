@@ -59,11 +59,11 @@ sap.ui.define([
           obra.tipo_obra = tipos_obras;
           obra.partido = partidos;
           obra.contratista = obra.contratista[0].contratista;
-        });
-        oModel.setProperty("/altaobras", aObras);
-        oModel.getProperty("/altaobras").forEach(item => {
-          item.contratista.registro_proveedor = Number(item.contratista.registro_proveedor)
+        });        
+        aObras.forEach(item => {
+          item.registro_proveedor_format = Number(item.contratista.registro_proveedor)
         })
+        oModel.setProperty("/altaobras", aObras);
       } catch (error) {
         const message = this.getResourceBundle().getText("errorservice");
         MessageToast.show(message);
