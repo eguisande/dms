@@ -30,7 +30,7 @@
       <Input value="{AppJsonModel>/ObraDetalle/telefono}" type="Number"/>
       <Label text="{i18n>correo}"/>
       <Input id="inputCorreo" value="{AppJsonModel>/ObraDetalle/correo}" type="Email" required="true"/>
-      <Label text="Representate Técnico Contratista"/>
+      <Label text="{i18n>representantetecnico}"/>
       <Input value="{AppJsonModel>/ObraDetalle/representante_tecnico}" />
       <Label text="Matrícula"/>
       <Input value="{AppJsonModel>/ObraDetalle/nro_matricula}" type="Number"/>
