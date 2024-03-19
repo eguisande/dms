@@ -2,7 +2,7 @@
   xmlns:form="sap.ui.layout.form"
   xmlns="sap.m">
   <WizardStep id="idObraAltaStep3" validated="true" title="{i18n>p3}">
-    <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+    <form:SimpleForm layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
       <form:content>
         <Table id="idP3Table" items="{AppJsonModel>/p3s}" fixedLayout="false" width="100%">
           <headerToolbar>
@@ -86,7 +86,7 @@
         </Table>
       </form:content>
     </form:SimpleForm>
-    <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+    <form:SimpleForm layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
       <form:content>
         <Table id="idImportesP3Table" items="{AppJsonModel>/importes_p3}" fixedLayout="false" width="100%">
           <headerToolbar>

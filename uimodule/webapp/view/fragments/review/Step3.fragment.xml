@@ -2,9 +2,9 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <form:SimpleForm title="P3" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
+  <form:SimpleForm title="{i18n>p3}" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/p3s}" fixedLayout="false" width="100%">
+      <Table items="{AppJsonModel>/p3s}" fixedLayout="false" width="100%" demandPopin="true">
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nrop3}" />
@@ -74,9 +74,9 @@
       </Table>
     </form:content>
   </form:SimpleForm>
-  <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+  <form:SimpleForm layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/importes_p3}" fixedLayout="false" width="100%">
+      <Table items="{AppJsonModel>/importes_p3}" fixedLayout="false" width="100%" demandPopin="true">
         <headerToolbar>
           <Toolbar>
             <Title text="{i18n>importesp3}" titleStyle="H6"/>

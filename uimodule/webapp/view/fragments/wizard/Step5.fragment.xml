@@ -2,7 +2,7 @@
   xmlns:form="sap.ui.layout.form"
   xmlns="sap.m">
   <WizardStep id="idObraAltaStep5" validated="true" title="{i18n>pi}">
-    <form:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
+    <form:SimpleForm layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
       <form:content>
         <Table id="idProyectosInversionTable" items="{AppJsonModel>/proyectos_inversion}" fixedLayout="false" width="100%">
           <headerToolbar>

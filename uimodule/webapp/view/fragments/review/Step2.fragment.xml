@@ -2,9 +2,9 @@
   xmlns:form="sap.ui.layout.form"
   xmlns:l="sap.ui.layout"
   xmlns="sap.m">
-  <form:SimpleForm title="{i18n>ordenescompra}" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="true">
+  <form:SimpleForm title="{i18n>ordenescompra}" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" singleContainerFullSize="true">
     <form:content>
-      <Table items="{AppJsonModel>/ordenes_compra}" fixedLayout="false" width="100%">
+      <Table items="{AppJsonModel>/ordenes_compra}" fixedLayout="false" width="100%" demandPopin="true">
         <columns>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>nroordencompra}" />
