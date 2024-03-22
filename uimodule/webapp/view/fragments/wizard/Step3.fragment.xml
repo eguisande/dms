@@ -76,7 +76,7 @@
                 </ComboBox>
                 <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
                 <Switch state="{AppJsonModel>acopio_materiales}" customTextOn="Si" customTextOff="No" enabled="false"/>
-                <Text text="{AppJsonModel>anticipo_financiero}%"/>
+                <Text text="{path: 'AppJsonModel>anticipo_financiero', formatter: '.formatter.formatPercentage'}"/>
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteP3"/>
                 </HBox>
@@ -127,7 +127,7 @@
                 <Text text="{AppJsonModel>moneda_ID}"/>
                 <Text text="{path: 'AppJsonModel>importe_ars', formatter: '.formatter.formatQuantity'}"/>
                 <Text text="{AppJsonModel>tipo_cambio}"/>          
-                <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>
+                <Text text="{path: 'AppJsonModel>porcentaje_ponderacion', formatter: '.formatter.formatPercentage'}"/>
                 <HBox>
                   <Button class="sapUiTinyMargin" tooltip="{i18n>eliminar}" icon="sap-icon://delete" type="Reject" press="deleteImporteP3"/>
                 </HBox>

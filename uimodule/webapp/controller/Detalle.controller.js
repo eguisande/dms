@@ -908,8 +908,7 @@ sap.ui.define([
             const suma = oModel.getData().importes_p3.reduce((total, i) => total + i.importe_ars, 0);
             //El total de la suma de los importes pi debe ser igual al total de los importes de los p3
             if (oModel.getProperty("/monto_total") !== suma) {
-              const errorMessage = this.getResourceBundle().getText("errormontostotales");
-              MessageBox.error(errorMessage);
+              this.errorAmountsConfirm();
             } else {
               const oNavPage = this.byId("wizardNavContainer");
               const oPageReview = this.byId("wizardReviewPage");
@@ -970,6 +969,24 @@ sap.ui.define([
       } else {
         this.onNavBack();
       }
+    },
+
+    //Dialogo de advertencia: La suma de los importes de los proyectos de inversión no coincide con el total de los importes de cada P3
+    errorAmountsConfirm: function () {
+      const errorMessage = this.getResourceBundle().getText("errormontostotales");
+      MessageBox.warning(errorMessage, {
+        actions: ["Sí", "No"],
+        emphasizedAction: "Sí",
+        onClose: async (sAction) => {
+          if (sAction === "No") {
+            return;
+          } else {
+            const oNavPage = this.byId("wizardNavContainer");
+            const oPageReview = this.byId("wizardReviewPage");
+            oNavPage.to(oPageReview);
+          }
+        }
+      });
     },
 
     //Valido los campos a completar

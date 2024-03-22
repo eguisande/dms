@@ -59,6 +59,19 @@ sap.ui.define([
         }
       });
       return isNaN(nTotal) ? null : oCurrencyFormat.format(nTotal, "ARS");
+    },
+
+    formatPercentage: function (nTotal = 0) {
+      if (!nTotal) {
+        return nTotal;
+      }
+      const options = {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      };
+      const number = nTotal.toLocaleString('es-ES', options);
+      return isNaN(nTotal) ? null : number + "%";
     }
 
   };

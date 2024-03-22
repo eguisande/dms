@@ -34,7 +34,7 @@
       <Label text="{i18n>acopio}" required="true"/>
       <Switch state="{AppJsonModel>/P3/acopio_materiales}" customTextOn="Si" customTextOff="No" change="onAcopioChange"/>
       <Label text="{i18n>anticipofinanciero}" required="true"/>
-      <StepInput id="idInputAnticipoP3" value="{AppJsonModel>/P3/anticipo_financiero}" min="0" max="100" description="%" fieldWidth="90%"/>     
+      <StepInput id="idInputAnticipoP3" value="{AppJsonModel>/P3/anticipo_financiero}" displayValuePrecision="2" step="0.1" min="0" max="100" description="%" fieldWidth="90%"/>     
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closeP3Dialog" type="Default" />

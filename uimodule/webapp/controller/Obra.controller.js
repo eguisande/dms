@@ -24,9 +24,6 @@ sap.ui.define([
       const urlPdfApi = oManifest.resolveUri("generatePDF");
       Services.setUrl(urlCatalog, urlDMS, urlWF, urlUserApi, urlPdfApi);
       this.getRouter().getRoute("Obra").attachPatternMatched(this._onObjectMatched, this);
-      // Services.getContratistas().then(data => {
-      //   oModel.setProperty("/Contratistas", data.value);
-      // });
     },
 
     _onObjectMatched: async function () {

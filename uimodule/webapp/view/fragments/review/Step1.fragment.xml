@@ -39,7 +39,7 @@
         <Label text="{i18n>fechafirma}"/>
         <DatePicker displayFormat="dd/MM/yyyy" dateValue="{AppJsonModel>/ObraDetalle/fecha_firma}" editable="false"/>
         <Label text="{i18n>incrementomaximo}"/>
-        <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/incremento_maximo}" displayValuePrecision="2" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
         <Label text="{i18n>plazoejecucion}"/>
         <Input value="{AppJsonModel>/ObraDetalle/plazo_ejecucion}" editable="false" type="Number" textAlign="End"/>
         <ComboBox items="{AppJsonModel>/Combos/UnidadesMedida}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/um_plazo_ID}">
@@ -51,13 +51,13 @@
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
         </ComboBox>
         <Label text="{i18n>fondoreparo}"/>
-        <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" min="0" max="100" description="%" fieldWidth="90%" editable="false"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/fondo_reparo}" displayValuePrecision="2" min="0" max="100" description="%" fieldWidth="90%" editable="false"/>
         <Label text="{i18n>financiamiento}"/>
         <ComboBox items="{AppJsonModel>/Combos/Financiamientos}" editable="false" selectedKey="{AppJsonModel>/ObraDetalle/financiamiento_obra_ID}">
             <core:Item key="{AppJsonModel>ID}" text="{AppJsonModel>descripcion}" />
         </ComboBox>
         <Label text="{i18n>descuentomonto}"/>
-        <StepInput value="{AppJsonModel>/ObraDetalle/descuento_monto_contrato}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/descuento_monto_contrato}" displayValuePrecision="2" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
         <Link press="editStepOne" text="{i18n>editar}" visible="{=${AppJsonModel>/ObraDetalle/estado_ID} === 'BO' &amp;&amp; ${AppJsonModel>/Permisos/edit}}">
             <layoutData>
                 <l:GridData linebreak="true"/>
@@ -70,6 +70,6 @@
         <Label text="{i18n>extendidapor}"/>
         <Input value="{AppJsonModel>/ObraDetalle/extendida_por}" editable="false"/>
         <Label text="{i18n>porcentajecobertura}"/>
-        <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
+        <StepInput value="{AppJsonModel>/ObraDetalle/porcentaje_cobertura}" displayValuePrecision="2" min="0" max="100" editable="false" description="%" fieldWidth="90%"/>
     </form:SimpleForm>
 </core:FragmentDefinition>

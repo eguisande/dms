@@ -20,7 +20,7 @@
       <Label text="{i18n>importears}"/>
       <Input value="{AppJsonModel>/ImporteP3/importe_ars}" type="Number" editable="false"/>
       <Label text="{i18n>porcentajeponderacion}" required="true"/>
-      <StepInput id="idPorcentajePondImporteP3" value="{AppJsonModel>/ImporteP3/porcentaje_ponderacion}" min="0" max="100" description="%" fieldWidth="90%"/>
+      <StepInput id="idPorcentajePondImporteP3" value="{AppJsonModel>/ImporteP3/porcentaje_ponderacion}" displayValuePrecision="2" step="0.1" min="0" max="100" description="%" fieldWidth="90%"/>
     </FlexBox>
     <beginButton>
       <Button text="{i18n>dialogCloseButtonText}" press="closeImporteP3Dialog" type="Default" />

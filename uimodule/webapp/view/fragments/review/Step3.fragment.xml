@@ -67,7 +67,7 @@
               </ComboBox>
               <Switch state="{AppJsonModel>acumar}" customTextOn="Si" customTextOff="No" enabled="false"/>
               <Switch state="{AppJsonModel>acopio_materiales}" customTextOn="Si" customTextOff="No" enabled="false"/>
-              <Text text="{AppJsonModel>anticipo_financiero}%"/>
+              <Text text="{path: 'AppJsonModel>anticipo_financiero', formatter: '.formatter.formatPercentage'}"/>
             </cells>
           </ColumnListItem>
         </items>
@@ -98,7 +98,7 @@
           </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>tipocambio}" />
-          </Column>          
+          </Column>
           <Column minScreenWidth="Tablet" demandPopin="true">
             <Text text="{i18n>porcentajeponderacion}" />
           </Column>
@@ -110,8 +110,8 @@
               <Text text="{path: 'AppJsonModel>importe', formatter: '.formatter.formatQuantity'}"/>
               <Text text="{AppJsonModel>moneda_ID}"/>
               <Text text="{path: 'AppJsonModel>importe_ars', formatter: '.formatter.formatQuantity'}"/>
-              <Text text="{AppJsonModel>tipo_cambio}"/>              
-              <Text text="{AppJsonModel>porcentaje_ponderacion}%"/>
+              <Text text="{AppJsonModel>tipo_cambio}"/>
+              <Text text="{path: 'AppJsonModel>porcentaje_ponderacion', formatter: '.formatter.formatPercentage'}"/>
             </cells>
           </ColumnListItem>
         </items>
