@@ -906,10 +906,13 @@ sap.ui.define([
             MessageBox.error(messagePi);
           } else {
             const suma = oModel.getData().importes_p3.reduce((total, i) => total + i.importe_ars, 0);
-            //El total de la suma de los importes pi debe ser igual al total de los importes de los p3
-            if (oModel.getProperty("/monto_total") !== suma) {
+            const monto_total = oModel.getProperty("/monto_total");
+            //El total de la suma de los importes pi no es igual al total de los importes de los p3
+            //Calulo de margen de error
+            const margin = this.errorMarginCalculation(suma, monto_total);
+            if (!margin) { //si es mayor a 0,01% muestro el aviso de confirmacion
               this.errorAmountsConfirm();
-            } else {
+            } else { //si es menor a 0,01% no muestro el aviso
               const oNavPage = this.byId("wizardNavContainer");
               const oPageReview = this.byId("wizardReviewPage");
               oNavPage.to(oPageReview);
@@ -917,6 +920,14 @@ sap.ui.define([
           }
         }
       }
+    },
+
+    errorMarginCalculation: function (suma, monto_total) {  
+      const marginOfErrorPercent = 0.01;    
+      const marginOfError = Math.abs(suma * marginOfErrorPercent / 100);
+      const minValue = suma - marginOfError;
+      const maxValue = suma + marginOfError;
+      return monto_total >= minValue && monto_total <= maxValue;
     },
 
     //Navegacion de los steps del wizard

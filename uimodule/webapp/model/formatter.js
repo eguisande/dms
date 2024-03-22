@@ -48,17 +48,14 @@ sap.ui.define([
     formatQuantity: function (nTotal = 0) {
       if (!nTotal) {
         return nTotal;
-      }
-      const oCurrencyFormat = NumberFormat.getCurrencyInstance({
-        currencyCode: false,
-        customCurrencies: {
-          "ARS": {
-            decimals: 2,
-            isoCode: "ARS"
-          }
-        }
-      });
-      return isNaN(nTotal) ? null : oCurrencyFormat.format(nTotal, "ARS");
+      }   
+      const options = {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      };        
+      const quantity = nTotal.toLocaleString("es-ES", options);
+      return isNaN(nTotal) ? null : quantity;
     },
 
     formatPercentage: function (nTotal = 0) {
