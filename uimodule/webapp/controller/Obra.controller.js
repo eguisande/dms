@@ -365,6 +365,11 @@ sap.ui.define([
       this.navToCross("pgocontroldocumentacion", { ID });
     },
 
+    onNavigateToActasSancion: function (oEvent) {
+      const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
+      this.navToCross("pgoactadesancion", { ID });
+    },
+
     onNavigateToActasSuspension: function (oEvent) {
       const { ID } = oEvent.getSource().getBindingContext("AppJsonModel").getObject();
       this.navToCross("pgoactassuspension", { ID });

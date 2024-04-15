@@ -110,6 +110,7 @@
                       <items>
                         <MenuItem text="{i18n>actas}">
                           <items>
+                            <MenuItem text="{i18n>actassancion}" press="onNavigateToActasSancion" />
                             <MenuItem text="{i18n>actassuspension}" press="onNavigateToActasSuspension" />
                             <MenuItem text="{i18n>acopio}" press="onNavigateToAcopioMateriales" />
                             <MenuItem text="{i18n>actasprorroga}" press="onNavigateToActasProrroga" />
