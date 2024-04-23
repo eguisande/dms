@@ -110,15 +110,16 @@
                       <items>
                         <MenuItem text="{i18n>actas}">
                           <items>
-                            <MenuItem text="{i18n>actassancion}" press="onNavigateToActasSancion" />
-                            <MenuItem text="{i18n>actassuspension}" press="onNavigateToActasSuspension" />
                             <MenuItem text="{i18n>acopio}" press="onNavigateToAcopioMateriales" />
-                            <MenuItem text="{i18n>actasprorroga}" press="onNavigateToActasProrroga" />
-                            <MenuItem text="{i18n>actastradicion}" press="onNavigateToActasTradicion" />
-                            <MenuItem text="{i18n>actasconstatacion}" press="onNavigateToActasConstatacion" />
                             <MenuItem text="{i18n>actasadicionales}" press="onNavigateToActasAdicionales" />
+                            <MenuItem text="{i18n>actasampliacion}" press="onNavigateToActasAmpliacion" />
+                            <MenuItem text="{i18n>actasconstatacion}" press="onNavigateToActasConstatacion" />
                             <MenuItem text="{i18n>actasexcedidas}" press="onNavigateToActasExcedidas" />
                             <MenuItem text="{i18n>actasEconomias}" press="onNavigateToActasEconomias" />
+                            <MenuItem text="{i18n>actasprorroga}" press="onNavigateToActasProrroga" />
+                            <MenuItem text="{i18n>actastradicion}" press="onNavigateToActasTradicion" />
+                            <MenuItem text="{i18n>actassancion}" press="onNavigateToActasSancion" />
+                            <MenuItem text="{i18n>actassuspension}" press="onNavigateToActasSuspension" />
                           </items>
                         </MenuItem>
                         <MenuItem text="{i18n>medicion}" icon="sap-icon://measure">
