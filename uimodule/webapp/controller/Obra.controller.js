@@ -94,8 +94,7 @@ sap.ui.define([
       const sCargaIncial = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sComunicaciones = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_AreaGenero"
         || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
-        || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_UsuarioGenericoAySA");
-      const sNotasMinutas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista");
+        || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_Director" || oGrupo === "PGO_Gerente" || oGrupo === "PGO_JefeArea");
       const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista");
       oModel.setProperty("/Permisos", {
         user,
@@ -120,8 +119,7 @@ sap.ui.define([
         partidimetro: !!sPartidimetro && true,
         planTrabajo: !!sPlanTrabajo && true,
         preconstruccion: !!sPreconstruccion && true,
-        oferta: !!sOferta && true,
-        notasMinutas: !!sNotasMinutas && true
+        oferta: !!sOferta && true
       });
     },
 
