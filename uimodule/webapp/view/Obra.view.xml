@@ -59,7 +59,7 @@
           </Column>
         </columns>
         <items>
-          <ColumnListItem vAlign="Middle">
+          <ColumnListItem vAlign="Middle" visible="{AppJsonModel>/Permisos/list}">
             <cells>
               <Text text="{AppJsonModel>nombre}" />
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
@@ -79,7 +79,7 @@
                     <MenuItem text="{i18n>plantrabajo}" icon="sap-icon://gantt-bars" press="onNavigateToPlanTrabajo" visible="{AppJsonModel>/Permisos/planTrabajo}"/>
                     <MenuItem text="{i18n>acta}" icon="sap-icon://survey" press="onNavigateToPreconstruccion" visible="{AppJsonModel>/Permisos/preconstruccion}"/>
                     <MenuItem text="{i18n>enviar}" icon="sap-icon://approvals" press="onEnviar" visible="{=${AppJsonModel>estado_ID} === 'BO' || ${AppJsonModel>estado_ID} === 'RE'}"/>
-                    <MenuItem text="{i18n>controldocumentacion}" icon="sap-icon://complete" press="onNavigateToControlDocumentacion"/>
+                    <MenuItem text="{i18n>controldocumentacion}" icon="sap-icon://complete" press="onNavigateToControlDocumentacion" visible="{AppJsonModel>/Permisos/controldocumentacion}"/>
                     <MenuItem text="{i18n>documentacion}" icon="sap-icon://add-document">
                       <items>
                         <MenuItem text="{i18n>cargainicial}" press="onNavigateToCargaInicial" visible="{AppJsonModel>/Permisos/cargaInicial}"/>
@@ -162,7 +162,7 @@
     <f:footer>
       <OverflowToolbar>
         <ToolbarSpacer/>
-        <Button type="Emphasized" text="{i18n>altayasignacion}" press="crearObra">
+        <Button type="Emphasized" text="{i18n>altayasignacion}" press="crearObra"  visible="{AppJsonModel>/Permisos/altayasignaicon}">
           <layoutData>
             <OverflowToolbarLayoutData priority="NeverOverflow" />
           </layoutData>

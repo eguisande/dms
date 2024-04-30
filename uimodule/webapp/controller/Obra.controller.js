@@ -34,6 +34,8 @@ sap.ui.define([
         const { email } = await Services.getUser();
         const oUserRoles = await Services.getUserRoles();
         this.setUserData(oUserRoles.value, email);
+        debugger;
+        let oTest = await Services.getObrasByUserLogged(oUserRoles.value)
         const aObras = await this.getObrasData();
         aObras.forEach(obra => {
           const data = obra.p3.map(function (p3) {
@@ -70,21 +72,31 @@ sap.ui.define([
     },
 
     setUserData: function (aGroups, user) {
-      const oModel = this.getModel("AppJsonModel");
-      const sDetalle = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
+      const oModel = this.getModel("AppJsonModel")
+      const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion")
+      const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector")
+      const sContratista = aGroups.find(oGrupo => oGrupo === "PGO_Contratista")
+      const sAnalista = aGroups.find(oGrupo => oGrupo === "PGO_Analista")
+      const sSuper = aGroups.find(oGrupo => oGrupo === "PGO_Super")
+      const sAreaSeguridadHigiene = aGroups.find(oGrupo => oGrupo === "PGO_AreaSeguridadHigiene")
+      const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_AreaIngenieria")
+      const sGenero = aGroups.find(oGrupo => oGrupo === "PGO_AreaGenero")
+      const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_AreaCarteleria")
+      const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_AreaMedioambiente")
+     // const sDetalle = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
       const sPartidimetro = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
       const sPlanTrabajo = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
       const sPreconstruccion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
       const sOferta = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Analista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector");
-      const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion");
-      const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector");
+   //   const sJefeInspector = aGroups.find(oGrupo => oGrupo === "PGO_JefeInspeccion");
+     // const sInspector = aGroups.find(oGrupo => oGrupo === "PGO_Inspector");
       const sAreaGenero = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaGenero" || oGrupo === "PGO_UsuarioGenericoAySA");
-      const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_UsuarioGenericoAySA");
-      const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+    //  const sAreaCarteleria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_UsuarioGenericoAySA");
+     // const sAreaMedioambiente = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAreaPolizas = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAreaSegHigiene = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAreaPermisos = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaPermisos" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
-      const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
+   //   const sAreaIngenieria = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaIngenieria" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAreaInterferencias = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_AreaInterferencias" || oGrupo === "PGO_Contratista" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_UsuarioGenericoAySA");
       const sAll = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_Analista" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_AreaGenero"
         || oGrupo === "PGO_AreaCarteleria" || oGrupo === "PGO_AreaMedioambiente" || oGrupo === "PGO_AreaPolizas" || oGrupo === "PGO_AreaSeguridadHigiene" || oGrupo === "PGO_AreaPermisos"
@@ -98,28 +110,33 @@ sap.ui.define([
       const sEjecucion = aGroups.find(oGrupo => oGrupo === "PGO_Super" || oGrupo === "PGO_UsuarioGenericoAySA" || oGrupo === "PGO_Inspector" || oGrupo === "PGO_JefeInspeccion" || oGrupo === "PGO_Contratista");
       oModel.setProperty("/Permisos", {
         user,
-        delete: !!sCreateDelete && true,
-        create: !!sCreateDelete && true,
-        edit: !!sEdit && true,
+        altayasignaicon: (!!sAnalista) && true,
+        list: (!!sAnalista || !!sAreaSeguridadHigiene || !!sAreaIngenieria || !!sGenero || !!sAreaCarteleria || !!sAreaMedioambiente) && true,
+        detalle: (!!sSuper || !!sAnalista || !!sAreaSeguridadHigiene || !!sAreaIngenieria || !!sAreaGenero || !!sAreaCarteleria || !!sAreaMedioambiente )  && true,
+        partidimetro: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector) && true,
+        planTrabajo: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector)  && true,
+        preconstruccion: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector) && true,
+        controldocumentacion: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector) && true,
+        cargaInicial: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector) && true,
+        carteleria: (!!sAreaCarteleria) && true,
+        genero: (!!sAreaGenero) && true,
+        ingenieria: (!!sSuper || !!sJefeInspector || !!sInspector || !!sAreaIngenieria) && true,
+        interferencias: (!!sSuper || !!sJefeInspector || !!sInspector || !!sAreaSeguridadHigiene) && true,
+        medioAmbiente: (!!sAreaMedioambiente) && true,
+        oferta: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector || !!sAnalista) && true,
+        permisos: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector) && true,
+        polizas: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector) && true,
+        seghigiene: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector || !!sAnalista) && true,
+        comunicaciones: (!!sSuper || !!sContratista || !!sJefeInspector || !!sInspector || !!sAnalista || !!sAreaSegHigiene || !!sAreaIngenieria || !!sAreaGenero || !!sAreaCarteleria || !!sAreaMedioambiente) && true,
+        delete: (!!sAnalista)  && true,
+        create: (!!sAnalista)  && true,
+        edit: (!!sAnalista) && true,
         all: !!sAll && true,
-        detalle: !!sDetalle && true,
         jefe: !!sJefeInspector && true,
         inspector: !!sInspector && true,
-        genero: !!sAreaGenero && true,
-        carteleria: !!sAreaCarteleria && true,
-        medioAmbiente: !!sAreaMedioambiente && true,
-        polizas: !!sAreaPolizas && true,
-        seghigiene: !!sAreaSegHigiene && true,
-        permisos: !!sAreaPermisos && true,
-        ingenieria: !!sAreaIngenieria && true,
-        interferencias: !!sAreaInterferencias && true,
-        cargaInicial: !!sCargaIncial && true,
-        comunicaciones: !!sComunicaciones && true,
         ejecucion: !!sEjecucion && true,
-        partidimetro: !!sPartidimetro && true,
-        planTrabajo: !!sPlanTrabajo && true,
-        preconstruccion: !!sPreconstruccion && true,
-        oferta: !!sOferta && true
+       
+        
       });
     },
 

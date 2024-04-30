@@ -76,6 +76,14 @@ sap.ui.define([], function () {
       );
     },
 
+    
+    getObrasByUserLogged: function (usuario) {
+      return this.callGetService(
+        `getObrasByUserLogged(usuario=${usuario})`
+      );
+    },
+
+
     getObra: function (ID) {
       return this.callGetService(
         `Obras/${ID}?$expand=estado,responsables($expand=inspectores($expand=inspector),gerencia,direccion),financiamiento_obra,ordenes_compra,contratista($expand=contratista),p3($expand=pi($expand=tipo_pi,p3,sistema_contratacion,responsables($expand=responsables($expand=direccion,gerencia,inspectores($expand=inspector)))),importes($expand=p3),fluido,tipo_obra,tipo_contrato,sistema,partido)`
