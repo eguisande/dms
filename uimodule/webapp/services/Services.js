@@ -79,7 +79,7 @@ sap.ui.define([], function () {
     
     getObrasByUserLogged: function (usuario) {
       return this.callGetService(
-        `getObrasByUserLogged(usuario=${usuario})`
+        `getObrasByUserLogged(usuario='${usuario}')`
       );
     },
 
