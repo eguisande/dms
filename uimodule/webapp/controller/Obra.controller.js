@@ -35,7 +35,7 @@ sap.ui.define([
         const oUserRoles = await Services.getUserRoles();
         this.setUserData(oUserRoles.value, email);
         debugger;
-        let oTest = await Services.getObrasByUserLogged(oUserRoles.value)
+        let oTest = await Services.getObrasByUserLogged(email)
         const aObras = await this.getObrasData();
         aObras.forEach(obra => {
           const data = obra.p3.map(function (p3) {
