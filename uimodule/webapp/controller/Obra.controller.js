@@ -35,8 +35,8 @@ sap.ui.define([
         const oUserRoles = await Services.getUserRoles();
         this.setUserData(oUserRoles.value, email);
         debugger;
-        let oTest = await Services.getObrasByUserLogged(email)
-        const aObras = await this.getObrasData();
+        //let oTest = 
+        const aObras = await this.getObrasData(email);
         aObras.forEach(obra => {
           const data = obra.p3.map(function (p3) {
             return {
@@ -140,11 +140,13 @@ sap.ui.define([
       });
     },
 
-    getObrasData: async function () {
+    getObrasData: async function (email) {
       const oModel = this.getModel("AppJsonModel");
       const { all, jefe, inspector, user } = oModel.getProperty("/Permisos");
-      if (all) {
-        const { value } = await Services.getObras();
+      const { value } = await Services.getObrasByUserLogged(email) // await Services.getObras();
+      return value;
+     /*  if (all) {
+        const { value } =  await Services.getObras();
         return value;
       }
       if (jefe) {
@@ -154,7 +156,7 @@ sap.ui.define([
       if (inspector) {
         const { value } = await Services.getObrasJefeInspector(user, "EM");
         return value;
-      }
+      } */
 
     },
 

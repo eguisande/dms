@@ -1,0 +1,23 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <Dialog id="idAltaAsignacionDialog" title="{i18n>altayasignacion}">
+
+        <f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
+            <f:content>
+                <Label text="{i18n>proyectoinversion}" />
+                <Input id="idInputPI" value="{AppJsonModel>/Alta/PI}" />
+                <Label text="{i18n>registroproveedor}" />
+                <Input id="idInputNroProveedor" value="{AppJsonModel>/Alta/nroProveedor}" valueHelpOnly="true" valueHelpRequest="onOpenDialogContratistas" showValueHelp="true"/>
+            </f:content>
+        </f:SimpleForm>
+
+        <beginButton>
+            <Button text="{i18n>dialogCloseButtonText}" press=".onCloseDialogAltaAsignacion" type="Default"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>dialogAceptButtonText}" press=".onAltaAsignacion" type="Emphasized"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
