@@ -59,7 +59,7 @@
           </Column>
         </columns>
         <items>
-          <ColumnListItem vAlign="Middle" visible="{AppJsonModel>/Permisos/list}">
+          <ColumnListItem vAlign="Middle">
             <cells>
               <Text text="{AppJsonModel>nombre}" />
               <ObjectStatus text="{AppJsonModel>estado/descripcion}" inverted="true" state="{AppJsonModel>estado/color}" />
